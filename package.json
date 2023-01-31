@@ -6,11 +6,27 @@
   "description": "TS/JS Utilities for both client & node apps",
   "main": "index.js",
   "type": "commonjs",
-  "scripts": {
-  },
+  "scripts": {},
   "dependencies": {
     "date-fns": "latest",
     "file-type": "latest",
-    "lodash": "latest"
+    "lodash": "latest",
+     "error-stack-parser": "*",
+    "stack-trace": "*",
+    "stacktracey": "*",
+    "ts-node": "*",
+    "json5": "*",
+    "uuid": "*"
+  },
+  "devDependencies": {
+    "@types/lodash": "*",
+    "@types/node": "*",
+    "@typescript-eslint/eslint-plugin": "*",
+    "@typescript-eslint/parser": "*",
+    "eslint": "*",
+    "eslint-config-prettier": "*",
+    "eslint-plugin-prettier": "*",
+    "prettier": "*",
+    "typescript": "*"
   }
 }
