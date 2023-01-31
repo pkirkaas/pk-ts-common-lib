@@ -1,0 +1,16 @@
+{
+  "name": "pk-ts-lib-common",
+  "version": "l.0.1",
+  "author": "Paul Kirkaas",
+  "license": "UNLICENSED",
+  "description": "TS/JS Utilities for both client & node apps",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+  },
+  "dependencies": {
+    "date-fns": "latest",
+    "file-type": "latest",
+    "lodash": "latest"
+  }
+}
