@@ -4,24 +4,33 @@
   "author": "Paul Kirkaas",
   "license": "UNLICENSED",
   "description": "TS/JS Utilities for both client & node apps",
-  "main": "index.js",
+  "engines": {
+    "node": ">= 18.0.0"
+  },
+  "exports": {
+    ".":"./dist/index"
+  },
   "type": "commonjs",
-  "scripts": {},
+  "scripts": {
+    "postinstall" : "tsc",
+    "clean": "rm -rf ./dist ./node_modules package-lock.json"
+  },
   "dependencies": {
+    "axios": "*",
     "date-fns": "latest",
-    "file-type": "latest",
-    "lodash": "latest",
     "error-stack-parser": "*",
+    "file-type": "latest",
+    "json-decycle": "*",
+    "json5": "*",
+    "lodash": "latest",
     "stack-trace": "*",
     "stacktracey": "*",
-    "axios": "*",
-    "json-decycle": "*",
     "ts-node": "*",
     "tsconfig-paths": "*",
-    "json5": "*",
     "uuid": "*"
   },
   "devDependencies": {
+    "@tsconfig/node18": "^1.0.1",
     "@types/lodash": "*",
     "@types/node": "*",
     "@typescript-eslint/eslint-plugin": "*",

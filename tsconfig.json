@@ -1,8 +1,7 @@
 {
+  "extends":"@tsconfig/node18/tsconfig.json",
   "compilerOptions": {
     "esModuleInterop": true,
-    "module": "commonjs",
-    "target": "es6",
     "outDir": "./dist",
     "rootDir": ".",
     "declaration": true,
@@ -18,9 +17,6 @@
     "allowUmdGlobalAccess": true,
     "allowJs": true,
     "newLine": "lf",
-    "lib": [
-      "ES2021.String"
-    ]
   },
   "ts-node": {
     "require": [
