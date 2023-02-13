@@ -624,3 +624,18 @@ export function JSONStringify(arg) {
   }
 }
 
+/** Totally lifted from Axios - but they don't export it!
+ * Takes an HTTP header string and objectifies it - 
+ * directives as keys
+ * with values or undefined
+ * @return object
+ */
+export function parseHeaderString(str) {
+  const tokens = Object.create(null);
+  const tokensRE = /([^\s,;=]+)\s*(?:=\s*([^,;]+))?/g;
+  let match;
+  while ((match = tokensRE.exec(str))) {
+    tokens[match[1]] = match[2];
+  }
+  return tokens;
+}
