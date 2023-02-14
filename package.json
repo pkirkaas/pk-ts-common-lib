@@ -23,9 +23,14 @@
     "lodash": "latest",
     "stack-trace": "*",
     "stacktracey": "*",
+    "body-parser": "*",
+    "cookie-parser": "*",
+    "cors": "*",
     "ts-node": "*",
+    "uuidv4": "*",
     "tsconfig-paths": "*",
     "url-status-code": "^2.0.0",
+    "url-join": "latest",
     "uuid": "*"
   },
   "devDependencies": {
