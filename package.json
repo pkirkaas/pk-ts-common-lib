@@ -8,7 +8,8 @@
     "node": ">= 18.0.0"
   },
   "comments": {
-    "main": "dist/index.js",
+    "mainjs": "dist/index.js",
+    "main": "dist/index",
     ".": "./dist/index",
     "exports": {
       ".": {
@@ -19,7 +20,13 @@
     },
     "end": "end"
   },
-  "main": "dist/index",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
   "type": "commonjs",
   "scripts": {
     "postinstall": "tsc",
