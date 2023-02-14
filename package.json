@@ -10,15 +10,16 @@
   "comments": {
     "main": "dist/index.js",
     ".": "./dist/index",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js",
+        "require": "./dist/index.js"
+      }
+    },
     "end": "end"
   },
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.js"
-    }
-  },
+  "main": "dist/index",
   "type": "commonjs",
   "scripts": {
     "postinstall": "tsc",
