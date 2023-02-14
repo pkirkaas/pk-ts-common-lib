@@ -7,7 +7,12 @@
   "engines": {
     "node": ">= 18.0.0"
   },
-  "main": "dist/index.js",
+  "comments": {
+    "main": "dist/index.js",
+  },
+  "exports" {
+    "." : "./dist/index"
+  },
   "type": "commonjs",
   "scripts": {
     "postinstall": "tsc",
