@@ -21,6 +21,7 @@
     },
     "end": "end"
   },
+  "main": "dist/index",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
