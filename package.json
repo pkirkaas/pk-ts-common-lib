@@ -16,9 +16,18 @@
         "types": "./dist/index.d.ts",
         "import": "./dist/index.js",
         "require": "./dist/index.js"
-      }
+      },
+      "./tsconfig.json": "./tsconfig.json"
     },
     "end": "end"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    },
+    "./tsconfig.json": "./tsconfig.json"
   },
   "main": "dist/index",
   "type": "commonjs",
