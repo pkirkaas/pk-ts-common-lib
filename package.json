@@ -9,6 +9,7 @@
   },
   "comments": {
     "main": "dist/index.js",
+    "end":"end"
   },
   "exports" : {
     "." : "./dist/index"
