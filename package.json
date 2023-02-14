@@ -10,7 +10,7 @@
   "comments": {
     "main": "dist/index.js",
   },
-  "exports" {
+  "exports" : {
     "." : "./dist/index"
   },
   "type": "commonjs",
