@@ -9,10 +9,15 @@
   },
   "comments": {
     "main": "dist/index.js",
-    "end":"end"
+    ".": "./dist/index",
+    "end": "end"
   },
-  "exports" : {
-    "." : "./dist/index"
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
   },
   "type": "commonjs",
   "scripts": {
