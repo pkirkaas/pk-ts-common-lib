@@ -1,6 +1,6 @@
 # Node artifact files
 node_modules/
-dist/
+# Persisist to allow regular JS app to use dist/
 package-lock.json
 
 #Symlinked common
