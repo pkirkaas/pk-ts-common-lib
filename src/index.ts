@@ -2,8 +2,12 @@
 export const axios = require('axios');
 export const JSON5 = require('json5');
 //require("json-decycle").extend(JSON5);
+export const jsdc = require("json-decycle");
+jsdc.extend(JSON5);
+/*
 import { extend } from "json-decycle";
 extend(JSON5);
+*/
 export type OptArrStr = string | string[];
 export type Falsy  = false | 0 | "" | null | undefined;
 export type GenericObject  =  { [key: string]: any };
