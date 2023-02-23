@@ -7,20 +7,6 @@
   "engines": {
     "node": ">= 18.0.0"
   },
-  "comments": {
-    "mainjs": "dist/index.js",
-    "main": "dist/index",
-    ".": "./dist/index",
-    "exports": {
-      ".": {
-        "types": "./dist/index.d.ts",
-        "import": "./dist/index.js",
-        "require": "./dist/index.js"
-      },
-      "./tsconfig.json": "./tsconfig.json"
-    },
-    "end": "end"
-  },
   "main": "dist/index",
   "exports": {
     ".": {
