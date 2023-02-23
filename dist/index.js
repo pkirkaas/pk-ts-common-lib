@@ -18,7 +18,9 @@ exports.JSON5 = exports.axios = void 0;
 /** Init shared by MongoQP-api & MongoQP-client */
 exports.axios = require('axios');
 exports.JSON5 = require('json5');
-require("json-decycle").extend(exports.JSON5);
+//require("json-decycle").extend(JSON5);
+const json_decycle_1 = require("json-decycle");
+(0, json_decycle_1.extend)(exports.JSON5);
 //@ts-ignore
 Array.prototype.random = function () {
     return this[Math.floor((Math.random() * this.length))];
