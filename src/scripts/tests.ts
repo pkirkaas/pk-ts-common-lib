@@ -1,5 +1,6 @@
 import { typeOf, isEmpty, jsondecycle, JSON5 } from '..';
 let tobj = { a: 8 };
+let isDist = false;
 let j5 = JSON5.stringify(tobj);
 let to = typeOf(tobj);
 let toJ = typeOf(JSON);
