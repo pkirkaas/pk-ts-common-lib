@@ -2,8 +2,8 @@
 export const axios = require('axios');
 export const JSON5 = require('json5');
 //require("json-decycle").extend(JSON5);
-export const jsdc = require("json-decycle");
-jsdc.extend(JSON5);
+export const jsondecycle = require("json-decycle");
+jsondecycle.extend(JSON5);
 /*
 import { extend } from "json-decycle";
 extend(JSON5);
