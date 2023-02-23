@@ -5,3 +5,5 @@ Copyright 2023 - Paul Kirkaas - pkirkaas@gmail.com
 
 Includes - common env independent functionality
 common contains environment independent features, that are included included in both client & node libraries, which have additional env functionality
+
+TODO - combine JSON5 & json-decycle cleverly!
