@@ -8,8 +8,9 @@
 #
 # To enable this hook, rename this file to "pre-commit".
 export SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
+export BASEDIR=`pwd`
 
-echo "The script dir: [$SCRIPT_DIR]"
+echo "The script dir: [$SCRIPT_DIR]; called from: [$BASEDIR]"
 exit
 
 if git rev-parse --verify HEAD >/dev/null 2>&1
