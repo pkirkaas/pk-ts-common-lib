@@ -14,13 +14,13 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.jsdc = exports.JSON5 = exports.axios = void 0;
+exports.jsondecycle = exports.JSON5 = exports.axios = void 0;
 /** Init shared by MongoQP-api & MongoQP-client */
 exports.axios = require('axios');
 exports.JSON5 = require('json5');
 //require("json-decycle").extend(JSON5);
-exports.jsdc = require("json-decycle");
-exports.jsdc.extend(exports.JSON5);
+exports.jsondecycle = require("json-decycle");
+exports.jsondecycle.extend(exports.JSON5);
 //@ts-ignore
 Array.prototype.random = function () {
     return this[Math.floor((Math.random() * this.length))];
