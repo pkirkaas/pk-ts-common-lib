@@ -16,3 +16,4 @@ declare global {
     }
 }
 export * from './common-operations';
+//# sourceMappingURL=index.d.ts.map
