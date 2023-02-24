@@ -19,7 +19,8 @@
   },
   "type": "commonjs",
   "scripts": {
-    "clean": "rm -rf ./dist ./node_modules package-lock.json"
+    "clean": "rm -rf ./dist ./node_modules package-lock.json",
+    "tstarg" : "echo Something and --"
   },
   "dependencies": {
     "axios": "*",
