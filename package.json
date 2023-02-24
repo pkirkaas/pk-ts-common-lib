@@ -19,7 +19,6 @@
   },
   "type": "commonjs",
   "scripts": {
-    "postinstall": "tsc",
     "clean": "rm -rf ./dist ./node_modules package-lock.json"
   },
   "dependencies": {
@@ -32,9 +31,6 @@
     "lodash": "latest",
     "stack-trace": "*",
     "stacktracey": "*",
-    "body-parser": "*",
-    "cookie-parser": "*",
-    "cors": "*",
     "ts-node": "*",
     "uuidv4": "*",
     "tsconfig-paths": "*",

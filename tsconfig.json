@@ -16,7 +16,8 @@
     "allowUmdGlobalAccess": true,
     "allowJs": true,
     "newLine": "lf",
-    "moduleResolution": "nodenext"
+    "moduleResolution": "NodeNext",
+    "module": "NodeNext"
   },
   "ts-node": {
     "require": [
