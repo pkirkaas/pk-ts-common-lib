@@ -36,9 +36,7 @@
     "tsconfig-paths": "*",
     "url-status-code": "^2.0.0",
     "url-join": "latest",
-    "uuid": "*"
-  },
-  "devDependencies": {
+    "uuid": "*",
     "@tsconfig/node18": "^1.0.1",
     "@types/lodash": "*",
     "@types/node": "*",
