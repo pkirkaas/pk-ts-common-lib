@@ -1,16 +1,26 @@
 
-const urlStatus = require('url-status-code');
-//import { JSON5 } from 'json5';
-const JSON5 = require('json5');
+//const urlStatus = require('url-status-code');
+import  urlStatus  from 'url-status-code';
+import  JSON5  from 'json5';
+//const JSON5 = require('json5');
 //linked?
 
-const _ = require("lodash");
+//const _ = require("lodash");
+import _  from "lodash";
 import { v4 as uuidv4 } from "uuid";
-import { GenericObject, GenObj } from '.';
+import { GenericObject, GenObj } from './index.js';
+import jsondecycle from "json-decycle";
+export { jsondecycle };
+jsondecycle.extend(JSON5);
 
+//import { default as JSON5 } from 'json5';
+//import  JSON5  from 'json5';
 import * as ESP from "error-stack-parser";
-const axios = require("axios");
+//const axios = require("axios");
+//import { axios } from "Axios";
+import  axios  from "axios";
 import { format, isValid } from "date-fns";
+export { urlStatus, JSON5, GenericObject, GenObj };
 //const path = require("path/posix");
 //const path = require("path/posix");
 /** NODE SPECIFIC

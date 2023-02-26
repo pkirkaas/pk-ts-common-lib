@@ -1,4 +1,9 @@
-import { GenericObject, GenObj } from '.';
+import urlStatus from 'url-status-code';
+import JSON5 from 'json5';
+import { GenericObject, GenObj } from './index.js';
+import jsondecycle from "json-decycle";
+export { jsondecycle };
+export { urlStatus, JSON5, GenericObject, GenObj };
 /** NODE SPECIFIC
 */
 /**
@@ -99,7 +104,7 @@ export declare function isPrimitive(arg: any): boolean;
  * & values, not based on other types or prototypes
  */
 export declare function isSimpleObject(anobj: any): boolean;
-export declare function isObject(arg: any, alsoEmpty?: boolean): any;
+export declare function isObject(arg: any, alsoEmpty?: boolean): boolean;
 export declare function allProps(obj: any): string[];
 export declare function typeOf(anObj: any, opts?: any): String;
 /**

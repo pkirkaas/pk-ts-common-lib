@@ -24,13 +24,16 @@
   "ts-node": {
     "require": [
       "tsconfig-paths/register"
-    ]
+    ],
+    "esm":true
   },
   "exclude": [
     "node_modules",
     "dist",
     "dist/**/*",
-    "*.d.ts"
+    "*.d.ts",
+    "./src/index.ts",
+    "./src/common-operations.ts"
   ],
   "include": [
     "./src/**/*",

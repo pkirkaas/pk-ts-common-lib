@@ -1,13 +1,18 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.parseHeaderString = exports.JSONStringify = exports.JSON5Stringify = exports.valWithType = exports.typeOfEach = exports.typeOf = exports.allProps = exports.isObject = exports.isSimpleObject = exports.isPrimitive = exports.isSimpleType = exports.trueVal = exports.isEmpty = exports.checkUrl3 = exports.checkUrlAxios = exports.checkUrl = exports.rewriteHttpsToHttp = exports.isCli = exports.intersect = exports.inArr1NinArr2 = exports.pkToDate = exports.asNumeric = exports.isNumeric = exports.jsonClone = exports.filterInt = exports.isPromise = exports.validateDateFnsDuration = exports.subObj = exports.getStack = void 0;
-const urlStatus = require('url-status-code');
-//import { JSON5 } from 'json5';
-const JSON5 = require('json5');
+//const urlStatus = require('url-status-code');
+import urlStatus from 'url-status-code';
+import JSON5 from 'json5';
+//const JSON5 = require('json5');
 //linked?
-const _ = require("lodash");
-const axios = require("axios");
-const date_fns_1 = require("date-fns");
+//const _ = require("lodash");
+import _ from "lodash";
+import jsondecycle from "json-decycle";
+export { jsondecycle };
+jsondecycle.extend(JSON5);
+//const axios = require("axios");
+//import { axios } from "Axios";
+import axios from "axios";
+import { isValid } from "date-fns";
+export { urlStatus, JSON5 };
 //const path = require("path/posix");
 //const path = require("path/posix");
 /** NODE SPECIFIC
@@ -19,7 +24,7 @@ const date_fns_1 = require("date-fns");
  * the top of the array
  * @retrun array stack
  */
-function getStack(offset = 0) {
+export function getStack(offset = 0) {
     offset += 2;
     let stackStr = Error().stack;
     let stackArr = stackStr.split("at ");
@@ -31,25 +36,23 @@ function getStack(offset = 0) {
     }
     return ret;
 }
-exports.getStack = getStack;
 /**
  * Return just the subset of the object, for keys specified in the "fields" array.
  */
-function subObj(obj, fields) {
+export function subObj(obj, fields) {
     let ret = {};
     for (let field of fields) {
         ret[field] = obj[field];
     }
     return ret;
 }
-exports.subObj = subObj;
 /** Takes a 'duration' object for date-fns/add and validate
  * it. Optionall, converts to negative (time/dates in past)
  * @param obj object - obj to test
  * @param boolean forceNegative - force to negative/past offest?
  * @return duration
  */
-function validateDateFnsDuration(obj, forceNegative = false) {
+export function validateDateFnsDuration(obj, forceNegative = false) {
     if (!isSimpleObject(obj) || isEmpty(obj)) {
         return false;
     }
@@ -68,13 +71,11 @@ function validateDateFnsDuration(obj, forceNegative = false) {
         return obj;
     }
 }
-exports.validateDateFnsDuration = validateDateFnsDuration;
-function isPromise(arg) {
+export function isPromise(arg) {
     return !!arg && typeof arg === "object" && typeof arg.then === "function";
 }
-exports.isPromise = isPromise;
 /** From Mozilla - a stricter int parser */
-function filterInt(value) {
+export function filterInt(value) {
     if (/^[-+]?(\d+|Infinity)$/.test(value)) {
         return Number(value);
     }
@@ -83,7 +84,6 @@ function filterInt(value) {
         return false;
     }
 }
-exports.filterInt = filterInt;
 /*
 export function getEspStack() {
   let stack = ESP.parse(new Error());
@@ -94,13 +94,12 @@ export function getEspStack() {
  * to be storable in MongoDB
  * Primitives will just be returned unchanged.
  */
-function jsonClone(arg) {
+export function jsonClone(arg) {
     if (!arg || typeof arg !== "object" || isPrimitive(arg)) {
         return arg;
     }
     return JSON5.parse(JSON5Stringify(arg));
 }
-exports.jsonClone = jsonClone;
 /**
  * Checks if the arg can be converted to a number
  * If not, returns boolean false
@@ -110,7 +109,7 @@ exports.jsonClone = jsonClone;
  * @param asNum boolean - if true,
  *
  */
-function isNumeric(arg, asNum = false) {
+export function isNumeric(arg, asNum = false) {
     let num = Number(arg);
     if (num !== parseFloat(arg)) {
         return false;
@@ -120,14 +119,12 @@ function isNumeric(arg, asNum = false) {
     }
     return true;
 }
-exports.isNumeric = isNumeric;
 /**
  * Returns the numeric value, or boolean false
  */
-function asNumeric(arg) {
+export function asNumeric(arg) {
     return isNumeric(arg, true);
 }
-exports.asNumeric = asNumeric;
 /**
  * If arg can be in any way be interpreted as a date,
  * returns the JS Date object,
@@ -143,35 +140,32 @@ exports.asNumeric = asNumeric;
  * BUT new Date("1650566202871") DOESN'T - and sometimes
  * the DB returns a timestamp as a string...
  */
-function pkToDate(arg) {
+export function pkToDate(arg) {
     if (isNumeric(arg)) {
         arg = new Date(Number(arg));
     }
     else {
         arg = new Date(arg);
     }
-    if ((arg instanceof Date) && (0, date_fns_1.isValid)(arg)) {
+    if ((arg instanceof Date) && isValid(arg)) {
         return arg;
     }
     return false;
 }
-exports.pkToDate = pkToDate;
 /**
  * Return elements in arr1 Not In arr2
  */
-function inArr1NinArr2(arr1, arr2) {
+export function inArr1NinArr2(arr1, arr2) {
     return arr1.filter((el) => !arr2.includes(el));
 }
-exports.inArr1NinArr2 = inArr1NinArr2;
 /**
  * Uniqe intersection of two arrays
  */
-function intersect(a, b) {
+export function intersect(a, b) {
     var setB = new Set(b);
     return [...new Set(a)].filter(x => setB.has(x));
 }
-exports.intersect = intersect;
-function isCli(report = false) {
+export function isCli(report = false) {
     let runtime = process.env.RUNTIME;
     //let runtime = getRuntime();
     let lisCli = runtime === "cli";
@@ -181,8 +175,7 @@ function isCli(report = false) {
     console.log("In isCli; runtime:", { runtime, lisCli });
     return lisCli;
 }
-exports.isCli = isCli;
-function rewriteHttpsToHttp(url) {
+export function rewriteHttpsToHttp(url) {
     let parts = url.split(":");
     if (parts[0] === "https") {
         parts[0] = "http";
@@ -190,7 +183,6 @@ function rewriteHttpsToHttp(url) {
     let newUrl = `${parts[0]}:${parts[1]}`;
     return newUrl;
 }
-exports.rewriteHttpsToHttp = rewriteHttpsToHttp;
 /**
  * check single url or array of urls
  * if single url, return true/false
@@ -198,7 +190,7 @@ exports.rewriteHttpsToHttp = rewriteHttpsToHttp;
  * TODO!! Doesn't accout for network errors, exceptions, etc!!
  * SEE below checkUrl3
  */
-async function checkUrl(url) {
+export async function checkUrl(url) {
     if (Array.isArray(url)) {
         let badUrls = [];
         for (let aurl of url) {
@@ -220,7 +212,6 @@ async function checkUrl(url) {
         return false;
     }
 }
-exports.checkUrl = checkUrl;
 function mkUrl(url) {
     try {
         let urlObj = new URL(url);
@@ -251,7 +242,7 @@ function mkUrlObj(url, full = false) {
         return err;
     }
 }
-async function checkUrlAxios(tstUrl, full = false) {
+export async function checkUrlAxios(tstUrl, full = false) {
     //let lTool = new LogTool({context: 'checkUrlStatus'});
     //  let lTool = LogTool.getLog('chkStatA', { context: 'checkUrlAxios' });
     let failCodes = [404, 401, 403, 404]; // Return immediate false
@@ -377,7 +368,6 @@ async function checkUrlAxios(tstUrl, full = false) {
         return ret;
     }
 }
-exports.checkUrlAxios = checkUrlAxios;
 /*
 //Deprecated!
 async function checkUrlStatus(tstUrl) {
@@ -423,7 +413,7 @@ async function checkUrlStatus(tstUrl) {
  *
  *
  */
-async function checkUrl3(url) {
+export async function checkUrl3(url) {
     try {
         let status = await urlStatus(url);
         //let toS = typeOf(status);
@@ -440,9 +430,8 @@ async function checkUrl3(url) {
         return { msg: `Exception for URL:`, url, err };
     }
 }
-exports.checkUrl3 = checkUrl3;
 //Returns false also for empty objects
-function isEmpty(arg) {
+export function isEmpty(arg) {
     if (!arg || (Array.isArray(arg) && !arg.length)) {
         return true;
     }
@@ -453,45 +442,39 @@ function isEmpty(arg) {
     }
     return false;
 }
-exports.isEmpty = isEmpty;
 /**
  * returns arg, unless it is an empty object or array
  */
-function trueVal(arg) {
+export function trueVal(arg) {
     if (!isEmpty(arg)) {
         return arg;
     }
 }
-exports.trueVal = trueVal;
-function isSimpleType(arg) {
+export function isSimpleType(arg) {
     let simpletypes = ["boolean", "number", "bigint", "string"];
     let toarg = typeof arg;
     return simpletypes.includes(toarg);
 }
-exports.isSimpleType = isSimpleType;
-function isPrimitive(arg) {
+export function isPrimitive(arg) {
     return arg !== Object(arg);
 }
-exports.isPrimitive = isPrimitive;
 /**
  * Tests if the argument is a "simple" JS object - with just keys
  * & values, not based on other types or prototypes
  */
-function isSimpleObject(anobj) {
+export function isSimpleObject(anobj) {
     if (!anobj || typeof anobj !== "object") {
         return false;
     }
     return Object.getPrototypeOf(anobj) === Object.getPrototypeOf({});
 }
-exports.isSimpleObject = isSimpleObject;
-function isObject(arg, alsoEmpty = false) {
+export function isObject(arg, alsoEmpty = false) {
     if (!arg || isPrimitive(arg) || isEmpty(arg)) {
         return false;
     }
     return _.isObjectLike(arg);
 }
-exports.isObject = isObject;
-function allProps(obj) {
+export function allProps(obj) {
     if (!isObject(obj)) {
         return [];
     }
@@ -505,7 +488,6 @@ function allProps(obj) {
     let unique = Array.from(allProps);
     return unique;
 }
-exports.allProps = allProps;
 /* Use lodash isObject (excludes functions) or isObjectLike (includes functions)
 export function isRealObject(anobj) {
   if (!anobj || typeof anobj !== "object") {
@@ -515,7 +497,7 @@ export function isRealObject(anobj) {
 }
 */
 //export function typeOf(anObj: any, level?: Number): String {
-function typeOf(anObj, opts) {
+export function typeOf(anObj, opts) {
     let level = null;
     let functionPrefix = 'function: ';
     let simplePrefix = 'simple ';
@@ -570,13 +552,12 @@ function typeOf(anObj, opts) {
         return JSON.stringify({ err, anObj }, null, 2);
     }
 }
-exports.typeOf = typeOf;
 /**
  * Lazy way to get type of multiple variables at once
  * @param simple object obj - collection of properties to type
  * @return object - keyed by the original keys, to type
  */
-function typeOfEach(obj) {
+export function typeOfEach(obj) {
     if (!isSimpleObject(obj) || isEmpty(obj)) {
         console.error(`Bad obj param to typeOfEach - obj:`, { obj });
         return false;
@@ -589,13 +570,11 @@ function typeOfEach(obj) {
     }
     return res;
 }
-exports.typeOfEach = typeOfEach;
-function valWithType(val) {
+export function valWithType(val) {
     return { type: typeOf(val), val };
 }
-exports.valWithType = valWithType;
 /** Safe stringify - try first, then acycling */
-function JSON5Stringify(arg) {
+export function JSON5Stringify(arg) {
     try {
         return JSON5.stringify(arg, null, 2);
     }
@@ -604,8 +583,7 @@ function JSON5Stringify(arg) {
         return JSON5.decycle(arg, null, 2);
     }
 }
-exports.JSON5Stringify = JSON5Stringify;
-function JSONStringify(arg) {
+export function JSONStringify(arg) {
     /*
     if (arg === undefined) {
       return 'undefned';
@@ -621,14 +599,13 @@ function JSONStringify(arg) {
         return JSON.decycle(arg, null, 2);
     }
 }
-exports.JSONStringify = JSONStringify;
 /** Totally lifted from Axios - but they don't export it!
  * Takes an HTTP header string and objectifies it -
  * directives as keys
  * with values or undefined
  * @return object
  */
-function parseHeaderString(str) {
+export function parseHeaderString(str) {
     const tokens = Object.create(null);
     const tokensRE = /([^\s,;=]+)\s*(?:=\s*([^,;]+))?/g;
     let match;
@@ -637,5 +614,4 @@ function parseHeaderString(str) {
     }
     return tokens;
 }
-exports.parseHeaderString = parseHeaderString;
 //# sourceMappingURL=common-operations.js.map

@@ -17,7 +17,7 @@
     },
     "./tsconfig.json": "./tsconfig.json"
   },
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
     "clean": "rm -rf ./dist ./node_modules package-lock.json",
     "tstarg" : "echo Something and --"
