@@ -1,9 +1,3 @@
-/** Init shared by MongoQP-api & MongoQP-client */
-import axios from 'axios';
-export * from 'axios';
-import jsondecycle from 'json-decycle';
-export * from 'json-decycle';
-export { axios, jsondecycle };
 export type OptArrStr = string | string[];
 export type Falsy = false | 0 | "" | null | undefined;
 export type GenericObject = {

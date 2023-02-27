@@ -28,6 +28,11 @@ export declare function validateDateFnsDuration(obj: any, forceNegative?: boolea
 export declare function isPromise(arg?: any): boolean;
 /** From Mozilla - a stricter int parser */
 export declare function filterInt(value: any): number | false;
+/**
+ * Takes a browser event & tries to get some info
+ * Move this to browser library when the time comes
+ */
+export declare function eventInfo(ev: any): {};
 /** Try to make simple copies of complex objects (like with cyclic references)
  * to be storable in MongoDB
  * Primitives will just be returned unchanged.

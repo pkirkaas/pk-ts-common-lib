@@ -5,6 +5,7 @@ import JSON5 from 'json5';
 //linked?
 //const _ = require("lodash");
 import _ from "lodash";
+//@ts-ignore
 import jsondecycle from "json-decycle";
 export { jsondecycle };
 jsondecycle.extend(JSON5);
@@ -90,6 +91,21 @@ export function getEspStack() {
   return stack;
 }
 */
+/**
+ * Takes a browser event & tries to get some info
+ * Move this to browser library when the time comes
+ */
+export function eventInfo(ev) {
+    let evProps = ['bubbles', 'cancelable', 'cancelBubble', 'composed', 'currentTarget',
+        'defaultPrevented', 'eventPhase', 'explicitOriginalTarget', 'isTrusted',
+        'originalTarget', 'returnValue', 'srcElement', 'target',
+        'timeStamp', 'type',];
+    let eventDets = {};
+    for (let prop of evProps) {
+        eventDets[prop] = jsonClone(ev[prop]);
+    }
+    return eventDets;
+}
 /** Try to make simple copies of complex objects (like with cyclic references)
  * to be storable in MongoDB
  * Primitives will just be returned unchanged.
@@ -97,6 +113,11 @@ export function getEspStack() {
 export function jsonClone(arg) {
     if (!arg || typeof arg !== "object" || isPrimitive(arg)) {
         return arg;
+    }
+    //@ts-ignore
+    if ((typeof Element !== 'undefined') && (arg instanceof Element)) {
+        //Not sure I want to do this - my JSON5Stringify might handle it - test in browser
+        return arg.outerHTML;
     }
     return JSON5.parse(JSON5Stringify(arg));
 }

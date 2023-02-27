@@ -1,7 +1,6 @@
 {
   "extends":"@tsconfig/node18/tsconfig.json",
   "compilerOptions": {
-    "target":"ESNext",
     "esModuleInterop": true,
     "outDir": "./dist",
     "baseUrl": ".",
@@ -19,8 +18,8 @@
     "allowUmdGlobalAccess": true,
     "allowJs": true,
     "newLine": "lf",
-    "moduleResolution": "Node",
-    "module": "ESNext"
+    "moduleResolution": "NodeNext",
+    "module": "NodeNext"
   },
   "ts-node": {
     "require": [
