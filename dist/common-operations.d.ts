@@ -102,6 +102,7 @@ export declare function isEmpty(arg: any): boolean;
  * returns arg, unless it is an empty object or array
  */
 export declare function trueVal(arg: any): any;
+export declare function isByRef(arg: any): any;
 export declare function isSimpleType(arg: any): boolean;
 export declare function isPrimitive(arg: any): boolean;
 /**
@@ -110,6 +111,9 @@ export declare function isPrimitive(arg: any): boolean;
  */
 export declare function isSimpleObject(anobj: any): boolean;
 export declare function isObject(arg: any, alsoEmpty?: boolean): boolean;
+/**
+ * Try to get as many props from obj as possible
+ */
 export declare function allProps(obj: any): string[];
 export declare function typeOf(anObj: any, opts?: any): String;
 /**

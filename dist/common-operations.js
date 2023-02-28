@@ -495,6 +495,9 @@ export function isObject(arg, alsoEmpty = false) {
     }
     return _.isObjectLike(arg);
 }
+/**
+ * Try to get as many props from obj as possible
+ */
 export function allProps(obj) {
     if (!isObject(obj)) {
         return [];

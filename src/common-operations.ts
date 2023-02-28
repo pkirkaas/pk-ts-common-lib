@@ -501,6 +501,8 @@ export function trueVal(arg) {
   }
 }
 
+export function isByRef(arg:any) 
+
 export function isSimpleType(arg) {
   let simpletypes = ["boolean", "number", "bigint", "string"];
   let toarg = typeof arg;
@@ -527,6 +529,10 @@ export function isObject(arg, alsoEmpty = false) {
   }
   return _.isObjectLike(arg);
 }
+
+/**
+ * Try to get as many props from obj as possible
+ */
 export function allProps(obj: any) {
   if (!isObject(obj)) {
     return [];
