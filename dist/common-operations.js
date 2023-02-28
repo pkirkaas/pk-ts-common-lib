@@ -389,42 +389,6 @@ export async function checkUrlAxios(tstUrl, full = false) {
         return ret;
     }
 }
-/*
-//Deprecated!
-async function checkUrlStatus(tstUrl) {
-  let fOpts = {
-    method: "HEAD",
-    cache: "no-cache",
-    headers: {
-    },
-    connection: "close",
-  };
-  let url = mkUrl(tstUrl);
-  if (!(url instanceof URL)) {
-    return { err: tstUrl };
-  }
-  //let href = url.href;
-  try {
-    let resp = await fetch(tstUrl, fOpts);
-
-    //console.log("Fetch success resp:", { resp, tstUrl });
-    let status = resp.status;
-    if (status === 200) {
-      return true;
-    } else if (status > 400) {
-      return false;
-    } else {
-      return `code: [${resp.code}]; status: [${resp.status}]`;
-    }
-  } catch (err) {
-    //console.log("Fetch err:", { tstUrl, err });
-    return err.cause.code;
-    let ekeys = Object.keys(err);
-    //return err.code;
-    return ekeys;
-  }
-}
-*/
 /**
  * Tri-state check - to account for failed checks -
  * @return boolean|other
@@ -470,6 +434,13 @@ export function trueVal(arg) {
     if (!isEmpty(arg)) {
         return arg;
     }
+}
+/**
+ * Arrays & Objects passed by referrence,
+ * risk of unintended changes
+ */
+export function isByRef(arg) {
+    return !isPrimitive(arg);
 }
 export function isSimpleType(arg) {
     let simpletypes = ["boolean", "number", "bigint", "string"];

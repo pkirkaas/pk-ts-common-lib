@@ -416,42 +416,6 @@ export async function checkUrlAxios(tstUrl, full = false) {
 }
 
 
-/*
-//Deprecated!
-async function checkUrlStatus(tstUrl) {
-  let fOpts = {
-    method: "HEAD",
-    cache: "no-cache",
-    headers: {
-    },
-    connection: "close",
-  };
-  let url = mkUrl(tstUrl);
-  if (!(url instanceof URL)) {
-    return { err: tstUrl };
-  }
-  //let href = url.href;
-  try {
-    let resp = await fetch(tstUrl, fOpts);
-
-    //console.log("Fetch success resp:", { resp, tstUrl });
-    let status = resp.status;
-    if (status === 200) {
-      return true;
-    } else if (status > 400) {
-      return false;
-    } else {
-      return `code: [${resp.code}]; status: [${resp.status}]`;
-    }
-  } catch (err) {
-    //console.log("Fetch err:", { tstUrl, err });
-    return err.cause.code;
-    let ekeys = Object.keys(err);
-    //return err.code;
-    return ekeys;
-  }
-}
-*/
 
 
 /**
@@ -501,7 +465,13 @@ export function trueVal(arg) {
   }
 }
 
-export function isByRef(arg:any) 
+/**
+ * Arrays & Objects passed by referrence,
+ * risk of unintended changes
+ */
+export function isByRef(arg: any):boolean {
+  return !isPrimitive(arg);
+}
 
 export function isSimpleType(arg) {
   let simpletypes = ["boolean", "number", "bigint", "string"];

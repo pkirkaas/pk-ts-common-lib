@@ -102,7 +102,11 @@ export declare function isEmpty(arg: any): boolean;
  * returns arg, unless it is an empty object or array
  */
 export declare function trueVal(arg: any): any;
-export declare function isByRef(arg: any): any;
+/**
+ * Arrays & Objects passed by referrence,
+ * risk of unintended changes
+ */
+export declare function isByRef(arg: any): boolean;
 export declare function isSimpleType(arg: any): boolean;
 export declare function isPrimitive(arg: any): boolean;
 /**
