@@ -192,6 +192,9 @@ export function pkToDate(arg) {
 }
 
 
+//Array utilities
+
+
 /**
  * Return elements in arr1 Not In arr2
  */
@@ -205,6 +208,22 @@ export function inArr1NinArr2(arr1: any[], arr2: any[]) {
 export function intersect(a?:any[], b?:any[]):any[] {
   var setB = new Set(b);
   return [...new Set(a)].filter(x => setB.has(x));
+}
+
+/**
+ * Compares arrays by VALUES - independant of order
+ */
+export function arraysEqual(a, b) {
+	return JSON.stringify(a.sort()) === JSON.stringify(b.sort());
+}
+
+/**
+ * Is 'a' a subset of 'b' ?
+ */
+export function isSubset(a, b) {
+  a = [... new Set(a)];
+  b = [... new Set(b)];
+  return a.every((val) => b.includes(val));
 }
 
 export function isCli(report = false) {

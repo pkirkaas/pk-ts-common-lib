@@ -76,6 +76,14 @@ export declare function inArr1NinArr2(arr1: any[], arr2: any[]): any[];
  * Uniqe intersection of two arrays
  */
 export declare function intersect(a?: any[], b?: any[]): any[];
+/**
+ * Compares arrays by VALUES - independant of order
+ */
+export declare function arraysEqual(a: any, b: any): boolean;
+/**
+ * Is 'a' a subset of 'b' ?
+ */
+export declare function isSubset(a: any, b: any): any;
 export declare function isCli(report?: boolean): boolean;
 export declare function rewriteHttpsToHttp(url: any): string;
 /**
