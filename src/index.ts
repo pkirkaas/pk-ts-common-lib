@@ -37,3 +37,4 @@ Array.prototype.random = function () {
 }
 
 export * from './common-operations.js';
+export * from './tag-classes.js';

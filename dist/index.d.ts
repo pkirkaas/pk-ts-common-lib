@@ -12,4 +12,5 @@ declare global {
     }
 }
 export * from './common-operations.js';
+export * from './tag-classes.js';
 //# sourceMappingURL=index.d.ts.map
