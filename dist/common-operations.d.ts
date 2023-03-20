@@ -127,6 +127,10 @@ export declare function isObject(arg: any, alsoEmpty?: boolean): boolean;
  * Try to get as many props from obj as possible
  */
 export declare function allProps(obj: any): string[];
+/**
+ * Take input arrays, merge, & return single array w. unique values
+ */
+export declare function uniqueVals(...arrs: any[]): any[];
 export declare function typeOf(anObj: any, opts?: any): String;
 /**
  * Lazy way to get type of multiple variables at once

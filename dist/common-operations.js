@@ -498,6 +498,16 @@ export function allProps(obj) {
     let unique = Array.from(allProps);
     return unique;
 }
+/**
+ * Take input arrays, merge, & return single array w. unique values
+ */
+export function uniqueVals(...arrs) {
+    let merged = [];
+    for (let arr of arrs) {
+        merged = [...merged, ...arr];
+    }
+    return Array.from(new Set(merged));
+}
 /* Use lodash isObject (excludes functions) or isObjectLike (includes functions)
 export function isRealObject(anobj) {
   if (!anobj || typeof anobj !== "object") {
