@@ -133,6 +133,13 @@ export declare function allProps(obj: any): string[];
 export declare function uniqueVals(...arrs: any[]): any[];
 export declare function typeOf(anObj: any, opts?: any): String;
 /**
+ * Retuns a random integer
+ * @param numeric to - max int to return
+ * @param numberic from default 0 - optional starting/min number
+ * @return int
+ */
+export declare function randInt(to: any, from?: any): any;
+/**
  * Lazy way to get type of multiple variables at once
  * @param simple object obj - collection of properties to type
  * @return object - keyed by the original keys, to type

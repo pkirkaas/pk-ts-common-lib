@@ -573,6 +573,29 @@ export function typeOf(anObj, opts) {
     }
 }
 /**
+ * Retuns a random integer
+ * @param numeric to - max int to return
+ * @param numberic from default 0 - optional starting/min number
+ * @return int
+ */
+export function randInt(to, from = 0) {
+    // Convert args to ints if possible, else throw
+    //@ts-ignore
+    if (isNaN((to = parseInt(to)) || isNaN((from = parseInt(from))))) {
+        throw new PkError(`Non-numeric arg to randInt():`, { to, from });
+    }
+    if (from === to) {
+        return from;
+    }
+    if (from > to) {
+        let tmp = from;
+        from = to;
+        to = tmp;
+    }
+    let bRand = from + Math.floor((Math.random() * ((to + 1) - from)));
+    return bRand;
+}
+/**
  * Lazy way to get type of multiple variables at once
  * @param simple object obj - collection of properties to type
  * @return object - keyed by the original keys, to type
