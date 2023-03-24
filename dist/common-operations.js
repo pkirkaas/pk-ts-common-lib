@@ -5,6 +5,7 @@ import JSON5 from 'json5';
 //linked?
 //const _ = require("lodash");
 import _ from "lodash";
+import { PkError } from './index.js';
 //@ts-ignore
 import jsondecycle from "json-decycle";
 export { jsondecycle };
