@@ -25,6 +25,10 @@ export declare function subObj(obj: GenericObject, fields: string[]): GenObj;
  * @return duration
  */
 export declare function validateDateFnsDuration(obj: any, forceNegative?: boolean): any;
+/**
+ * Returns true if arg str contains ANY of the what strings
+ */
+export declare function strIncludesAny(str: string, substrs: any): boolean;
 export declare function isPromise(arg?: any): boolean;
 /** From Mozilla - a stricter int parser */
 export declare function filterInt(value: any): number | false;

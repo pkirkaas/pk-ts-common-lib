@@ -73,6 +73,20 @@ export function validateDateFnsDuration(obj, forceNegative = false) {
         return obj;
     }
 }
+/**
+ * Returns true if arg str contains ANY of the what strings
+ */
+export function strIncludesAny(str, substrs) {
+    if (!Array.isArray(substrs)) {
+        substrs = [substrs];
+    }
+    for (let substr of substrs) {
+        if (str.includes(substr)) {
+            return true;
+        }
+    }
+    return false;
+}
 export function isPromise(arg) {
     return !!arg && typeof arg === "object" && typeof arg.then === "function";
 }
