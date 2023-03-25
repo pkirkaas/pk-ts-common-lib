@@ -1,7 +1,5 @@
 import { dtFmt, pkToDate } from '../index.js';
 import util from 'util';
-import { dog } from '../index.js';
-console.log({ dog });
 util.inspect.defaultOptions.maxArrayLength = null;
 util.inspect.defaultOptions.depth = null;
 util.inspect.defaultOptions.breakLength = 200;
@@ -16,6 +14,8 @@ for (let key in tstDtArgs) {
         pkTDRes: pkToDate(orig),
         dtFmtShort: dtFmt('short', orig),
         dtFmtDT: dtFmt('dt', orig),
+        dtFmtDTs: dtFmt('dts', orig),
+        dtFmtTs: dtFmt('ts', orig),
     };
 }
 let dtE = new Date();

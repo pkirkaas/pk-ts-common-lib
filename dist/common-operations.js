@@ -204,7 +204,9 @@ export function pkToDate(arg) {
 export function dtFmt(fmt, dt) {
     let fmts = {
         short: 'dd-MMM-yy',
-        dt: 'dd-MMM-yy KK:mm'
+        dt: 'dd-MMM-yy KK:mm',
+        dts: 'dd-MMM-yy KK:mm:ss',
+        ts: 'KK:mm:ss',
     };
     let keys = Object.keys(fmts);
     if (!keys.includes(fmt)) {

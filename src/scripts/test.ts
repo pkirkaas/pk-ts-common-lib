@@ -1,8 +1,6 @@
 import { filterInt, GenObj, dtFmt, pkToDate, deepMeld, uniqueVals, PkError, TagObj, TagObjCol, typeOf, isEmpty, jsondecycle, JSON5, isSubset, arraysEqual } from '../index.js';
 import util from 'util';
 
-import { dog } from '../index.js';
-console.log({ dog });
 
 util.inspect.defaultOptions.maxArrayLength = null;
 util.inspect.defaultOptions.depth = null;
@@ -19,6 +17,8 @@ for (let key in tstDtArgs) {
 		pkTDRes: pkToDate(orig),
 		dtFmtShort: dtFmt('short', orig), 
 		dtFmtDT: dtFmt('dt', orig), 
+		dtFmtDTs: dtFmt('dts', orig), 
+		dtFmtTs: dtFmt('ts', orig), 
 	}
 }
 let dtE = new Date();
