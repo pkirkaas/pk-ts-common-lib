@@ -11,6 +11,7 @@ declare global {
         readonly random: any;
     }
 }
+export { dog } from './tst-export.js';
 export * from './common-operations.js';
 export * from './tag-classes.js';
 export * from './object-utils.js';

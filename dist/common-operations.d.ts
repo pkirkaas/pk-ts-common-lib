@@ -59,7 +59,12 @@ export declare function asNumeric(arg: any): number | boolean;
 /**
  * If arg can be in any way be interpreted as a date,
  * returns the JS Date object,
+ * NOTE: Unlike regulare JS :
+ *
+ * let dtE = new Date(); //Now
+ * let dtN = new Date(null); //Start of epoch
  * Valid arg values:
+ *    null - returns new Date() - now
  *    new Date("2016-01-01")
  *   "2016-01-01"
  *    1650566202871
@@ -72,6 +77,12 @@ export declare function asNumeric(arg: any): number | boolean;
  * the DB returns a timestamp as a string...
  */
 export declare function pkToDate(arg: any): false | Date;
+/**
+ * Quick Format a date with single format code & date
+ * @param string fmt - one of an array
+ * @param dt - datable or if null now  - but - if invalid, though returns false
+ */
+export declare function dtFmt(fmt: any, dt: any): string;
 /**
  * Return elements in arr1 Not In arr2
  */

@@ -183,7 +183,12 @@ export function asNumeric(arg) {
 /** 
  * If arg can be in any way be interpreted as a date,
  * returns the JS Date object,
+ * NOTE: Unlike regulare JS :
+ * 
+ * let dtE = new Date(); //Now
+ * let dtN = new Date(null); //Start of epoch
  * Valid arg values:
+ *    null - returns new Date() - now
  *    new Date("2016-01-01")
  *   "2016-01-01"
  *    1650566202871
@@ -198,6 +203,8 @@ export function asNumeric(arg) {
 export function pkToDate(arg) {
   if (isNumeric(arg)) {
     arg = new Date(Number(arg));
+  } else if (isEmpty(arg)) {
+    arg = new Date();
   } else {
     arg = new Date(arg);
   }
@@ -205,6 +212,30 @@ export function pkToDate(arg) {
     return arg;
   }
 	return false;
+}
+
+/**
+ * Quick Format a date with single format code & date
+ * @param string fmt - one of an array
+ * @param dt - datable or if null now  - but - if invalid, though returns false
+ */
+export function dtFmt(fmt, dt) {
+  let fmts = {
+    short:'dd-MMM-yy',
+    dt:'dd-MMM-yy KK:mm'
+
+  }
+  let keys = Object.keys(fmts);
+  if (!keys.includes(fmt)) {
+    fmt = 'short';
+  }
+  dt = pkToDate(dt);
+  if (dt === false) {
+    return "FALSE";
+  }
+  let fullFmt = fmts[fmt];
+  return format(dt, fullFmt);
+
 }
 
 

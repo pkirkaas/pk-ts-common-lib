@@ -31,6 +31,8 @@ declare global {
         readonly random: any;
     }
 }
+import { dog } from './tst-export.js';
+export { dog } from './tst-export.js';
 //@ts-ignore
 Array.prototype.random = function () {
   return this[Math.floor((Math.random()*this.length))];

@@ -1,8 +1,27 @@
-import { filterInt, PkError, typeOf, JSON5 } from '../index.js';
+import { dtFmt, pkToDate } from '../index.js';
 import util from 'util';
+import { dog } from '../index.js';
+console.log({ dog });
 util.inspect.defaultOptions.maxArrayLength = null;
 util.inspect.defaultOptions.depth = null;
 util.inspect.defaultOptions.breakLength = 200;
+console.log('In test.ts...');
+let tstDtArgs = { null: null, str1: '2023-12-01' };
+let res = {};
+for (let key in tstDtArgs) {
+    let orig = tstDtArgs[key];
+    let pkTDRes;
+    res[key] = {
+        orig,
+        pkTDRes: pkToDate(orig),
+        dtFmtShort: dtFmt('short', orig),
+        dtFmtDT: dtFmt('dt', orig),
+    };
+}
+let dtE = new Date();
+let dtN = new Date(null);
+console.log('todate res:', { res, dtE, dtN });
+/*
 let tobj = { a: 8 };
 let isDist = false;
 let j5 = JSON5.stringify(tobj);
@@ -11,52 +30,9 @@ let toJ = typeOf(JSON);
 let toJ5 = typeOf(JSON5);
 let arr1 = ['a', 'b', 'c'];
 let arr2 = ['a', 'b'];
-/*
 let asub = isSubset(arr2, arr1);
 let tagObj = new TagObj('myData', 'theTag');
 */
-function toInt(arg) {
-    if (filterInt(arg)) {
-        return arg;
-    }
-    return parseInt(arg);
-}
-/**
- * Retuns a random integer
- * @param numeric to - max int to return
- * @param numberic from default 0 - optional starting/min number
- * @return int
- */
-function randInt(to, from = 0) {
-    // Convert args to ints if possible, else throw
-    //@ts-ignore
-    if (isNaN((to = parseInt(to)) || isNaN((from = parseInt(from))))) {
-        throw new PkError(`Non-numeric arg to randInt():`, { to, from });
-    }
-    if (from === to) {
-        return from;
-    }
-    if (from > to) {
-        let tmp = from;
-        from = to;
-        to = tmp;
-    }
-    let bRand = from + Math.floor((Math.random() * ((to + 1) - from)));
-    return bRand;
-}
-let rtsts = [[5], [2, 3], [99, 3], [3, 99], ['5', 93.4], ['15.3', 4]];
-let res = rtsts.map((el) => {
-    let rands = [];
-    for (let i = 0; i < 8; i++) {
-        //@ts-ignore
-        rands.push(randInt(...el));
-    }
-    el.push(rands);
-    return el;
-});
-console.log({ res });
-//return this[Math.floor((Math.random()*this.length))];
-// Testing ints
 /*
 function valIsNaN(arg: any) {
     return arg !== arg;
