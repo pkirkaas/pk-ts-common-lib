@@ -219,7 +219,7 @@ export function pkToDate(arg) {
  * @param string fmt - one of an array
  * @param dt - datable or if null now  - but - if invalid, though returns false
  */
-export function dtFmt(fmt, dt) {
+export function dtFmt(fmt?:any, dt?:any) {
   let fmts = {
     short:'dd-MMM-yy',
     dt: 'dd-MMM-yy KK:mm',

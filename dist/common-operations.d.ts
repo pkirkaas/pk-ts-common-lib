@@ -82,7 +82,7 @@ export declare function pkToDate(arg: any): false | Date;
  * @param string fmt - one of an array
  * @param dt - datable or if null now  - but - if invalid, though returns false
  */
-export declare function dtFmt(fmt: any, dt: any): string;
+export declare function dtFmt(fmt?: any, dt?: any): string;
 /**
  * Return elements in arr1 Not In arr2
  */
