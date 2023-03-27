@@ -142,6 +142,7 @@ export declare function isObject(arg: any, alsoEmpty?: boolean): boolean;
  * Try to get as many props from obj as possible
  */
 export declare function allProps(obj: any): string[];
+export declare function allPropsWithTypes(obj: any): GenObj;
 /**
  * Take input arrays, merge, & return single array w. unique values
  */

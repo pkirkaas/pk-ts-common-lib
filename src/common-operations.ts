@@ -587,6 +587,15 @@ export function allProps(obj: any) {
   return unique;
 }
 
+export function allPropsWithTypes(obj: any) {
+  let props = allProps(obj);
+  let ret: GenObj = {};
+  for (let prop of props) {
+    ret[prop] = typeOf(obj[prop]);
+  }
+  return ret;
+}
+
 /**
  * Take input arrays, merge, & return single array w. unique values
  */

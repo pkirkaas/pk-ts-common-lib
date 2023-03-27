@@ -544,6 +544,14 @@ export function allProps(obj) {
     let unique = Array.from(allProps);
     return unique;
 }
+export function allPropsWithTypes(obj) {
+    let props = allProps(obj);
+    let ret = {};
+    for (let prop of props) {
+        ret[prop] = typeOf(obj[prop]);
+    }
+    return ret;
+}
 /**
  * Take input arrays, merge, & return single array w. unique values
  */
