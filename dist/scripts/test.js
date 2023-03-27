@@ -1,14 +1,18 @@
-import { dtFmt, pkToDate } from '../index.js';
+import { getRandEls } from '../index.js';
 import util from 'util';
 util.inspect.defaultOptions.maxArrayLength = null;
 util.inspect.defaultOptions.depth = null;
 util.inspect.defaultOptions.breakLength = 200;
 console.log('In test.ts...');
+let tstArr = ['dog', 'cat', 'horse', 'donky', 7, 12, { some: 'obj' }, 'today'];
+let res = getRandEls(tstArr, 1);
+console.log({ res });
+/*
 let tstDtArgs = { null: null, str1: '2023-12-01' };
-let res = {};
+let res: GenObj = {};
 for (let key in tstDtArgs) {
-    let orig = tstDtArgs[key];
-    let pkTDRes;
+     let orig = tstDtArgs[key];
+     let pkTDRes
     res[key] = {
         orig,
         pkTDRes: pkToDate(orig),
@@ -16,12 +20,11 @@ for (let key in tstDtArgs) {
         dtFmtDT: dtFmt('dt', orig),
         dtFmtDTs: dtFmt('dts', orig),
         dtFmtTs: dtFmt('ts', orig),
-    };
+    }
 }
 let dtE = new Date();
 let dtN = new Date(null);
 console.log('todate res:', { res, dtE, dtN });
-/*
 let tobj = { a: 8 };
 let isDist = false;
 let j5 = JSON5.stringify(tobj);

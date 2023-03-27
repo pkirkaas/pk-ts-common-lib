@@ -1,4 +1,4 @@
-import { filterInt, GenObj, dtFmt, pkToDate, deepMeld, uniqueVals, PkError, TagObj, TagObjCol, typeOf, isEmpty, jsondecycle, JSON5, isSubset, arraysEqual } from '../index.js';
+import { filterInt, getRandEls, GenObj, dtFmt, pkToDate, deepMeld, uniqueVals, PkError, TagObj, TagObjCol, typeOf, isEmpty, jsondecycle, JSON5, isSubset, arraysEqual } from '../index.js';
 import util from 'util';
 
 
@@ -7,6 +7,11 @@ util.inspect.defaultOptions.depth = null;
 util.inspect.defaultOptions.breakLength = 200;
 console.log('In test.ts...');
 
+let tstArr = ['dog', 'cat', 'horse', 'donky', 7, 12, { some: 'obj' }, 'today'];
+let res = getRandEls(tstArr, 1);
+console.log({ res });
+
+/*
 let tstDtArgs = { null: null, str1: '2023-12-01' };
 let res: GenObj = {};
 for (let key in tstDtArgs) {
@@ -24,7 +29,6 @@ for (let key in tstDtArgs) {
 let dtE = new Date();
 let dtN = new Date(null);
 console.log('todate res:', { res, dtE, dtN });
-/*
 let tobj = { a: 8 };
 let isDist = false;
 let j5 = JSON5.stringify(tobj);

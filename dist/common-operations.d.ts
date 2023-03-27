@@ -151,23 +151,14 @@ export declare function typeOf(anObj: any, opts?: any): String;
 /**
  * Replace w. below when finished.
  */
-export declare function getRandEls(arr: any[]): any;
+export declare function getRand(arr: any[]): any;
 /**
- * Not finished - replace above
-export function getRandEls(arr: any[], cnt = 1) {
-    if (!Array.isArray(arr) || !arr.length) {
-        throw new PkError(`Invalid array arg to getRandEls:`, { arr });
-    }
-    cnt = Math.min(cnt, arr.length);
-    if (cnt === 1) {
-        return arr[Math.floor((Math.random() * arr.length))];
-    }
-    let ret = [];
-    for (let i = 0; i < cnt; i++) {
-        let el =
-    }
-
-}
+ * Gets cnt random unique elements of an array
+ * Not the most efficient but it works
+ * if cnt = 0, returns a single element, else an array of els
+ */
+export declare function getRandEls(arr: any[], cnt?: any): any;
+/**
 */
 /**
  * Retuns a random integer
