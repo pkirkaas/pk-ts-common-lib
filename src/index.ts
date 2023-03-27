@@ -17,23 +17,23 @@ export JSON5;
 */
 //export { axios, jsondecycle };
 //require("json-decycle").extend(JSON5);
- //const jsondecycle = require("json-decycle");
+//const jsondecycle = require("json-decycle");
 /*
 import { extend } from "json-decycle";
 extend(JSON5);
 */
 export type OptArrStr = string | string[];
-export type Falsy  = false | 0 | "" | null | undefined;
-export type GenericObject  =  { [key: string]: any };
-export type GenObj  =  { [key: string]: any };
+export type Falsy = false | 0 | "" | null | undefined;
+export type GenericObject = { [key: string]: any };
+export type GenObj = { [key: string]: any };
 declare global {
-    interface Array<T> {
-        readonly random: any;
-    }
+  interface Array<T> {
+    readonly random: any;
+  }
 }
 //@ts-ignore
 Array.prototype.random = function () {
-  return this[Math.floor((Math.random()*this.length))];
+  return this[Math.floor((Math.random() * this.length))];
 }
 
 export * from './common-operations.js';

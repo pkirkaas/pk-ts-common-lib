@@ -665,6 +665,32 @@ export function typeOf(anObj: any, opts?:any):String { //level?: Number): String
 }
 
 /**
+ * Replace w. below when finished.
+ */
+export function getRandEls(arr: any[]) {
+  return arr[Math.floor((Math.random() * arr.length))];
+}
+
+
+/**
+ * Not finished - replace above
+export function getRandEls(arr: any[], cnt = 1) {
+	if (!Array.isArray(arr) || !arr.length) {
+		throw new PkError(`Invalid array arg to getRandEls:`, { arr });
+	}
+	cnt = Math.min(cnt, arr.length);
+	if (cnt === 1) {
+		return arr[Math.floor((Math.random() * arr.length))];
+	}
+	let ret = [];
+	for (let i = 0; i < cnt; i++) {
+		let el = 
+	}
+
+}
+*/
+
+/**
  * Retuns a random integer
  * @param numeric to - max int to return
  * @param numberic from default 0 - optional starting/min number
