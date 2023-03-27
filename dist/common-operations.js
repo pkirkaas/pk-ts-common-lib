@@ -522,7 +522,8 @@ export function isSimpleObject(anobj) {
     return Object.getPrototypeOf(anobj) === Object.getPrototypeOf({});
 }
 export function isObject(arg, alsoEmpty = false) {
-    if (!arg || isPrimitive(arg) || isEmpty(arg)) {
+    //if (!arg || isPrimitive(arg) || isEmpty(arg)) {
+    if (!arg || isPrimitive(arg)) {
         return false;
     }
     return _.isObjectLike(arg);
