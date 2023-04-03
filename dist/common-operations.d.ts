@@ -37,6 +37,7 @@ export declare function filterInt(value: any): number | false;
  * Move this to browser library when the time comes
  */
 export declare function eventInfo(ev: any): {};
+export declare function JSON5Parse(str: string): any;
 /** Try to make simple copies of complex objects (like with cyclic references)
  * to be storable in MongoDB
  * Primitives will just be returned unchanged.

@@ -136,6 +136,17 @@ export function eventInfo(ev) {
   }
   return eventDets;
 }
+
+export function JSON5Parse(str: string) {
+  try {
+    return JSON5.parse(str);
+  } catch (e) {
+    return {
+      json5ParseError: e,
+      origStr:str,
+    }
+  }
+}
 /** Try to make simple copies of complex objects (like with cyclic references)
  * to be storable in MongoDB
  * Primitives will just be returned unchanged.
@@ -149,7 +160,8 @@ export function jsonClone(arg) {
     //Not sure I want to do this - my JSON5Stringify might handle it - test in browser
     return arg.outerHTML;
   }
-  return JSON5.parse(JSON5Stringify(arg));
+  //return JSON5.parse(JSON5Stringify(arg));
+  return JSON5Parse(JSON5Stringify(arg));
 }
 /**
  * Checks if the arg can be converted to a number
