@@ -1,4 +1,4 @@
-import { filterInt, getRandEls, GenObj, dtFmt, pkToDate, deepMeld, uniqueVals, PkError, TagObj, TagObjCol, typeOf, isEmpty, jsondecycle, JSON5, isSubset, arraysEqual } from '../index.js';
+import { filterInt, getRandEls, GenObj, dtFmt, pkToDate, deepMeld, uniqueVals, PkError, TagObj, TagObjCol, typeOf, isEmpty,  JSON5, isSubset, arraysEqual } from '../index.js';
 import util from 'util';
 
 
