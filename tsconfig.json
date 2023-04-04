@@ -1,7 +1,7 @@
 {
   "extends":"@tsconfig/node18/tsconfig.json",
   "compilerOptions": {
-    "target":"ESNext",
+    "target":"ES6",
     "esModuleInterop": true,
     "outDir": "./dist",
     "baseUrl": ".",
@@ -21,7 +21,7 @@
     "allowJs": true,
     "newLine": "lf",
     "moduleResolution": "Node",
-    "module": "ESNext"
+    "module": "ES6"
   },
   "ts-node": {
     "require": [

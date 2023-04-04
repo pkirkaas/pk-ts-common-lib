@@ -1,3 +1,12 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 //const urlStatus = require('url-status-code');
 import urlStatus from 'url-status-code';
 import JSON5 from 'json5';
@@ -286,27 +295,29 @@ export function rewriteHttpsToHttp(url) {
  * TODO!! Doesn't accout for network errors, exceptions, etc!!
  * SEE below checkUrl3
  */
-export async function checkUrl(url) {
-    if (Array.isArray(url)) {
-        let badUrls = [];
-        for (let aurl of url) {
-            let status = await urlStatus(aurl);
-            if (status != 200) {
-                badUrls.push(aurl);
+export function checkUrl(url) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (Array.isArray(url)) {
+            let badUrls = [];
+            for (let aurl of url) {
+                let status = yield urlStatus(aurl);
+                if (status != 200) {
+                    badUrls.push(aurl);
+                }
             }
+            if (!badUrls.length) {
+                return true;
+            }
+            return badUrls;
         }
-        if (!badUrls.length) {
-            return true;
+        else {
+            let status = yield urlStatus(url);
+            if (status == 200) {
+                return true;
+            }
+            return false;
         }
-        return badUrls;
-    }
-    else {
-        let status = await urlStatus(url);
-        if (status == 200) {
-            return true;
-        }
-        return false;
-    }
+    });
 }
 function mkUrl(url) {
     try {
@@ -338,131 +349,134 @@ function mkUrlObj(url, full = false) {
         return err;
     }
 }
-export async function checkUrlAxios(tstUrl, full = false) {
-    //let lTool = new LogTool({context: 'checkUrlStatus'});
-    //  let lTool = LogTool.getLog('chkStatA', { context: 'checkUrlAxios' });
-    let failCodes = [404, 401, 403, 404]; // Return immediate false
-    let retryCodes = [408, 429,]; // Try again
-    let notAllowed = 405;
-    /*
-    let fOpts:GenObj = {
-      method: "HEAD",
-      cache: "no-cache",
-      headers: {
-      },
-      connection: "close",
-    };
-    */
-    let fOpts = {
-        method: "HEAD",
-        cache: "no-cache",
-        headers: {
-            Connection: 'close',
-        },
-        connection: "close",
-    };
-    let retries = 0;
-    let maxRetries = 4;
-    let timeout = 5;
-    let urlObj = mkUrlObj(tstUrl, full);
-    if (!(urlObj instanceof URL)) {
-        if (full) {
-            return urlObj;
-        }
-        return { err: tstUrl };
-    }
-    fOpts.url = tstUrl;
-    let resps = [];
-    let resp;
-    let lastErr;
-    try {
-        while (retries < maxRetries) {
-            retries++;
-            lastErr = null;
-            //@ts-ignore
-            try {
-                resp = await axios(fOpts);
-            }
-            catch (err) {
-                lastErr = err;
-                continue;
-            }
-            let status = resp.status;
-            if (status === notAllowed) {
-                fOpts.method = "GET";
-                //@ts-ignore
-                resp = await axios(fOpts);
-                status = resp.status;
-            }
-            if (status === 200) {
-                return true;
-            }
-            else if (failCodes.includes(status)) {
-                return false;
-            }
-            else if (retryCodes.includes(status)) {
-                continue;
-            }
-        } // Unknown reason for failure
-        if (resp) {
-            let respKeys = Object.keys(resp);
-            let status = resp.status;
-            let toResp = typeOf(resp);
-            resp['retries'] = retries;
-            let barg = { badresponse: { tstUrl, respKeys, status, toResp, resp } };
-            //lTool.snap(barg);
+export function checkUrlAxios(tstUrl, full = false) {
+    var _a, _b;
+    return __awaiter(this, void 0, void 0, function* () {
+        //let lTool = new LogTool({context: 'checkUrlStatus'});
+        //  let lTool = LogTool.getLog('chkStatA', { context: 'checkUrlAxios' });
+        let failCodes = [404, 401, 403, 404]; // Return immediate false
+        let retryCodes = [408, 429,]; // Try again
+        let notAllowed = 405;
+        /*
+        let fOpts:GenObj = {
+          method: "HEAD",
+          cache: "no-cache",
+          headers: {
+          },
+          connection: "close",
+        };
+        */
+        let fOpts = {
+            method: "HEAD",
+            cache: "no-cache",
+            headers: {
+                Connection: 'close',
+            },
+            connection: "close",
+        };
+        let retries = 0;
+        let maxRetries = 4;
+        let timeout = 5;
+        let urlObj = mkUrlObj(tstUrl, full);
+        if (!(urlObj instanceof URL)) {
             if (full) {
-                return resp;
+                return urlObj;
             }
-            return `code: [${resp.code}]; url: [${tstUrl}], status: [${resp.status}], retries: [${retries}]`;
+            return { err: tstUrl };
         }
-        else if (lastErr) { //Axios error!
-            let toErr = typeOf(lastErr);
-            let errKeys = Object.keys(lastErr);
-            let sarg = { exception: { toErr, errKeys, lastErr, retries, tstUrl } };
+        fOpts.url = tstUrl;
+        let resps = [];
+        let resp;
+        let lastErr;
+        try {
+            while (retries < maxRetries) {
+                retries++;
+                lastErr = null;
+                //@ts-ignore
+                try {
+                    resp = yield axios(fOpts);
+                }
+                catch (err) {
+                    lastErr = err;
+                    continue;
+                }
+                let status = resp.status;
+                if (status === notAllowed) {
+                    fOpts.method = "GET";
+                    //@ts-ignore
+                    resp = yield axios(fOpts);
+                    status = resp.status;
+                }
+                if (status === 200) {
+                    return true;
+                }
+                else if (failCodes.includes(status)) {
+                    return false;
+                }
+                else if (retryCodes.includes(status)) {
+                    continue;
+                }
+            } // Unknown reason for failure
+            if (resp) {
+                let respKeys = Object.keys(resp);
+                let status = resp.status;
+                let toResp = typeOf(resp);
+                resp['retries'] = retries;
+                let barg = { badresponse: { tstUrl, respKeys, status, toResp, resp } };
+                //lTool.snap(barg);
+                if (full) {
+                    return resp;
+                }
+                return `code: [${resp.code}]; url: [${tstUrl}], status: [${resp.status}], retries: [${retries}]`;
+            }
+            else if (lastErr) { //Axios error!
+                let toErr = typeOf(lastErr);
+                let errKeys = Object.keys(lastErr);
+                let sarg = { exception: { toErr, errKeys, lastErr, retries, tstUrl } };
+                //lTool.snap({ err, retries, tstUrl });
+                // console.log({ sarg });
+                //lTool.snap(sarg);
+                if (full) {
+                    return lastErr;
+                }
+                let ret;
+                if (typeof lastErr === 'object') {
+                    (_a = lastErr === null || lastErr === void 0 ? void 0 : lastErr.cause) === null || _a === void 0 ? void 0 : _a.code;
+                }
+                if (!ret) {
+                    ret = lastErr;
+                }
+                return ret;
+            }
+            let ret = {
+                unkown: { retries, tstUrl, msg: "No error and no response?" }
+            };
+            //lTool.snap(ret);
+            return ret;
+            //console.log({ resp, respKeys });
+            //console.log({  toResp, status, respKeys });
+        }
+        catch (err) {
+            console.error("WE SHOULDN'T BE HERE!!", err);
+            let toErr = typeOf(err);
+            let errKeys = Object.keys(err);
+            let sarg = { UnexpecteException: { toErr, errKeys, err, retries, tstUrl } };
             //lTool.snap({ err, retries, tstUrl });
             // console.log({ sarg });
             //lTool.snap(sarg);
             if (full) {
-                return lastErr;
+                return err;
             }
             let ret;
-            if (typeof lastErr === 'object') {
-                lastErr?.cause?.code;
+            if (typeof err === 'object') {
+                (_b = err === null || err === void 0 ? void 0 : err.cause) === null || _b === void 0 ? void 0 : _b.code;
             }
             if (!ret) {
-                ret = lastErr;
+                ret = err;
             }
             return ret;
         }
-        let ret = {
-            unkown: { retries, tstUrl, msg: "No error and no response?" }
-        };
-        //lTool.snap(ret);
-        return ret;
-        //console.log({ resp, respKeys });
-        //console.log({  toResp, status, respKeys });
-    }
-    catch (err) {
-        console.error("WE SHOULDN'T BE HERE!!", err);
-        let toErr = typeOf(err);
-        let errKeys = Object.keys(err);
-        let sarg = { UnexpecteException: { toErr, errKeys, err, retries, tstUrl } };
-        //lTool.snap({ err, retries, tstUrl });
-        // console.log({ sarg });
-        //lTool.snap(sarg);
-        if (full) {
-            return err;
-        }
-        let ret;
-        if (typeof err === 'object') {
-            err?.cause?.code;
-        }
-        if (!ret) {
-            ret = err;
-        }
-        return ret;
-    }
+    });
 }
 /**
  * Tri-state check - to account for failed checks -
@@ -473,22 +487,24 @@ export async function checkUrlAxios(tstUrl, full = false) {
  *
  *
  */
-export async function checkUrl3(url) {
-    try {
-        let status = await urlStatus(url);
-        //let toS = typeOf(status);
-        //console.log(`checkUrl3 - toS: ${toS}; status:`, { status });
-        if (status == 200) {
-            return true;
+export function checkUrl3(url) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            let status = yield urlStatus(url);
+            //let toS = typeOf(status);
+            //console.log(`checkUrl3 - toS: ${toS}; status:`, { status });
+            if (status == 200) {
+                return true;
+            }
+            else if (status > 300) {
+                return false;
+            }
+            return status;
         }
-        else if (status > 300) {
-            return false;
+        catch (err) {
+            return { msg: `Exception for URL:`, url, err };
         }
-        return status;
-    }
-    catch (err) {
-        return { msg: `Exception for URL:`, url, err };
-    }
+    });
 }
 //Returns false also for empty objects
 export function isEmpty(arg) {
