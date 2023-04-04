@@ -1,5 +1,5 @@
 /** Init shared by MongoQP-api & MongoQP-client */
-export * from './lib/json-decycle';
+export * from './lib/json-decycle.js';
 export type OptArrStr = string | string[];
 export type Falsy = false | 0 | "" | null | undefined;
 export type GenericObject = {

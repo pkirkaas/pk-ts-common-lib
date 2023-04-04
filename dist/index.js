@@ -1,5 +1,5 @@
 /** Init shared by MongoQP-api & MongoQP-client */
-export * from './lib/json-decycle';
+export * from './lib/json-decycle.js';
 //@ts-ignore
 Array.prototype.random = function () {
     return this[Math.floor((Math.random() * this.length))];

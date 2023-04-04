@@ -1,5 +1,5 @@
 /** Init shared by MongoQP-api & MongoQP-client */
-export * from './lib/json-decycle';
+export * from './lib/json-decycle.js';
 //export const axios = require('axios');
 //export const axios = require('axios');
 import axios from 'axios';
