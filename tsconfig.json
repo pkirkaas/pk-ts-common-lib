@@ -10,6 +10,7 @@
     "strict": false,
     "resolveJsonModule" : true,
     "sourceMap": true,
+     "lib": ["es2022","ES2020", "ES2021.WeakRef", "DOM"],
     "checkJs": true,
     "skipLibCheck": true,
     "noImplicitAny": false,
