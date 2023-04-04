@@ -144,6 +144,10 @@ export declare function isObject(arg: any, alsoEmpty?: boolean): boolean;
  */
 export declare function allProps(obj: any): string[];
 export declare function allPropsWithTypes(obj: any): GenObj;
+export declare function objInfo(arg: any): {
+    type: String;
+    props: GenObj;
+};
 /**
  * Take input arrays, merge, & return single array w. unique values
  */

@@ -141,8 +141,10 @@ export function JSON5Parse(str: string) {
   try {
     return JSON5.parse(str);
   } catch (e) {
+    let eInfo = objInfo(e);
     return {
       json5ParseError: e,
+      eInfo,
       origStr:str,
     }
   }
@@ -607,6 +609,15 @@ export function allPropsWithTypes(obj: any) {
     ret[prop] = typeOf(obj[prop]);
   }
   return ret;
+}
+
+export function objInfo(arg: any) {
+  let objType = typeOf(arg); 
+  let objProps: GenObj = {};
+  if (isObject(arg)) {
+     objProps = allPropsWithTypes;
+  }
+  return { type: objType, props: objProps };
 }
 
 /**

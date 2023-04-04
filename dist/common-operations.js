@@ -126,8 +126,10 @@ export function JSON5Parse(str) {
         return JSON5.parse(str);
     }
     catch (e) {
+        let eInfo = objInfo(e);
         return {
             json5ParseError: e,
+            eInfo,
             origStr: str,
         };
     }
@@ -564,6 +566,14 @@ export function allPropsWithTypes(obj) {
         ret[prop] = typeOf(obj[prop]);
     }
     return ret;
+}
+export function objInfo(arg) {
+    let objType = typeOf(arg);
+    let objProps = {};
+    if (isObject(arg)) {
+        objProps = allPropsWithTypes;
+    }
+    return { type: objType, props: objProps };
 }
 /**
  * Take input arrays, merge, & return single array w. unique values
