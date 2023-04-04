@@ -1,4 +1,5 @@
 /** Init shared by MongoQP-api & MongoQP-client */
+import 'weakmap-polyfill';
 //export const axios = require('axios');
 //export const axios = require('axios');
 import axios from 'axios';

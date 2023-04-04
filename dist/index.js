@@ -1,3 +1,5 @@
+/** Init shared by MongoQP-api & MongoQP-client */
+import 'weakmap-polyfill';
 //@ts-ignore
 Array.prototype.random = function () {
     return this[Math.floor((Math.random() * this.length))];

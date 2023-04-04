@@ -1,3 +1,5 @@
+/** Init shared by MongoQP-api & MongoQP-client */
+import 'weakmap-polyfill';
 export type OptArrStr = string | string[];
 export type Falsy = false | 0 | "" | null | undefined;
 export type GenericObject = {
