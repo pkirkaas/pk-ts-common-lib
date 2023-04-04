@@ -16,7 +16,8 @@ import JSON5 from 'json5';
 import _ from "lodash";
 import { PkError } from './index.js';
 //@ts-ignore
-import jsondecycle from "json-decycle";
+//import jsondecycle from "json-decycle";
+import jsondecycle from "./lib/json-decycle.js";
 export { jsondecycle };
 jsondecycle.extend(JSON5);
 //const axios = require("axios");

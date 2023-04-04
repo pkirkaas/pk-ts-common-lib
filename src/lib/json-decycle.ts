@@ -1,3 +1,4 @@
+import 'weakmap-polyfill';
 const isObject = (value: any): value is object => typeof value === 'object'
   && value != null
   && !(value instanceof Boolean)
