@@ -1,0 +1,3 @@
+# Copy some source code that I can't run as a package.
+
+json-decycle kept giving WeakMap not a constructor error in the browser - so trying here...
