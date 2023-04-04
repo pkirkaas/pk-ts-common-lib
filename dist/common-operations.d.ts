@@ -1,8 +1,6 @@
 import urlStatus from 'url-status-code';
 import JSON5 from 'json5';
 import { GenericObject, GenObj } from './index.js';
-import jsondecycle from "./lib/json-decycle.js";
-export { jsondecycle };
 export { urlStatus, JSON5, GenericObject, GenObj };
 /** NODE SPECIFIC
 */

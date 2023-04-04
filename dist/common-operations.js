@@ -17,9 +17,12 @@ import _ from "lodash";
 import { PkError } from './index.js';
 //@ts-ignore
 //import jsondecycle from "json-decycle";
-import jsondecycle from "./lib/json-decycle.js";
-export { jsondecycle };
-jsondecycle.extend(JSON5);
+//import { jsondecycle } from "./lib/json-decycle.js";
+import { extend } from "./lib/json-decycle.js";
+//export { jsondecycle };
+//decycle, retrocycle, extend
+//@ts-ignore
+extend(JSON5);
 //const axios = require("axios");
 //import { axios } from "Axios";
 import axios from "axios";

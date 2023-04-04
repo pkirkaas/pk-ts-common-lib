@@ -11,9 +11,12 @@ import { v4 as uuidv4 } from "uuid";
 import { PkError, GenericObject, GenObj } from './index.js';
 //@ts-ignore
 //import jsondecycle from "json-decycle";
-import jsondecycle from "./lib/json-decycle.js";
-export { jsondecycle };
-jsondecycle.extend(JSON5);
+//import { jsondecycle } from "./lib/json-decycle.js";
+import { decycle, retrocycle, extend } from "./lib/json-decycle.js";
+//export { jsondecycle };
+//decycle, retrocycle, extend
+//@ts-ignore
+extend(JSON5);
 
 //import { default as JSON5 } from 'json5';
 //import  JSON5  from 'json5';
