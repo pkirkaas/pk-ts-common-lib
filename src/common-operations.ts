@@ -615,7 +615,7 @@ export function objInfo(arg: any) {
   let objType = typeOf(arg); 
   let objProps: GenObj = {};
   if (isObject(arg)) {
-     objProps = allPropsWithTypes;
+     objProps = allPropsWithTypes(arg);
   }
   return { type: objType, props: objProps };
 }
