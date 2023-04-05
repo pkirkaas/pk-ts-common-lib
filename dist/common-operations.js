@@ -546,30 +546,98 @@ export function isObject(arg, alsoEmpty = false) {
     }
     return _.isObjectLike(arg);
 }
-/**
- * Try to get as many props from obj as possible
- */
-export function allProps(obj) {
-    if (!isObject(obj)) {
-        return [];
-    }
-    let allProps = new Set(Object.getOwnPropertyNames(obj));
-    while (obj = Object.getPrototypeOf(obj)) {
-        let keys = Object.getOwnPropertyNames(obj);
-        for (let key of keys) {
-            allProps.add(key);
+/*
+function probeProps(obj, props?: any[],) {
+    let def = ['constructor', 'prototype','name','class', 'type','super',];
+    let ret: GenObj = {};
+    for (let prop of def) {
+        try {
+            let val = obj[prop];
+            if ( val === undefined) {
+                continue;
+            }
+            ret[prop] = { val, type: typeOf(val) };
+        } catch (e) {
+            console.error(`error in probeProps with prop [${prop}]`, e, obj);
         }
     }
-    let unique = Array.from(allProps);
-    return unique;
+    return ret;
 }
-export function allPropsWithTypes(obj) {
-    let props = allProps(obj);
+ */
+export function getObjDets(obj) {
+    if (isPrimitive(obj)) {
+        return false;
+    }
+    let ret = {
+        type: typeof obj,
+        props: allProps(obj),
+        prototype: Object.getPrototypeOf(obj),
+    };
+    return ret;
+}
+export const skipProps = ['caller', 'callee', 'arguments', "toLocaleString",
+    "valueOf", "propertyIsEnumerable", "__lookupSetter__",
+    "__lookupGetter__", "__defineSetter__", "__defineGetter__",
+    "isPrototypeOf", "hasOwnProperty", "toString",];
+/**
+ * Inspect an object to get as many props as possible
+ * @param obj - what to test
+ * @param depth number - what to return
+ * 0: just array of prop keys
+ * 1: object of keys=>value
+ * 2: object of keys => {type, value}
+ */
+export function allProps(obj, depth = 2) {
+    if (isPrimitive(obj)) {
+        return false;
+    }
+    let def = ['constructor', 'prototype', 'name', 'class', 'type', 'super',];
+    let tstKeys = [];
+    for (let prop of def) {
+        try {
+            let val = obj[prop];
+            if (val === undefined) {
+                continue;
+            }
+            tstKeys.push(prop);
+        }
+        catch (e) {
+            console.error(`error in probeProps with prop [${prop}]`, e, obj);
+        }
+    }
+    let tstObj = obj;
+    let allProps = Object.getOwnPropertyNames(tstObj);
+    while (tstObj = Object.getPrototypeOf(tstObj)) {
+        let keys = Object.getOwnPropertyNames(tstObj);
+        for (let key of keys) {
+            allProps.push(key);
+        }
+    }
+    let unique = uniqueVals(allProps, tstKeys);
+    unique = inArr1NinArr2(unique, skipProps);
+    if (!depth) {
+        return unique;
+    }
     let ret = {};
-    for (let prop of props) {
-        ret[prop] = typeOf(obj[prop]);
+    for (let prop of unique) {
+        try {
+            let val = obj[prop];
+            let type = typeOf(val);
+            if (depth === 1) {
+                ret[prop] = val;
+            }
+            else {
+                ret[prop] = { type, val };
+            }
+        }
+        catch (e) {
+            console.error(`Exception in allProps for prop [${prop}]:`, { obj, e });
+        }
     }
     return ret;
+}
+export function allPropsWithTypes(obj) {
+    return allProps(obj, 1);
 }
 export function objInfo(arg) {
     let objType = typeOf(arg);

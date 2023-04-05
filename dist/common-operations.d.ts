@@ -137,14 +137,25 @@ export declare function isPrimitive(arg: any): boolean;
  */
 export declare function isSimpleObject(anobj: any): boolean;
 export declare function isObject(arg: any, alsoEmpty?: boolean): boolean;
+export declare function getObjDets(obj: any): false | {
+    type: "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function";
+    props: boolean | GenObj;
+    prototype: any;
+};
+export declare const skipProps: string[];
 /**
- * Try to get as many props from obj as possible
+ * Inspect an object to get as many props as possible
+ * @param obj - what to test
+ * @param depth number - what to return
+ * 0: just array of prop keys
+ * 1: object of keys=>value
+ * 2: object of keys => {type, value}
  */
-export declare function allProps(obj: any): string[];
-export declare function allPropsWithTypes(obj: any): GenObj;
+export declare function allProps(obj: any, depth?: number): false | GenObj;
+export declare function allPropsWithTypes(obj: any): false | GenObj;
 export declare function objInfo(arg: any): {
     type: String;
-    props: GenObj;
+    props: any;
 };
 /**
  * Take input arrays, merge, & return single array w. unique values

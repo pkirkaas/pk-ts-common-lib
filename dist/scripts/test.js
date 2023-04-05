@@ -1,12 +1,37 @@
-import { getRandEls } from '../index.js';
+import { PkError, isEmpty, allProps, getObjDets } from '../index.js';
 import util from 'util';
 util.inspect.defaultOptions.maxArrayLength = null;
 util.inspect.defaultOptions.depth = null;
 util.inspect.defaultOptions.breakLength = 200;
 console.log('In test.ts...');
 let tstArr = ['dog', 'cat', 'horse', 'donky', 7, 12, { some: 'obj' }, 'today'];
-let res = getRandEls(tstArr, 1);
-console.log({ res });
+function tstProps() {
+    let anErr = new PkError('tstErr');
+    let insp = allProps(anErr);
+    let bres = {
+        anErr: getObjDets(anErr),
+        PkError: getObjDets(PkError),
+        isEmpty: getObjDets(isEmpty),
+        emptyObj: getObjDets({}),
+        emptyArr: getObjDets([]),
+        string: getObjDets(' '),
+    };
+    /*
+    let res = {
+        anErr: { props: allProps(anErr), type: typeof anErr },
+        PkErrorClass: { props: allProps(PkError), type: typeof PkError },
+        //emptyObj: allProps({}),
+        simpleObj: allProps({ d: 'cat' }),
+        emptyArr: allProps([]),
+        //smallArr: allProps([1, 2, 3]),
+        isEmptyFnc: allProps(isEmpty),
+        //null:allProps(null),
+    }
+    */
+    console.log({ bres });
+}
+;
+tstProps();
 /*
 let tstDtArgs = { null: null, str1: '2023-12-01' };
 let res: GenObj = {};
