@@ -7,6 +7,34 @@ util.inspect.defaultOptions.breakLength = 200;
 console.log('In test.ts...');
 
 let tstArr = ['dog', 'cat', 'horse', 'donky', 7, 12, { some: 'obj' }, 'today'];
+class Organ {
+	age?: number;
+	constructor(age?: number) {
+		this.age = age;
+	}
+};
+class Animal extends Organ {
+	nick?: string;
+	constructor(age?:number, nick?:string) {
+		super(age);
+		this.nick = nick;
+	}
+};
+
+class Dog extends Animal {
+	breed?: string;
+	owner?: string;
+	constructor(age?: number, nick?: string, breed?: string, owner?: string) {
+		super(age, nick);
+		this.breed = breed;
+		this.owner = owner;
+	}
+}
+
+function tstFnNames(arg) {
+	console.log({ arg });
+}
+let aDog = new Dog(22, 'buck', 'mutt', 'daddy');
 function tstProps() {
 	let anErr = new PkError('tstErr');
 	let insp = allProps(anErr);

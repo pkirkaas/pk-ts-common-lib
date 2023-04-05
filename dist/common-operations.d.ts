@@ -137,9 +137,12 @@ export declare function isPrimitive(arg: any): boolean;
  */
 export declare function isSimpleObject(anobj: any): boolean;
 export declare function isObject(arg: any, alsoEmpty?: boolean): boolean;
+export declare function getConstructorChain(obj: any): void;
+export declare function getPrototypeChain(obj: any): void;
 export declare function getObjDets(obj: any): false | {
-    type: "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function";
-    props: boolean | GenObj;
+    toObj: "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function";
+    pkToObj: String;
+    props: false | GenObj;
     prototype: any;
 };
 export declare const skipProps: string[];

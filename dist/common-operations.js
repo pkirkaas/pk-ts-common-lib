@@ -564,13 +564,21 @@ function probeProps(obj, props?: any[],) {
     return ret;
 }
  */
+export function getConstructorChain(obj) {
+}
+export function getPrototypeChain(obj) {
+}
 export function getObjDets(obj) {
-    if (isPrimitive(obj)) {
+    if (!obj || isPrimitive(obj)) {
         return false;
     }
+    let toObj = typeof obj;
+    let pkToObj = typeOf(obj);
+    let props = allProps(obj);
     let ret = {
-        type: typeof obj,
-        props: allProps(obj),
+        toObj,
+        pkToObj,
+        props,
         prototype: Object.getPrototypeOf(obj),
     };
     return ret;
@@ -578,7 +586,7 @@ export function getObjDets(obj) {
 export const skipProps = ['caller', 'callee', 'arguments', "toLocaleString",
     "valueOf", "propertyIsEnumerable", "__lookupSetter__",
     "__lookupGetter__", "__defineSetter__", "__defineGetter__",
-    "isPrototypeOf", "hasOwnProperty", "toString",];
+    "isPrototypeOf", "hasOwnProperty", "toString", 'apply', 'bind', 'call'];
 /**
  * Inspect an object to get as many props as possible
  * @param obj - what to test
