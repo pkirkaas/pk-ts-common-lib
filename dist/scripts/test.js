@@ -1,4 +1,4 @@
-import { PkError, isEmpty, allProps, getObjDets } from '../index.js';
+import { PkError, isEmpty, allProps, classStack, getPrototypeChain, getObjDets } from '../index.js';
 import util from 'util';
 util.inspect.defaultOptions.maxArrayLength = null;
 util.inspect.defaultOptions.depth = null;
@@ -20,7 +20,9 @@ class Animal extends Organ {
     }
 }
 ;
-class Dog extends Animal {
+class Mammal extends Animal {
+}
+class Dog extends Mammal {
     breed;
     owner;
     constructor(age, nick, breed, owner) {
@@ -43,6 +45,12 @@ function tstProps() {
         emptyObj: getObjDets({}),
         emptyArr: getObjDets([]),
         string: getObjDets(' '),
+        aDogPChain: getPrototypeChain(aDog),
+        //anErrPChain: getPrototypeChain(anErr),
+        aDogCS: classStack(aDog),
+        //DogPChain: getPrototypeChain(Dog),
+        DogCS: classStack(Dog),
+        //	aDogCChain: getConstructorChain(aDog),
     };
     /*
     let res = {

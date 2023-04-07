@@ -137,8 +137,32 @@ export declare function isPrimitive(arg: any): boolean;
  */
 export declare function isSimpleObject(anobj: any): boolean;
 export declare function isObject(arg: any, alsoEmpty?: boolean): boolean;
-export declare function getConstructorChain(obj: any): void;
-export declare function getPrototypeChain(obj: any): void;
+export declare function getConstructorChain(obj: any): any[];
+/**
+ * Checks if arg is an instance of a class.
+ * TODO: - have to do lots of testing of different args to
+ * verify test conditions...
+ * @return - false, or {constructor, className}
+ */
+export declare function isInstance(arg: any): false | {
+    constructor: any;
+    className: any;
+};
+/**
+ * Appears to be no way to distinguish between a to-level class
+ * and a function...
+ */
+export declare function isClassOrFunction(arg: any): any;
+/**
+ * Check whether obj is an instance or a class
+ */
+export declare function classStack(obj: any): any[];
+/**
+ * This is very hacky - but can be helpful - to get the inheritance
+ * chain of classes & instances of classes - lots of bad edge cases -
+ * BE WARNED!
+ */
+export declare function getPrototypeChain(obj: any): any[];
 export declare function getObjDets(obj: any): false | {
     toObj: "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function";
     pkToObj: String;

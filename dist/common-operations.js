@@ -548,25 +548,138 @@ export function isObject(arg, alsoEmpty = false) {
 }
 /*
 function probeProps(obj, props?: any[],) {
-    let def = ['constructor', 'prototype','name','class', 'type','super',];
-    let ret: GenObj = {};
-    for (let prop of def) {
-        try {
-            let val = obj[prop];
-            if ( val === undefined) {
-                continue;
-            }
-            ret[prop] = { val, type: typeOf(val) };
-        } catch (e) {
-            console.error(`error in probeProps with prop [${prop}]`, e, obj);
-        }
+  let def = ['constructor', 'prototype','name','class', 'type','super',];
+  let ret: GenObj = {};
+  for (let prop of def) {
+    try {
+      let val = obj[prop];
+      if ( val === undefined) {
+        continue;
+      }
+      ret[prop] = { val, type: typeOf(val) };
+    } catch (e) {
+      console.error(`error in probeProps with prop [${prop}]`, e, obj);
     }
-    return ret;
+  }
+  return ret;
 }
  */
 export function getConstructorChain(obj) {
+    let i = 0;
+    let constructorChain = [];
+    let constructor = obj;
+    try {
+        while (constructor = constructor.constructor) {
+            let toConstructor = typeOf(constructor);
+            if ((i++ > 10) || (toConstructor === 'function: Function')) {
+                break;
+            }
+            constructorChain.push({ constructor, toConstructor });
+        }
+    }
+    catch (e) {
+        console.error(`Exception w. in getConstructorChain:`, { obj, e });
+    }
+    return constructorChain;
 }
+/**
+ * Checks if arg is an instance of a class.
+ * TODO: - have to do lots of testing of different args to
+ * verify test conditions...
+ * @return - false, or {constructor, className}
+ */
+export function isInstance(arg) {
+    if (isPrimitive(arg) || !isObject(arg) || isEmpty(arg)) {
+        return false;
+    }
+    try {
+        let constructor = arg?.constructor;
+        if (constructor) {
+            let className = constructor?.name;
+            return { constructor, className };
+        }
+    }
+    catch (e) {
+        new PkError(`Exception:`, { e, arg });
+    }
+    return false;
+}
+/**
+ * Appears to be no way to distinguish between a to-level class
+ * and a function...
+ */
+export function isClassOrFunction(arg) {
+    /*
+    if ((typeof arg !== 'function') ||
+      isPrimitive(arg) || !isObject(arg) || isEmpty(arg)) {
+      return false;
+    }
+    */
+    if ((typeof arg === 'function')) {
+        try {
+            let prototype = Object.getPrototypeOf(arg);
+            return prototype;
+        }
+        catch (e) {
+            new PkError(`Exception:`, { e, arg });
+        }
+    }
+    return false;
+}
+/**
+ * Check whether obj is an instance or a class
+ */
+export function classStack(obj) {
+    let tst = obj;
+    let stack = [];
+    let deref = 'prototypeConstructorName';
+    if (!isInstance(obj)) {
+        //tst = Object.getPrototypeOf(obj);
+        deref = 'prototypeName';
+    }
+    try {
+        let pchain = getPrototypeChain(tst);
+        stack = uniqueVals(pchain.map((e) => e[deref]));
+        stack = stack.filter((e) => e !== '');
+    }
+    catch (e) {
+        new PkError(`Exception:`, { obj, e, stack });
+    }
+    return stack;
+}
+/**
+ * This is very hacky - but can be helpful - to get the inheritance
+ * chain of classes & instances of classes - lots of bad edge cases -
+ * BE WARNED!
+ */
 export function getPrototypeChain(obj) {
+    let i = 0;
+    let prototype = obj;
+    let prototypeConstructor = prototype?.constructor;
+    let prototypeConstructorName = prototype?.constructor?.name;
+    let toPrototype = typeOf(prototype);
+    let prototypeName = prototype?.name;
+    let toPrototypeConstructor = typeOf(prototypeConstructor);
+    let prototypeChain = [{ prototype, prototypeName, prototypeConstructorName, toPrototype, prototypeConstructor, toPrototypeConstructor, }];
+    try {
+        while (prototype = Object.getPrototypeOf(prototype)) {
+            //if ((i++ > 20) || isEmpty(prototype)) {
+            if ((i++ > 20) || _.isEqual(prototype, {})) {
+                //if ((i++ > 20) ) {
+                break;
+            }
+            toPrototype = typeOf(prototype);
+            prototypeConstructorName = prototype?.constructor?.name;
+            prototypeConstructor = prototype?.constructor;
+            prototypeName = prototype?.name;
+            toPrototypeConstructor = typeOf(prototypeConstructor);
+            prototypeChain.push({ prototype, prototypeName, toPrototype, prototypeConstructorName, prototypeConstructor, toPrototypeConstructor, });
+        }
+    }
+    catch (e) {
+        console.error(`Exception w. in getPrototypeChain:`, { obj, e });
+    }
+    return prototypeChain;
 }
 export function getObjDets(obj) {
     if (!obj || isPrimitive(obj)) {
@@ -623,6 +736,7 @@ export function allProps(obj, depth = 2) {
     }
     let unique = uniqueVals(allProps, tstKeys);
     unique = inArr1NinArr2(unique, skipProps);
+    unique = unique.filter((e) => e.startsWith('call$'));
     if (!depth) {
         return unique;
     }

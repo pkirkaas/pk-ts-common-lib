@@ -1,4 +1,8 @@
-import { filterInt, getRandEls, GenObj, dtFmt, pkToDate, deepMeld, uniqueVals, PkError, TagObj, TagObjCol, typeOf, isEmpty, allProps, JSON5, isSubset,  arraysEqual, getObjDets } from '../index.js';
+import {
+	filterInt, getRandEls, GenObj, dtFmt, pkToDate, deepMeld, uniqueVals, PkError, TagObj, TagObjCol, typeOf, isEmpty, allProps, JSON5, isSubset,
+	classStack,
+	arraysEqual, getConstructorChain, getPrototypeChain, getObjDets
+} from '../index.js';
 import util from 'util';
 
 util.inspect.defaultOptions.maxArrayLength = null;
@@ -21,7 +25,10 @@ class Animal extends Organ {
 	}
 };
 
-class Dog extends Animal {
+class Mammal extends Animal {
+}
+
+class Dog extends Mammal {
 	breed?: string;
 	owner?: string;
 	constructor(age?: number, nick?: string, breed?: string, owner?: string) {
@@ -48,6 +55,12 @@ function tstProps() {
 		emptyObj: getObjDets({}),
 		emptyArr: getObjDets([]),
 		string: getObjDets(' '),
+		aDogPChain: getPrototypeChain(aDog),
+		//anErrPChain: getPrototypeChain(anErr),
+		aDogCS: classStack(aDog),
+		//DogPChain: getPrototypeChain(Dog),
+		DogCS: classStack(Dog),
+	//	aDogCChain: getConstructorChain(aDog),
 	};
 
 

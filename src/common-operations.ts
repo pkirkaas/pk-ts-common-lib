@@ -1,12 +1,12 @@
 
 //const urlStatus = require('url-status-code');
-import  urlStatus  from 'url-status-code';
-import  JSON5  from 'json5';
+import urlStatus from 'url-status-code';
+import JSON5 from 'json5';
 //const JSON5 = require('json5');
 //linked?
 
 //const _ = require("lodash");
-import _  from "lodash";
+import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 import { PkError, GenericObject, GenObj } from './index.js';
 //@ts-ignore
@@ -23,7 +23,7 @@ extend(JSON5);
 import * as ESP from "error-stack-parser";
 //const axios = require("axios");
 //import { axios } from "Axios";
-import  axios  from "axios";
+import axios from "axios";
 import { format, isValid } from "date-fns";
 export { urlStatus, JSON5, GenericObject, GenObj };
 //const path = require("path/posix");
@@ -149,7 +149,7 @@ export function JSON5Parse(str: string) {
     return {
       json5ParseError: e,
       eInfo,
-      origStr:str,
+      origStr: str,
     }
   }
 }
@@ -229,7 +229,7 @@ export function pkToDate(arg) {
   if ((arg instanceof Date) && isValid(arg)) {
     return arg;
   }
-	return false;
+  return false;
 }
 
 /**
@@ -237,9 +237,9 @@ export function pkToDate(arg) {
  * @param string fmt - one of an array
  * @param dt - datable or if null now  - but - if invalid, though returns false
  */
-export function dtFmt(fmt?:any, dt?:any) {
+export function dtFmt(fmt?: any, dt?: any) {
   let fmts = {
-    short:'dd-MMM-yy',
+    short: 'dd-MMM-yy',
     dt: 'dd-MMM-yy KK:mm',
     dts: 'dd-MMM-yy KK:mm:ss',
     ts: 'KK:mm:ss',
@@ -273,7 +273,7 @@ export function inArr1NinArr2(arr1: any[], arr2: any[]) {
 /**
  * Uniqe intersection of two arrays
  */
-export function intersect(a?:any[], b?:any[]):any[] {
+export function intersect(a?: any[], b?: any[]): any[] {
   var setB = new Set(b);
   return [...new Set(a)].filter(x => setB.has(x));
 }
@@ -282,7 +282,7 @@ export function intersect(a?:any[], b?:any[]):any[] {
  * Compares arrays by VALUES - independant of order
  */
 export function arraysEqual(a, b) {
-	return JSON.stringify(a.sort()) === JSON.stringify(b.sort());
+  return JSON.stringify(a.sort()) === JSON.stringify(b.sort());
 }
 
 /**
@@ -346,16 +346,16 @@ export async function checkUrl(url) {
 
 
 function mkUrl(url) {
-	try {
-		let urlObj = new URL(url);
-		return urlObj;
-	} catch (err) {
-		//console.error({ url, err });
-		if ((typeof err === 'object') && (err.code)) {
-				return err.code;
-		}
-		return err;
-	}
+  try {
+    let urlObj = new URL(url);
+    return urlObj;
+  } catch (err) {
+    //console.error({ url, err });
+    if ((typeof err === 'object') && (err.code)) {
+      return err.code;
+    }
+    return err;
+  }
 }
 
 
@@ -379,7 +379,7 @@ function mkUrlObj(url, full = false) {
 
 export async function checkUrlAxios(tstUrl, full = false) {
   //let lTool = new LogTool({context: 'checkUrlStatus'});
-//  let lTool = LogTool.getLog('chkStatA', { context: 'checkUrlAxios' });
+  //  let lTool = LogTool.getLog('chkStatA', { context: 'checkUrlAxios' });
   let failCodes = [404, 401, 403, 404]; // Return immediate false
   let retryCodes = [408, 429,]; // Try again
   let notAllowed = 405;
@@ -556,7 +556,7 @@ export function trueVal(arg) {
  * Arrays & Objects passed by referrence,
  * risk of unintended changes
  */
-export function isByRef(arg: any):boolean {
+export function isByRef(arg: any): boolean {
   return !isPrimitive(arg);
 }
 
@@ -590,26 +590,144 @@ export function isObject(arg, alsoEmpty = false) {
 
 /*
 function probeProps(obj, props?: any[],) {
-	let def = ['constructor', 'prototype','name','class', 'type','super',];
-	let ret: GenObj = {};
-	for (let prop of def) {
-		try {
-			let val = obj[prop];
-			if ( val === undefined) {
-				continue;
-			}
-			ret[prop] = { val, type: typeOf(val) };
-		} catch (e) {
-			console.error(`error in probeProps with prop [${prop}]`, e, obj);
-		}
-	}
-	return ret;
+  let def = ['constructor', 'prototype','name','class', 'type','super',];
+  let ret: GenObj = {};
+  for (let prop of def) {
+    try {
+      let val = obj[prop];
+      if ( val === undefined) {
+        continue;
+      }
+      ret[prop] = { val, type: typeOf(val) };
+    } catch (e) {
+      console.error(`error in probeProps with prop [${prop}]`, e, obj);
+    }
+  }
+  return ret;
 }
  */
 export function getConstructorChain(obj) {
+  let i = 0;
+  let constructorChain: any[] = [];
+  let constructor: any = obj;
+  try {
+    while (constructor = constructor.constructor) {
+      let toConstructor = typeOf(constructor);
+      if ((i++ > 10) || (toConstructor === 'function: Function')) {
+        break;
+      }
+      constructorChain.push({ constructor, toConstructor });
+    }
+  } catch (e) {
+    console.error(`Exception w. in getConstructorChain:`, { obj, e });
+  }
+  return constructorChain;
 }
 
+/**
+ * Checks if arg is an instance of a class. 
+ * TODO: - have to do lots of testing of different args to 
+ * verify test conditions...
+ * @return - false, or {constructor, className}
+ */
+export function isInstance(arg) {
+  if (isPrimitive(arg) || !isObject(arg) || isEmpty(arg)) {
+    return false;
+  }
+  try {
+    let constructor = arg?.constructor;
+    if (constructor) {
+      let className = constructor?.name;
+      return { constructor, className };
+    }
+  } catch (e) {
+    new PkError(`Exception:`, { e, arg });
+  }
+  return false;
+}
+
+/**
+ * Appears to be no way to distinguish between a to-level class
+ * and a function...
+ */
+export function isClassOrFunction(arg) {
+  /*
+  if ((typeof arg !== 'function') ||
+    isPrimitive(arg) || !isObject(arg) || isEmpty(arg)) {
+    return false;
+  }
+  */
+  if ((typeof arg === 'function')) {
+    try {
+      let prototype = Object.getPrototypeOf(arg);
+      return prototype;
+    } catch (e) {
+      new PkError(`Exception:`, { e, arg });
+    }
+  }
+  return false;
+}
+
+
+/**
+ * Check whether obj is an instance or a class
+ */
+export function classStack(obj) {
+  let tst: any = obj;
+  let stack = [];
+  let deref = 'prototypeConstructorName';
+
+
+  if (!isInstance(obj)) {
+    //tst = Object.getPrototypeOf(obj);
+    deref = 'prototypeName';
+  }
+
+
+
+
+  try {
+    let pchain = getPrototypeChain(tst);
+    stack = uniqueVals(pchain.map((e) => e[deref]));
+    stack = stack.filter((e) => e !== '');
+  } catch (e) {
+    new PkError(`Exception:`, { obj, e, stack });
+  }
+  return stack;
+}
+
+/**
+ * This is very hacky - but can be helpful - to get the inheritance
+ * chain of classes & instances of classes - lots of bad edge cases -
+ * BE WARNED!
+ */
 export function getPrototypeChain(obj) {
+  let i = 0;
+  let prototype: any = obj;
+  let prototypeConstructor = prototype?.constructor;
+  let prototypeConstructorName = prototype?.constructor?.name;
+  let toPrototype = typeOf(prototype);
+  let prototypeName = prototype?.name;
+  let toPrototypeConstructor = typeOf(prototypeConstructor);
+  let prototypeChain: any[] = [{ prototype, prototypeName, prototypeConstructorName, toPrototype, prototypeConstructor, toPrototypeConstructor, }];
+  try {
+    while (prototype = Object.getPrototypeOf(prototype)) {
+      //if ((i++ > 20) || isEmpty(prototype)) {
+      if ((i++ > 20) || _.isEqual(prototype, {})) {
+        //if ((i++ > 20) ) {
+        break;
+      }
+      toPrototype = typeOf(prototype);
+      prototypeConstructorName = prototype?.constructor?.name;
+      prototypeConstructor = prototype?.constructor;
+      prototypeName = prototype?.name;
+      toPrototypeConstructor = typeOf(prototypeConstructor);
+      prototypeChain.push({ prototype, prototypeName, toPrototype, prototypeConstructorName, prototypeConstructor, toPrototypeConstructor, });
+    }
+  } catch (e) {
+    console.error(`Exception w. in getPrototypeChain:`, { obj, e });
+  }
+  return prototypeChain;
 }
 export function getObjDets(obj) {
   if (!obj || isPrimitive(obj)) {
@@ -629,9 +747,9 @@ export function getObjDets(obj) {
 }
 
 export const skipProps = ['caller', 'callee', 'arguments', "toLocaleString",
-    "valueOf", "propertyIsEnumerable", "__lookupSetter__",
-    "__lookupGetter__", "__defineSetter__", "__defineGetter__",
-    "isPrototypeOf", "hasOwnProperty", "toString",'apply', 'bind','call'];
+  "valueOf", "propertyIsEnumerable", "__lookupSetter__",
+  "__lookupGetter__", "__defineSetter__", "__defineGetter__",
+  "isPrototypeOf", "hasOwnProperty", "toString", 'apply', 'bind', 'call'];
 
 
 
@@ -643,23 +761,23 @@ export const skipProps = ['caller', 'callee', 'arguments', "toLocaleString",
  * 1: object of keys=>value
  * 2: object of keys => {type, value}
  */
-export function allProps(obj: any, depth:number=2) {
+export function allProps(obj: any, depth: number = 2) {
   if (isPrimitive(obj)) {
     return false;
   }
-	let def = ['constructor', 'prototype','name','class', 'type','super',];
+  let def = ['constructor', 'prototype', 'name', 'class', 'type', 'super',];
   let tstKeys = [];
-	for (let prop of def) {
-		try {
-			let val = obj[prop];
-			if ( val === undefined) {
-				continue;
-			}
+  for (let prop of def) {
+    try {
+      let val = obj[prop];
+      if (val === undefined) {
+        continue;
+      }
       tstKeys.push(prop);
-		} catch (e) {
-			console.error(`error in probeProps with prop [${prop}]`, e, obj);
-		}
-	}
+    } catch (e) {
+      console.error(`error in probeProps with prop [${prop}]`, e, obj);
+    }
+  }
   let tstObj = obj;
   let allProps = Object.getOwnPropertyNames(tstObj);
   while (tstObj = Object.getPrototypeOf(tstObj)) {
@@ -670,6 +788,7 @@ export function allProps(obj: any, depth:number=2) {
   }
   let unique = uniqueVals(allProps, tstKeys);
   unique = inArr1NinArr2(unique, skipProps);
+  unique = unique.filter((e) => e.startsWith('call$'));
   if (!depth) {
     return unique;
   }
@@ -696,10 +815,10 @@ export function allPropsWithTypes(obj: any) {
 }
 
 export function objInfo(arg: any) {
-  let objType = typeOf(arg); 
-  let objProps:any = {};
+  let objType = typeOf(arg);
+  let objProps: any = {};
   if (isObject(arg)) {
-     objProps = allPropsWithTypes(arg);
+    objProps = allPropsWithTypes(arg);
   }
   return { type: objType, props: objProps };
 }
@@ -707,12 +826,12 @@ export function objInfo(arg: any) {
 /**
  * Take input arrays, merge, & return single array w. unique values
  */
-export function uniqueVals(...arrs):any[] {
+export function uniqueVals(...arrs): any[] {
   let merged: any[] = [];
   for (let arr of arrs) {
     merged = [...merged, ...arr];
   }
-  return Array.from(new Set(merged)); 
+  return Array.from(new Set(merged));
 }
 
 /* Use lodash isObject (excludes functions) or isObjectLike (includes functions)
@@ -724,7 +843,7 @@ export function isRealObject(anobj) {
 }
 */
 //export function typeOf(anObj: any, level?: Number): String {
-export function typeOf(anObj: any, opts?:any):String { //level?: Number): String {
+export function typeOf(anObj: any, opts?: any): String { //level?: Number): String {
   let level: any = null;
   let functionPrefix = 'function: ';
   let simplePrefix = 'simple ';
@@ -734,7 +853,7 @@ export function typeOf(anObj: any, opts?:any):String { //level?: Number): String
     level = opts.level;
     if (opts.justType) {
       simplePrefix = functionPrefix = '';
-      
+
     }
   }
 
@@ -831,22 +950,22 @@ export function getRandEls(arr: any[], cnt = null) {
  * @param numberic from default 0 - optional starting/min number
  * @return int
  */
-export function randInt(to:any, from:any = 0) {
-	// Convert args to ints if possible, else throw
-	//@ts-ignore
-	if (isNaN((to = parseInt(to)) || isNaN((from = parseInt(from)))))  {
-		throw new PkError(`Non-numeric arg to randInt():`, { to, from });
-	}
-	if (from === to) {
-		return from;
-	}
-	if (from > to) {
-		let tmp = from;
-		from = to;
-		to = tmp;
-	}
-	let bRand = from + Math.floor((Math.random() * ((to + 1) - from)));
-	return bRand;
+export function randInt(to: any, from: any = 0) {
+  // Convert args to ints if possible, else throw
+  //@ts-ignore
+  if (isNaN((to = parseInt(to)) || isNaN((from = parseInt(from))))) {
+    throw new PkError(`Non-numeric arg to randInt():`, { to, from });
+  }
+  if (from === to) {
+    return from;
+  }
+  if (from > to) {
+    let tmp = from;
+    from = to;
+    to = tmp;
+  }
+  let bRand = from + Math.floor((Math.random() * ((to + 1) - from)));
+  return bRand;
 }
 
 
