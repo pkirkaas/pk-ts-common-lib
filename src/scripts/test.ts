@@ -48,7 +48,7 @@ function tstProps() {
 
 
 	let bres = {
-		inspP: allProps(anErr, 'fdv' ),
+		inspP: allProps(anErr, 'fdv'),
 		anErr: getObjDets(anErr),
 		PkError: getObjDets(PkError),
 		isEmpty: getObjDets(isEmpty),
@@ -60,7 +60,7 @@ function tstProps() {
 		aDogCS: classStack(aDog),
 		//DogPChain: getPrototypeChain(Dog),
 		DogCS: classStack(Dog),
-	//	aDogCChain: getConstructorChain(aDog),
+		//	aDogCChain: getConstructorChain(aDog),
 	};
 
 

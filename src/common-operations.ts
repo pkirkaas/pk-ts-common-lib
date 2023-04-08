@@ -835,7 +835,7 @@ export function allProps(obj: any, opt:string='pf', depth=6):GenObj|[]|string|bo
 }
 
 export function allPropsWithTypes(obj: any) {
-  return allProps(obj, 't');
+  return allProps(obj, 'tf');
 }
 
 export function objInfo(arg: any) {
@@ -890,7 +890,7 @@ export function typeOf(anObj: any, opts?: any): String { //level?: Number): Stri
     let to = typeof anObj;
     if (to === "function") {
       let keys = Object.keys(anObj);
-      let name = anObj.name;
+      let name = anObj?.name;
       if (!name) {
         name = 'function';
       }
@@ -912,7 +912,7 @@ export function typeOf(anObj: any, opts?: any): String { //level?: Number): Stri
     if (!anObj) {
       return 'undefined?';
     }
-    let ret = `${anObj.constructor.name}`;
+    let ret = `${anObj?.constructor?.name}`;
     if (level) {
       let keys = Object.keys(anObj);
       console.error({ keys });
