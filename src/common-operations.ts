@@ -735,7 +735,7 @@ export function getObjDets(obj) {
   }
   let toObj = typeof obj;
   let pkToObj = typeOf(obj);
-  let props = allProps(obj, { dets: 'v' });
+  let props = allProps(obj, 'vtpf' );
   let prototype = Object.getPrototypeOf(obj);
   let ret = { toObj, pkToObj, props, prototype, };
   return ret;
@@ -763,19 +763,28 @@ export function filterProps(props: any[]) {
  * //0: just array of prop keys
  * //1: object of keys=>value
  * //2: object of keys => {type, value}
- * @param {} opts: {dets:k(default)|kv|kt|kty, filterd:true(default)|false
- * If dets===k, just array of props
- * if dets===v - object {prop:value}
- * if dets===t - object {prop:type}
- * if (dets===tv or vt) object {prop:{type, value}
- * if (filtered === false) - all the returned props, values, etc
- * if (filtered === true) - Remove uninteresting props
+ * @param string opt any or all of: v|t|p|f 
+ * If 'v' - the raw value
+ * If 'p' - a parsed, readable value
+ * If 't' - the value type
+
+ * If none of t,v, or p  just array of props
+
+ * If at least one of t,v,p, abject {prop:{value,type,parsed}
+
+ * If f - filter out uninteresting props
  * 
+ * @param int depth - how many levels should it go?
  */
-export function allProps(obj: any, { dets = 'k', filter = true }: { dets?: string, filter?: boolean } = {}) {
-  console.log("In allProps - ", { dets, filter });
+//export function allProps(obj: any, { dets = 'p', filter = true }: { dets?: string, filter?: boolean } = {}) {
+export function allProps(obj: any, opt:string='pf', depth=6):GenObj|[]|string|boolean {
+  if (depth-- < 0) {
+    return 'END';
+  }
+  let opts = opt.split('');
+  let filter = opts.includes('f');
   if (isPrimitive(obj)) {
-    return false;
+    return false; // Or the primitive?
   }
   let def = ['constructor', 'prototype', 'name', 'class', 'type', 'super',];
   let tstKeys = [];
@@ -791,40 +800,42 @@ export function allProps(obj: any, { dets = 'k', filter = true }: { dets?: strin
     }
   }
   let tstObj = obj;
-  let allProps = Object.getOwnPropertyNames(tstObj);
+  let props = Object.getOwnPropertyNames(tstObj);
   while (tstObj = Object.getPrototypeOf(tstObj)) {
     let keys = Object.getOwnPropertyNames(tstObj);
     for (let key of keys) {
-      allProps.push(key);
+      props.push(key);
     }
   }
 
-  let unique = uniqueVals(allProps, tstKeys);
+  let unique = uniqueVals(props, tstKeys);
   if (filter) {
     unique = filterProps(unique);
   }
-  if (dets === 'k') { // Just array of prop names
+  if (isEmpty(intersect(opts, ['t', 'v', 'p',]))) { //Just the array of props
     return unique;
   } //We want more...
+
   let retObj: GenObj = {};
   for (let prop of unique) {
+    let ret: GenObj = {};
     let val = obj[prop];
-    let type = typeOf(val);
-    if (dets === 'v') {
-      retObj[prop] = val;
-    } else if (dets === 't') {
-      retObj[prop] = type;
-    } else if ((dets === 'tv') || (dets === 'vt')) {
-      retObj[prop] = { val, type };
-    } else {
-      throw new PkError(`In allProps - illegal argument [${dets}] for dets`);
+    if (opts.includes('v')) {
+      ret.val = val;
     }
+    if (opts.includes('t')) {
+      ret.type = typeOf(val);
+    }
+    if (opts.includes('p')) {
+      ret.parsed = allProps(val, opt,depth);
+    }
+    retObj[prop] = ret;
   }
   return retObj;
 }
 
 export function allPropsWithTypes(obj: any) {
-  return allProps(obj, { filter: true });
+  return allProps(obj, 't');
 }
 
 export function objInfo(arg: any) {

@@ -38,7 +38,7 @@ let aDog = new Dog(22, 'buck', 'mutt', 'daddy');
 function tstProps() {
     let anErr = new PkError('tstErr');
     let bres = {
-        inspP: allProps(anErr, { dets: 'dv' }),
+        inspP: allProps(anErr, 'fdv'),
         anErr: getObjDets(anErr),
         PkError: getObjDets(PkError),
         isEmpty: getObjDets(isEmpty),

@@ -166,7 +166,7 @@ export declare function getPrototypeChain(obj: any): any[];
 export declare function getObjDets(obj: any): false | {
     toObj: "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function";
     pkToObj: String;
-    props: false | GenObj;
+    props: string | boolean | GenObj | [];
     prototype: any;
 };
 export declare const skipProps: string[];
@@ -180,20 +180,21 @@ export declare function filterProps(props: any[]): any[];
  * //0: just array of prop keys
  * //1: object of keys=>value
  * //2: object of keys => {type, value}
- * @param {} opts: {dets:k(default)|kv|kt|kty, filterd:true(default)|false
- * If dets===k, just array of props
- * if dets===v - object {prop:value}
- * if dets===t - object {prop:type}
- * if (dets===tv or vt) object {prop:{type, value}
- * if (filtered === false) - all the returned props, values, etc
- * if (filtered === true) - Remove uninteresting props
+ * @param string opt any or all of: v|t|p|f
+ * If 'v' - the raw value
+ * If 'p' - a parsed, readable value
+ * If 't' - the value type
+
+ * If none of t,v, or p  just array of props
+
+ * If at least one of t,v,p, abject {prop:{value,type,parsed}
+
+ * If f - filter out uninteresting props
  *
+ * @param int depth - how many levels should it go?
  */
-export declare function allProps(obj: any, { dets, filter }?: {
-    dets?: string;
-    filter?: boolean;
-}): false | GenObj;
-export declare function allPropsWithTypes(obj: any): false | GenObj;
+export declare function allProps(obj: any, opt?: string, depth?: number): GenObj | [] | string | boolean;
+export declare function allPropsWithTypes(obj: any): string | boolean | GenObj | [];
 export declare function objInfo(arg: any): {
     type: String;
     props: any;
