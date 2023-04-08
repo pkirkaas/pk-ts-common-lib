@@ -693,6 +693,13 @@ export function getObjDets(obj) {
     return ret;
 }
 /**
+ * Not complete, but want to be careful...
+ */
+export const jsBuiltInObjMap = {
+    Object, Array, Date, Math, String, Function,
+};
+export const jsBuiltIns = Object.values(jsBuiltInObjMap);
+/**
  * Any point to decompose this with allProps?
  */
 export function isParsable(arg) {
@@ -703,6 +710,42 @@ export function isParsable(arg) {
         return false;
     }
     return true;
+}
+/**
+ * Returns property names from prototype tree. Even works for primitives,
+ * but not for null - so catch the exception & return []
+ */
+export function getProps(obj) {
+    try {
+        let tstObj = obj;
+        let props = Object.getOwnPropertyNames(tstObj);
+        while (tstObj = Object.getPrototypeOf(tstObj)) {
+            let keys = Object.getOwnPropertyNames(tstObj);
+            for (let key of keys) {
+                props.push(key);
+            }
+        }
+        return props;
+    }
+    catch (e) {
+        new PkError(`Exception in getProps-`, { obj, e });
+    }
+    return [];
+}
+/**
+ * Returns false if arg is NOT a built-in - like Object, Array, etc,
+ * OR - the built-in Name as string.
+ */
+export function isBuiltIn(arg) {
+    try { //For null, whatever odd..
+        if (jsBuiltIns.includes(arg)) {
+            return arg.name;
+        }
+    }
+    catch (e) {
+        new PkError(`Exception in isBuiltin for arg:`, { arg, e });
+    }
+    return false;
 }
 export const skipProps = ['caller', 'callee', 'arguments', "toLocaleString",
     "valueOf", "propertyIsEnumerable", "__lookupSetter__",
@@ -783,6 +826,14 @@ export function allProps(obj, opt = 'pf', depth = 6) {
     for (let prop of unique) {
         let ret = {};
         let val = obj[prop];
+        if (['prototype', 'constructor'].includes(prop)) {
+            let bi;
+            if (bi = isBuiltIn(val)) {
+                ret.val = bi;
+                retObj[prop] = ret;
+                continue;
+            }
+        }
         if (opts.includes('v')) {
             ret.val = val;
         }

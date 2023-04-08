@@ -170,9 +170,31 @@ export declare function getObjDets(obj: any): false | {
     prototype: any;
 };
 /**
+ * Not complete, but want to be careful...
+ */
+export declare const jsBuiltInObjMap: {
+    Object: ObjectConstructor;
+    Array: ArrayConstructor;
+    Date: DateConstructor;
+    Math: Math;
+    String: StringConstructor;
+    Function: FunctionConstructor;
+};
+export declare const jsBuiltIns: (DateConstructor | StringConstructor | ObjectConstructor | Math | ArrayConstructor | FunctionConstructor)[];
+/**
  * Any point to decompose this with allProps?
  */
 export declare function isParsable(arg: any): boolean;
+/**
+ * Returns property names from prototype tree. Even works for primitives,
+ * but not for null - so catch the exception & return []
+ */
+export declare function getProps(obj: any): string[];
+/**
+ * Returns false if arg is NOT a built-in - like Object, Array, etc,
+ * OR - the built-in Name as string.
+ */
+export declare function isBuiltIn(arg: any): any;
 export declare const skipProps: string[];
 export declare function filterProps(props: any[]): any[];
 /**

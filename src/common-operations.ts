@@ -735,7 +735,7 @@ export function getObjDets(obj) {
   }
   let toObj = typeof obj;
   let pkToObj = typeOf(obj);
-  let props = allProps(obj, 'vtpf' );
+  let props = allProps(obj, 'vtpf');
   let prototype = Object.getPrototypeOf(obj);
   let ret = { toObj, pkToObj, props, prototype, };
   return ret;
@@ -743,26 +743,73 @@ export function getObjDets(obj) {
 }
 
 /**
+ * Not complete, but want to be careful...
+ */
+export const jsBuiltInObjMap = {
+  Object, Array, Date, Math, String, Function,
+};
+
+export const jsBuiltIns = Object.values(jsBuiltInObjMap);
+
+/**
  * Any point to decompose this with allProps?
  */
 export function isParsable(arg) {
   if (!arg || isEmpty(arg) || isPrimitive(arg) ||
-  //@ts-ignore
+    //@ts-ignore
     (arg === Object) || (arg === Array) || (arg === Function) ||
-    
-    
-    
+
+
+
     (!isObject(arg) && (typeof arg !== 'function'))) {
     return false;
   }
   return true;
 }
 
+/**
+ * Returns property names from prototype tree. Even works for primitives,
+ * but not for null - so catch the exception & return []
+ */
+export function getProps(obj) {
+  try {
+    let tstObj = obj;
+    let props = Object.getOwnPropertyNames(tstObj);
+    while (tstObj = Object.getPrototypeOf(tstObj)) {
+      let keys = Object.getOwnPropertyNames(tstObj);
+      for (let key of keys) {
+        props.push(key);
+      }
+    }
+    return props;
+  } catch (e) {
+    new PkError(`Exception in getProps-`, { obj, e });
+  }
+  return [];
+}
+
+/**
+ * Returns false if arg is NOT a built-in - like Object, Array, etc,
+ * OR - the built-in Name as string.
+ */
+export function isBuiltIn(arg) {
+  try { //For null, whatever odd..
+    if (jsBuiltIns.includes(arg)) {
+      return arg.name;
+    }
+  } catch (e) {
+    new PkError(`Exception in isBuiltin for arg:`, { arg, e });
+  }
+
+  return false;
+}
+
+
 export const skipProps = ['caller', 'callee', 'arguments', "toLocaleString",
   "valueOf", "propertyIsEnumerable", "__lookupSetter__",
   "__lookupGetter__", "__defineSetter__", "__defineGetter__",
   "isPrototypeOf", "hasOwnProperty", "toString", 'apply', 'bind', 'call',
-  'assign', 'getOwnPropertyDescriptors', 'getOwnPropertyDescriptor',  ];
+  'assign', 'getOwnPropertyDescriptors', 'getOwnPropertyDescriptor',];
 
 
 export function filterProps(props: any[]) {
@@ -794,7 +841,7 @@ export function filterProps(props: any[]) {
  * @param int depth - how many levels should it go?
  */
 //export function allProps(obj: any, { dets = 'p', filter = true }: { dets?: string, filter?: boolean } = {}) {
-export function allProps(obj: any, opt:string='pf', depth=6):GenObj|[]|string|boolean {
+export function allProps(obj: any, opt: string = 'pf', depth = 6): GenObj | [] | string | boolean {
   if (depth-- < 0) {
     return 'END';
   }
@@ -820,6 +867,8 @@ export function allProps(obj: any, opt:string='pf', depth=6):GenObj|[]|string|bo
       console.error(`error in probeProps with prop [${prop}]`, e, obj);
     }
   }
+
+
   let tstObj = obj;
   let props = Object.getOwnPropertyNames(tstObj);
   while (tstObj = Object.getPrototypeOf(tstObj)) {
@@ -828,6 +877,7 @@ export function allProps(obj: any, opt:string='pf', depth=6):GenObj|[]|string|bo
       props.push(key);
     }
   }
+
 
   let unique = uniqueVals(props, tstKeys);
   if (filter) {
@@ -841,6 +891,14 @@ export function allProps(obj: any, opt:string='pf', depth=6):GenObj|[]|string|bo
   for (let prop of unique) {
     let ret: GenObj = {};
     let val = obj[prop];
+    if (['prototype', 'constructor'].includes(prop)) {
+      let bi: any;
+      if (bi = isBuiltIn(val)) {
+        ret.val = bi;
+        retObj[prop] = ret;
+        continue;
+      }
+    }
     if (opts.includes('v')) {
       ret.val = val;
     }
@@ -848,7 +906,7 @@ export function allProps(obj: any, opt:string='pf', depth=6):GenObj|[]|string|bo
       ret.type = typeOf(val);
     }
     if (opts.includes('p') && isParsable(val)) {
-      ret.parsed = allProps(val, opt,depth);
+      ret.parsed = allProps(val, opt, depth);
     }
     retObj[prop] = ret;
   }
