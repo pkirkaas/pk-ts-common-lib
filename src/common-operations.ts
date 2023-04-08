@@ -746,7 +746,8 @@ export function getObjDets(obj) {
  * Any point to decompose this with allProps?
  */
 export function isParsable(arg) {
-  if (!arg || isEmpty(arg) || isPrimitive(arg) || (!isObject(arg) && (typeof arg !== 'function'))) {
+  //@ts-ignore
+  if (!arg || isEmpty(arg) || isPrimitive(arg) || (arg === Object) || (!isObject(arg) && (typeof arg !== 'function'))) {
     return false;
   }
   return true;
@@ -755,7 +756,8 @@ export function isParsable(arg) {
 export const skipProps = ['caller', 'callee', 'arguments', "toLocaleString",
   "valueOf", "propertyIsEnumerable", "__lookupSetter__",
   "__lookupGetter__", "__defineSetter__", "__defineGetter__",
-  "isPrototypeOf", "hasOwnProperty", "toString", 'apply', 'bind', 'call'];
+  "isPrototypeOf", "hasOwnProperty", "toString", 'apply', 'bind', 'call',
+  'assign', 'getOwnPropertyDescriptors', 'getOwnPropertyDescriptor',  ];
 
 
 export function filterProps(props: any[]) {
