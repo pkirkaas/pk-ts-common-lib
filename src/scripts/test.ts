@@ -1,6 +1,6 @@
 import {
 	filterInt, getRandEls, GenObj, dtFmt, pkToDate, deepMeld, uniqueVals, PkError, TagObj, TagObjCol, typeOf, isEmpty, allProps, JSON5, isSubset,
-	classStack, getAllBuiltInProps,
+	classStack, getAllBuiltInProps, objInfo,
 	arraysEqual, getConstructorChain, getPrototypeChain, getObjDets
 } from '../index.js';
 import util from 'util';
@@ -42,16 +42,32 @@ function tstFnNames(arg) {
 	console.log({ arg });
 }
 let aDog = new Dog(22, 'buck', 'mutt', 'daddy');
-function tstProps() {
+function tstPropsY() {
 	let biProps = getAllBuiltInProps();
 	console.log({ biProps });
 }
-function tstPropsx() {
+function tstProps() {
 	let anErr = new PkError('tstErr');
 
 
 
 	let bres = {
+		aDog,
+		aDogOI: objInfo(aDog),
+		DogOI:objInfo(Dog),
+		inspP: objInfo(anErr, 'dv'),
+		anErr: objInfo(anErr),
+		PkError: objInfo(PkError),
+		isEmpty: objInfo(isEmpty),
+		emptyObj: objInfo({}),
+		emptyArr: objInfo([]),
+		string: objInfo(' '),
+		//aDogPChain: getPrototypeChain(aDog),
+		//anErrPChain: getPrototypeChain(anErr),
+		aDogCS: classStack(aDog),
+		//DogPChain: getPrototypeChain(Dog),
+		DogCS: classStack(Dog),
+		/*
 		inspP: allProps(anErr, 'dv'),
 		anErr: getObjDets(anErr),
 		PkError: getObjDets(PkError),
@@ -65,6 +81,7 @@ function tstPropsx() {
 		//DogPChain: getPrototypeChain(Dog),
 		DogCS: classStack(Dog),
 		//	aDogCChain: getConstructorChain(aDog),
+		*/
 	};
 
 

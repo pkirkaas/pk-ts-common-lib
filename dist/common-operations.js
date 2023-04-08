@@ -265,6 +265,7 @@ export function isSubset(a, b) {
     b = [...new Set(b)];
     return a.every((val) => b.includes(val));
 }
+//TODO - REDO! This sucks...
 export function isCli(report = false) {
     let runtime = process.env.RUNTIME;
     //let runtime = getRuntime();
@@ -701,17 +702,17 @@ export const jsBuiltInObjMap = {
 };
 export const jsBuiltIns = Object.values(jsBuiltInObjMap);
 export function getAllBuiltInProps() {
-    console.log("Debugging get all builtin props-", { jsBuiltIns });
+    //console.log("Debugging get all builtin props-", { jsBuiltIns });
     let props = [];
     for (let builtIn of jsBuiltIns) {
         let biProps = getProps(builtIn);
         //@ts-ignore
-        console.log(`Loading props for builtin: [${builtIn.name}]`, { biProps });
+        //console.log(`Loading props for builtin: [${builtIn.name}]`, { biProps });
         props = [...props, ...getProps(builtIn)];
     }
-    console.log(`Props before uniqueVals:`, { props });
+    //console.log(`Props before uniqueVals:`, { props });
     props = uniqueVals(props);
-    console.log(`Props AFTER uniqueVals:`, { props });
+    //console.log(`Props AFTER uniqueVals:`, { props });
     return props;
 }
 /**
@@ -823,7 +824,7 @@ export function filterProps(props) {
  * @param int depth - how many levels should it go?
  */
 //export function allProps(obj: any, { dets = 'p', filter = true }: { dets?: string, filter?: boolean } = {}) {
-export function allProps(obj, opt = 'p', depth = 6) {
+export function allProps(obj, opt = 'tvp', depth = 6) {
     if (depth-- < 0) {
         return 'END';
     }
@@ -885,7 +886,7 @@ export function allProps(obj, opt = 'p', depth = 6) {
 export function allPropsWithTypes(obj) {
     return allProps(obj, 't');
 }
-export function objInfo(arg, opt) {
+export function objInfo(arg, opt = 'tpv') {
     let info = {};
     info.type = typeOf(arg);
     let objProps = {};

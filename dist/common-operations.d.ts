@@ -246,7 +246,7 @@ export declare function filterProps(props: any[]): any[];
  */
 export declare function allProps(obj: any, opt?: string, depth?: number): GenObj | [] | string | boolean;
 export declare function allPropsWithTypes(obj: any): string | boolean | GenObj | [];
-export declare function objInfo(arg: any, opt?: 'tpv'): GenObj;
+export declare function objInfo(arg: any, opt?: string): GenObj;
 /**
  * Take input arrays, merge, & return single array w. unique values
  */
