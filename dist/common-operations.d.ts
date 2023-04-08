@@ -205,6 +205,7 @@ export declare const builtInProps: any[];
  * Any point to decompose this with allProps?
  */
 export declare function isParsable(arg: any): boolean;
+export declare function isParsed(arg: any): any;
 /**
  * Returns property names from prototype tree. Even works for primitives,
  * but not for null - so catch the exception & return []

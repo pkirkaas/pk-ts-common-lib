@@ -745,6 +745,15 @@ export function isParsable(arg) {
     }
     return true;
 }
+export function isParsed(arg) {
+    if (!arg || isEmpty(arg) || isPrimitive(arg) ||
+        //@ts-ignore
+        (arg === Object) || (arg === Array) || (arg === Function) ||
+        (!isObject(arg) && (typeof arg !== 'function'))) {
+        return arg;
+    }
+    return false;
+}
 /**
  * Returns property names from prototype tree. Even works for primitives,
  * but not for null - so catch the exception & return []
@@ -828,15 +837,25 @@ export function allProps(obj, opt = 'tvp', depth = 6) {
     if (depth-- < 0) {
         return 'END';
     }
+    /*
     if (!isParsable(obj)) {
-        return false;
+      return false;
     }
+    */
     let opts = opt.split('');
     let filter = !opts.includes('f');
-    if (isPrimitive(obj) || (!isObject(obj) && (typeof obj !== 'function'))) {
-        //return false; // Or the primitive?
-        return obj;
+    let res = isParsed(obj);
+    if (res) {
+        return {
+            val: res, type: typeOf(res), parsed: res,
+        };
     }
+    /*
+    if (isPrimitive(obj) || (!isObject(obj) && (typeof obj !== 'function'))) {
+      //return false; // Or the primitive?
+      return obj;
+    }
+    */
     let tstKeys = [];
     for (let prop of keepProps) {
         try {
