@@ -975,6 +975,7 @@ export function objInfo(arg: any, opt:string = 'tpv') {
   let info: GenObj = {};
   info.type = typeOf(arg);
   let objProps: any = {};
+  //SHOULD CHANGE BELOW TO isParsed()...
   if (isParsable(arg)) {
     let instance = isInstance(arg);
     let inheritance = classStack(arg);
@@ -989,6 +990,9 @@ export function objInfo(arg: any, opt:string = 'tpv') {
     if (objProps) {
       info.props = objProps;
     }
+  } else {
+    info.val = arg;
+    info.parsed = arg;
   }
   return info;
 }

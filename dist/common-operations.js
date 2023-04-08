@@ -909,6 +909,7 @@ export function objInfo(arg, opt = 'tpv') {
     let info = {};
     info.type = typeOf(arg);
     let objProps = {};
+    //SHOULD CHANGE BELOW TO isParsed()...
     if (isParsable(arg)) {
         let instance = isInstance(arg);
         let inheritance = classStack(arg);
@@ -923,6 +924,10 @@ export function objInfo(arg, opt = 'tpv') {
         if (objProps) {
             info.props = objProps;
         }
+    }
+    else {
+        info.val = arg;
+        info.parsed = arg;
     }
     return info;
 }
