@@ -198,10 +198,15 @@ export declare function isParsable(arg: any): boolean;
  */
 export declare function getProps(obj: any): string[];
 /**
+ * Weirdly, most built-ins have a name property, & are of type [Function:Date]
+ * or whatever, but Math does NOT have a name property, and is of type "Object [Math]". So try to deal with that...
+ */
+export declare function builtInName(bi: any): string;
+/**
  * Returns false if arg is NOT a built-in - like Object, Array, etc,
  * OR - the built-in Name as string.
  */
-export declare function isBuiltIn(arg: any): any;
+export declare function isBuiltIn(arg: any): string | false;
 export declare const skipProps: string[];
 export declare function filterProps(props: any[]): any[];
 /**

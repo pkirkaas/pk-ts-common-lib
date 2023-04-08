@@ -808,13 +808,25 @@ export function getProps(obj) {
 }
 
 /**
+ * Weirdly, most built-ins have a name property, & are of type [Function:Date]
+ * or whatever, but Math does NOT have a name property, and is of type "Object [Math]". So try to deal with that...
+ */
+export function builtInName(bi) {
+  let biName = bi.name ?? bi.toString();
+  if ((typeof biName !== 'string') || !biName) {
+    throw new PkError(`Weird - no name to be made for BI:`, { bi });
+  }
+  return biName;
+}
+/**
  * Returns false if arg is NOT a built-in - like Object, Array, etc,
  * OR - the built-in Name as string.
  */
 export function isBuiltIn(arg) {
   try { //For null, whatever odd..
     if (jsBuiltIns.includes(arg)) {
-      return arg.name;
+      //return arg.name ?? arg.toString();
+      return builtInName(arg);
     }
   } catch (e) {
     new PkError(`Exception in isBuiltin for arg:`, { arg, e });
