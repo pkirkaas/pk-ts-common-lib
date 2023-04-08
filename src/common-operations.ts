@@ -771,8 +771,21 @@ export function getAllBuiltInProps() {
  * As an exclude list for filtering out props from specific objects, but
  * HAVE TO BE CAREFUL! - Somethings we don't want to exclude, like constructor,
  * name, etc...
+ * APPROXIMATELY:
+ *  [ 'length', 'name', 'prototype', 'assign', 'getOwnPropertyDescriptor',
+    'getOwnPropertyDescriptors', 'getOwnPropertyNames', 'getOwnPropertySymbols',
+    'is', 'preventExtensions', 'seal', 'create', 'defineProperties', 'defineProperty', 'freeze', 'getPrototypeOf', 'setPrototypeOf', 'isExtensible', 'isFrozen', 'isSealed', 'keys', 'entries', 'fromEntries',
+    'values', 'hasOwn', 'arguments', 'caller', 'constructor', 'apply',
+    'bind', 'call', 'toString', '__defineGetter__', '__defineSetter__',
+    'hasOwnProperty', '__lookupGetter__', '__lookupSetter__', 'isPrototypeOf',
+    'propertyIsEnumerable', 'valueOf', '__proto__', 'toLocaleString',
+    'isArray', 'from', 'of', 'now', 'parse', 'UTC', 'isFinite', 'isInteger',
+    'isNaN', 'isSafeInteger', 'parseFloat', 'parseInt', 'MAX_VALUE',
+    'MIN_VALUE', 'NaN', 'NEGATIVE_INFINITY', 'POSITIVE_INFINITY', 'MAX_SAFE_INTEGER', 'MIN_SAFE_INTEGER', 'EPSILON', 'fromCharCode',
+    'fromCodePoint', 'raw', ],
  */
 export const builtInProps = getAllBuiltInProps();
+
 
 /**
  * Any point to decompose this with allProps?
@@ -801,7 +814,7 @@ export function getProps(obj) {
         props.push(key);
       }
     }
-    return props;
+    return uniqueVals(props);
   } catch (e) {
     new PkError(`Exception in getProps-`, { obj, e });
   }
@@ -836,16 +849,13 @@ export function isBuiltIn(arg) {
   return false;
 }
 
-
-export const skipProps = ['caller', 'callee', 'arguments', "toLocaleString",
-  "valueOf", "propertyIsEnumerable", "__lookupSetter__",
-  "__lookupGetter__", "__defineSetter__", "__defineGetter__",
-  "isPrototypeOf", "hasOwnProperty", "toString", 'apply', 'bind', 'call',
-  'assign', 'getOwnPropertyDescriptors', 'getOwnPropertyDescriptor',];
+//skipProps - maybe stuff like 'caller', 'callee', 'arguments'?
+export const keepProps = ['constructor', 'prototype', 'name', 'class',
+  'type', 'super', 'length', 'arguments', 'caller', 'callee', ];
 
 
 export function filterProps(props: any[]) {
-  props = inArr1NinArr2(props, skipProps);
+  props = inArr1NinArr2(props, builtInProps);
   props = props.filter((e) => !(e.startsWith('call$')));
   return props;
 }
@@ -886,9 +896,8 @@ export function allProps(obj: any, opt: string = 'pf', depth = 6): GenObj | [] |
     //return false; // Or the primitive?
     return obj;
   }
-  let def = ['constructor', 'prototype', 'name', 'class', 'type', 'super',];
   let tstKeys = [];
-  for (let prop of def) {
+  for (let prop of keepProps) {
     try {
       let val = obj[prop];
       if (val === undefined) {
@@ -901,20 +910,12 @@ export function allProps(obj: any, opt: string = 'pf', depth = 6): GenObj | [] |
   }
 
 
-  let tstObj = obj;
-  let props = Object.getOwnPropertyNames(tstObj);
-  while (tstObj = Object.getPrototypeOf(tstObj)) {
-    let keys = Object.getOwnPropertyNames(tstObj);
-    for (let key of keys) {
-      props.push(key);
-    }
-  }
-
-
-  let unique = uniqueVals(props, tstKeys);
+  let objProps = getProps(obj);
   if (filter) {
-    unique = filterProps(unique);
+    objProps = filterProps(objProps);
   }
+
+  let unique = uniqueVals(objProps, tstKeys);
   if (isEmpty(intersect(opts, ['t', 'v', 'p',]))) { //Just the array of props
     return unique;
   } //We want more...

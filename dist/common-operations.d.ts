@@ -187,6 +187,18 @@ export declare function getAllBuiltInProps(): any[];
  * As an exclude list for filtering out props from specific objects, but
  * HAVE TO BE CAREFUL! - Somethings we don't want to exclude, like constructor,
  * name, etc...
+ * APPROXIMATELY:
+ *  [ 'length', 'name', 'prototype', 'assign', 'getOwnPropertyDescriptor',
+    'getOwnPropertyDescriptors', 'getOwnPropertyNames', 'getOwnPropertySymbols',
+    'is', 'preventExtensions', 'seal', 'create', 'defineProperties', 'defineProperty', 'freeze', 'getPrototypeOf', 'setPrototypeOf', 'isExtensible', 'isFrozen', 'isSealed', 'keys', 'entries', 'fromEntries',
+    'values', 'hasOwn', 'arguments', 'caller', 'constructor', 'apply',
+    'bind', 'call', 'toString', '__defineGetter__', '__defineSetter__',
+    'hasOwnProperty', '__lookupGetter__', '__lookupSetter__', 'isPrototypeOf',
+    'propertyIsEnumerable', 'valueOf', '__proto__', 'toLocaleString',
+    'isArray', 'from', 'of', 'now', 'parse', 'UTC', 'isFinite', 'isInteger',
+    'isNaN', 'isSafeInteger', 'parseFloat', 'parseInt', 'MAX_VALUE',
+    'MIN_VALUE', 'NaN', 'NEGATIVE_INFINITY', 'POSITIVE_INFINITY', 'MAX_SAFE_INTEGER', 'MIN_SAFE_INTEGER', 'EPSILON', 'fromCharCode',
+    'fromCodePoint', 'raw', ],
  */
 export declare const builtInProps: any[];
 /**
@@ -197,7 +209,7 @@ export declare function isParsable(arg: any): boolean;
  * Returns property names from prototype tree. Even works for primitives,
  * but not for null - so catch the exception & return []
  */
-export declare function getProps(obj: any): string[];
+export declare function getProps(obj: any): any[];
 /**
  * Weirdly, most built-ins have a name property, & are of type [Function:Date]
  * or whatever, but Math does NOT have a name property, and is of type "Object [Math]". So try to deal with that...
@@ -208,7 +220,7 @@ export declare function builtInName(bi: any): string;
  * OR - the built-in Name as string.
  */
 export declare function isBuiltIn(arg: any): string | false;
-export declare const skipProps: string[];
+export declare const keepProps: string[];
 export declare function filterProps(props: any[]): any[];
 /**
  * Inspect an object to get as many props as possible,
