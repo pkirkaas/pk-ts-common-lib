@@ -736,7 +736,16 @@ export function allProps(obj, depth = 2) {
     }
     let unique = uniqueVals(allProps, tstKeys);
     unique = inArr1NinArr2(unique, skipProps);
-    unique = unique.filter((e) => !e.startsWith('call$'));
+    console.log(`In allProps - unique orig:`, { unique });
+    unique = unique.filter((e) => {
+        if (!(e.startsWith('call$'))) {
+            return true;
+        }
+        console.log('In allProps filter, - e:', { e });
+        //return !e.startsWith('call$');
+        return false;
+    });
+    console.log(`After allProps - NEW unique :`, { unique });
     if (!depth) {
         return unique;
     }
