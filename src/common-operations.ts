@@ -746,8 +746,13 @@ export function getObjDets(obj) {
  * Any point to decompose this with allProps?
  */
 export function isParsable(arg) {
+  if (!arg || isEmpty(arg) || isPrimitive(arg) ||
   //@ts-ignore
-  if (!arg || isEmpty(arg) || isPrimitive(arg) || (arg === Object) || (!isObject(arg) && (typeof arg !== 'function'))) {
+    (arg === Object) || (arg === Array) || (arg === Function) ||
+    
+    
+    
+    (!isObject(arg) && (typeof arg !== 'function'))) {
     return false;
   }
   return true;
