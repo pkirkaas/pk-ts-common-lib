@@ -796,6 +796,11 @@ export function allProps(obj: any, depth: number = 2) {
   let ret: GenObj = {};
   for (let prop of unique) {
     try {
+      console.log(`In allProps -  for prop: [${prop}], obj:`, { obj });
+      if (prop.startsWith('call$')) {
+        console.log("Started w. call$");
+        continue;
+      }
       let val = obj[prop];
       let type = typeOf(val);
       if (depth === 1) {
@@ -819,6 +824,7 @@ export function objInfo(arg: any) {
   let objProps: any = {};
   if (isObject(arg)) {
     objProps = allPropsWithTypes(arg);
+    console.log(`in objInfo, for objTO: [${objType}]`, { objProps });
   }
   return { type: objType, props: objProps };
 }
