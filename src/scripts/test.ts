@@ -1,6 +1,6 @@
 import {
 	filterInt, getRandEls, GenObj, dtFmt, pkToDate, deepMeld, uniqueVals, PkError, TagObj, TagObjCol, typeOf, isEmpty, allProps, JSON5, isSubset,
-	classStack,
+	classStack, getAllBuiltInProps,
 	arraysEqual, getConstructorChain, getPrototypeChain, getObjDets
 } from '../index.js';
 import util from 'util';
@@ -43,6 +43,10 @@ function tstFnNames(arg) {
 }
 let aDog = new Dog(22, 'buck', 'mutt', 'daddy');
 function tstProps() {
+	let biProps = getAllBuiltInProps();
+	console.log({ biProps });
+}
+function tstPropsx() {
 	let anErr = new PkError('tstErr');
 
 

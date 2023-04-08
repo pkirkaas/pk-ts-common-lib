@@ -752,11 +752,17 @@ export const jsBuiltInObjMap = {
 export const jsBuiltIns = Object.values(jsBuiltInObjMap);
 
 export function getAllBuiltInProps() {
+  console.log("Debugging get all builtin props-", { jsBuiltIns });
   let props = [];
   for (let builtIn of jsBuiltIns) {
+    let biProps = getProps(builtIn);
+    //@ts-ignore
+    console.log(`Loading props for builtin: [${builtIn.name}]`, { biProps });
     props = [...props, ...getProps(builtIn)]
   }
+  console.log(`Props before uniqueVals:`, { props });
   props = uniqueVals(props);
+  console.log(`Props AFTER uniqueVals:`, { props });
   return props;
 }
 
@@ -774,9 +780,6 @@ export function isParsable(arg) {
   if (!arg || isEmpty(arg) || isPrimitive(arg) ||
     //@ts-ignore
     (arg === Object) || (arg === Array) || (arg === Function) ||
-
-
-
     (!isObject(arg) && (typeof arg !== 'function'))) {
     return false;
   }

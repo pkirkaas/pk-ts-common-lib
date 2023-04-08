@@ -1,4 +1,4 @@
-import { PkError, isEmpty, allProps, classStack, getPrototypeChain, getObjDets } from '../index.js';
+import { PkError, isEmpty, allProps, classStack, getAllBuiltInProps, getPrototypeChain, getObjDets } from '../index.js';
 import util from 'util';
 util.inspect.defaultOptions.maxArrayLength = null;
 util.inspect.defaultOptions.depth = null;
@@ -36,6 +36,10 @@ function tstFnNames(arg) {
 }
 let aDog = new Dog(22, 'buck', 'mutt', 'daddy');
 function tstProps() {
+    let biProps = getAllBuiltInProps();
+    console.log({ biProps });
+}
+function tstPropsx() {
     let anErr = new PkError('tstErr');
     let bres = {
         inspP: allProps(anErr, 'fdv'),
