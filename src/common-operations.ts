@@ -744,9 +744,10 @@ export function getObjDets(obj) {
 
 /**
  * Not complete, but want to be careful...
+ * Leave Math out - because it is not a class or constructor...
  */
 export const jsBuiltInObjMap = {
-  Object, Array, Date, Math, String, Function,
+  Object, Array, Date, Number, String, Function,
 };
 
 export const jsBuiltIns = Object.values(jsBuiltInObjMap);

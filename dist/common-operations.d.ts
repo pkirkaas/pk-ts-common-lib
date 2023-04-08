@@ -171,16 +171,17 @@ export declare function getObjDets(obj: any): false | {
 };
 /**
  * Not complete, but want to be careful...
+ * Leave Math out - because it is not a class or constructor...
  */
 export declare const jsBuiltInObjMap: {
     Object: ObjectConstructor;
     Array: ArrayConstructor;
     Date: DateConstructor;
-    Math: Math;
+    Number: NumberConstructor;
     String: StringConstructor;
     Function: FunctionConstructor;
 };
-export declare const jsBuiltIns: (DateConstructor | StringConstructor | ObjectConstructor | Math | ArrayConstructor | FunctionConstructor)[];
+export declare const jsBuiltIns: (DateConstructor | NumberConstructor | StringConstructor | ObjectConstructor | ArrayConstructor | FunctionConstructor)[];
 export declare function getAllBuiltInProps(): any[];
 /**
  * As an exclude list for filtering out props from specific objects, but
