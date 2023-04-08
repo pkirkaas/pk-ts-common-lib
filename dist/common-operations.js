@@ -794,7 +794,7 @@ export function isBuiltIn(arg) {
 }
 //skipProps - maybe stuff like 'caller', 'callee', 'arguments'?
 export const keepProps = ['constructor', 'prototype', 'name', 'class',
-    'type', 'super', 'length', 'arguments', 'caller', 'callee',];
+    'type', 'super', 'length',];
 export function filterProps(props) {
     props = inArr1NinArr2(props, builtInProps);
     props = props.filter((e) => !(e.startsWith('call$')));
