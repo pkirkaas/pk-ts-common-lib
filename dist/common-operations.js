@@ -688,12 +688,8 @@ export function getObjDets(obj) {
     let toObj = typeof obj;
     let pkToObj = typeOf(obj);
     let props = allProps(obj, { dets: 'v' });
-    let ret = {
-        toObj,
-        pkToObj,
-        props,
-        prototype: Object.getPrototypeOf(obj),
-    };
+    let prototype = Object.getPrototypeOf(obj);
+    let ret = { toObj, pkToObj, props, prototype, };
     return ret;
 }
 export const skipProps = ['caller', 'callee', 'arguments', "toLocaleString",
