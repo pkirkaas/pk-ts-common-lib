@@ -788,7 +788,7 @@ export function allProps(obj: any, depth: number = 2) {
   }
   let unique = uniqueVals(allProps, tstKeys);
   unique = inArr1NinArr2(unique, skipProps);
-  unique = unique.filter((e) => e.startsWith('call$'));
+  unique = unique.filter((e) => !e.startsWith('call$'));
   if (!depth) {
     return unique;
   }
