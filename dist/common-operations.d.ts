@@ -170,15 +170,29 @@ export declare function getObjDets(obj: any): false | {
     prototype: any;
 };
 export declare const skipProps: string[];
+export declare function filterProps(props: any[]): any[];
 /**
- * Inspect an object to get as many props as possible
+ * Inspect an object to get as many props as possible,
+ * optionally with values, types, or both - optionally filterd
+ * by props
  * @param obj - what to test
- * @param depth number - what to return
- * 0: just array of prop keys
- * 1: object of keys=>value
- * 2: object of keys => {type, value}
+ * // @param depth number - what to return
+ * //0: just array of prop keys
+ * //1: object of keys=>value
+ * //2: object of keys => {type, value}
+ * @param {} opts: {dets:k(default)|kv|kt|kty, filterd:true(default)|false
+ * If dets===k, just array of props
+ * if dets===v - object {prop:value}
+ * if dets===t - object {prop:type}
+ * if (dets===tv or vt) object {prop:{type, value}
+ * if (filtered === false) - all the returned props, values, etc
+ * if (filtered === true) - Remove uninteresting props
+ *
  */
-export declare function allProps(obj: any, depth?: number): false | GenObj;
+export declare function allProps(obj: any, { dets, filter }?: {
+    dets?: string;
+    filter?: boolean;
+}): false | GenObj;
 export declare function allPropsWithTypes(obj: any): false | GenObj;
 export declare function objInfo(arg: any): {
     type: String;

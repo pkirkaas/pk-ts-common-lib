@@ -37,8 +37,8 @@ function tstFnNames(arg) {
 let aDog = new Dog(22, 'buck', 'mutt', 'daddy');
 function tstProps() {
     let anErr = new PkError('tstErr');
-    let insp = allProps(anErr);
     let bres = {
+        inspP: allProps(anErr, { dets: 'dv' }),
         anErr: getObjDets(anErr),
         PkError: getObjDets(PkError),
         isEmpty: getObjDets(isEmpty),

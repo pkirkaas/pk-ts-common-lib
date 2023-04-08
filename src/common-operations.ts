@@ -735,7 +735,7 @@ export function getObjDets(obj) {
   }
   let toObj = typeof obj;
   let pkToObj = typeOf(obj);
-  let props = allProps(obj);
+  let props = allProps(obj, { dets: 'v' });
   let ret = {
     toObj,
     pkToObj,
@@ -752,16 +752,32 @@ export const skipProps = ['caller', 'callee', 'arguments', "toLocaleString",
   "isPrototypeOf", "hasOwnProperty", "toString", 'apply', 'bind', 'call'];
 
 
+export function filterProps(props: any[]) {
+  props = inArr1NinArr2(props, skipProps);
+  props = props.filter((e) => !(e.startsWith('call$')));
+  return props;
+}
 
 /**
- * Inspect an object to get as many props as possible
+ * Inspect an object to get as many props as possible,
+ * optionally with values, types, or both - optionally filterd
+ * by props
  * @param obj - what to test
- * @param depth number - what to return
- * 0: just array of prop keys
- * 1: object of keys=>value
- * 2: object of keys => {type, value}
+ * // @param depth number - what to return
+ * //0: just array of prop keys
+ * //1: object of keys=>value
+ * //2: object of keys => {type, value}
+ * @param {} opts: {dets:k(default)|kv|kt|kty, filterd:true(default)|false
+ * If dets===k, just array of props
+ * if dets===v - object {prop:value}
+ * if dets===t - object {prop:type}
+ * if (dets===tv or vt) object {prop:{type, value}
+ * if (filtered === false) - all the returned props, values, etc
+ * if (filtered === true) - Remove uninteresting props
+ * 
  */
-export function allProps(obj: any, depth: number = 2) {
+export function allProps(obj: any, { dets = 'k', filter = true }: { dets?: string, filter?: boolean } = {}) {
+  console.log("In allProps - ", { dets, filter });
   if (isPrimitive(obj)) {
     return false;
   }
@@ -786,47 +802,33 @@ export function allProps(obj: any, depth: number = 2) {
       allProps.push(key);
     }
   }
+
   let unique = uniqueVals(allProps, tstKeys);
-  unique = inArr1NinArr2(unique, skipProps);
-  console.log(`In allProps - unique orig:`, { unique });
-  unique = unique.filter((e) => {
-    if (!(e.startsWith('call$'))) {
-      return true;
-    }
-    console.log('In allProps filter, - e:', { e });
-      //return !e.startsWith('call$');
-      return false;
-  });
-  console.log(`After allProps - NEW unique :`, { unique });
-
-  if (!depth) {
+  if (filter) {
+    unique = filterProps(unique);
+  }
+  if (dets === 'k') { // Just array of prop names
     return unique;
-  }
-
-  let ret: GenObj = {};
+  } //We want more...
+  let retObj: GenObj = {};
   for (let prop of unique) {
-    try {
-      console.log(`In allProps -  for prop: [${prop}], obj:`, { obj });
-      if (prop.startsWith('call$')) {
-        console.log("Started w. call$");
-        continue;
-      }
-      let val = obj[prop];
-      let type = typeOf(val);
-      if (depth === 1) {
-        ret[prop] = val;
-      } else {
-        ret[prop] = { type, val };
-      }
-    } catch (e) {
-      console.error(`Exception in allProps for prop [${prop}]:`, { obj, e });
+    let val = obj[prop];
+    let type = typeOf(val);
+    if (dets === 'v') {
+      retObj[prop] = val;
+    } else if (dets === 't') {
+      retObj[prop] = type;
+    } else if ((dets === 'tv') || (dets === 'vt')) {
+      retObj[prop] = { val, type };
+    } else {
+      throw new PkError(`In allProps - illegal argument [${dets}] for dets`);
     }
   }
-  return ret;
+  return retObj;
 }
 
 export function allPropsWithTypes(obj: any) {
-  return allProps(obj, 1);
+  return allProps(obj, { filter: true });
 }
 
 export function objInfo(arg: any) {
