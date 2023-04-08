@@ -742,6 +742,16 @@ export function getObjDets(obj) {
 
 }
 
+/**
+ * Any point to decompose this with allProps?
+ */
+export function isParsable(arg) {
+  if (!arg || isEmpty(arg) || isPrimitive(arg) || (!isObject(arg) && (typeof arg !== 'function'))) {
+    return false;
+  }
+  return true;
+}
+
 export const skipProps = ['caller', 'callee', 'arguments', "toLocaleString",
   "valueOf", "propertyIsEnumerable", "__lookupSetter__",
   "__lookupGetter__", "__defineSetter__", "__defineGetter__",
@@ -781,10 +791,14 @@ export function allProps(obj: any, opt:string='pf', depth=6):GenObj|[]|string|bo
   if (depth-- < 0) {
     return 'END';
   }
+  if (!isParsable(obj)) {
+    return false;
+  }
   let opts = opt.split('');
   let filter = opts.includes('f');
-  if (isPrimitive(obj)) {
-    return false; // Or the primitive?
+  if (isPrimitive(obj) || (!isObject(obj) && (typeof obj !== 'function'))) {
+    //return false; // Or the primitive?
+    return obj;
   }
   let def = ['constructor', 'prototype', 'name', 'class', 'type', 'super',];
   let tstKeys = [];
@@ -826,7 +840,7 @@ export function allProps(obj: any, opt:string='pf', depth=6):GenObj|[]|string|bo
     if (opts.includes('t')) {
       ret.type = typeOf(val);
     }
-    if (opts.includes('p')) {
+    if (opts.includes('p') && isParsable(val)) {
       ret.parsed = allProps(val, opt,depth);
     }
     retObj[prop] = ret;

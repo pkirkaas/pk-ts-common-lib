@@ -169,6 +169,10 @@ export declare function getObjDets(obj: any): false | {
     props: string | boolean | GenObj | [];
     prototype: any;
 };
+/**
+ * Any point to decompose this with allProps?
+ */
+export declare function isParsable(arg: any): boolean;
 export declare const skipProps: string[];
 export declare function filterProps(props: any[]): any[];
 /**
