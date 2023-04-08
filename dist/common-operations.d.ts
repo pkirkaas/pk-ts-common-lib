@@ -240,16 +240,13 @@ export declare function filterProps(props: any[]): any[];
 
  * If at least one of t,v,p, abject {prop:{value,type,parsed}
 
- * If f - filter out uninteresting props
+ * If f - FULL property details. Default: filter out uninteresting props
  *
  * @param int depth - how many levels should it go?
  */
 export declare function allProps(obj: any, opt?: string, depth?: number): GenObj | [] | string | boolean;
 export declare function allPropsWithTypes(obj: any): string | boolean | GenObj | [];
-export declare function objInfo(arg: any): {
-    type: String;
-    props: any;
-};
+export declare function objInfo(arg: any, opt?: 'tpv'): GenObj;
 /**
  * Take input arrays, merge, & return single array w. unique values
  */

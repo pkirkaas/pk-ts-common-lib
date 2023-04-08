@@ -735,7 +735,7 @@ export function getObjDets(obj) {
   }
   let toObj = typeof obj;
   let pkToObj = typeOf(obj);
-  let props = allProps(obj, 'vtpf');
+  let props = allProps(obj, 'vtp');
   let prototype = Object.getPrototypeOf(obj);
   let ret = { toObj, pkToObj, props, prototype, };
   return ret;
@@ -878,12 +878,12 @@ export function filterProps(props: any[]) {
 
  * If at least one of t,v,p, abject {prop:{value,type,parsed}
 
- * If f - filter out uninteresting props
+ * If f - FULL property details. Default: filter out uninteresting props
  * 
  * @param int depth - how many levels should it go?
  */
 //export function allProps(obj: any, { dets = 'p', filter = true }: { dets?: string, filter?: boolean } = {}) {
-export function allProps(obj: any, opt: string = 'pf', depth = 6): GenObj | [] | string | boolean {
+export function allProps(obj: any, opt: string = 'p', depth = 6): GenObj | [] | string | boolean {
   if (depth-- < 0) {
     return 'END';
   }
@@ -891,7 +891,7 @@ export function allProps(obj: any, opt: string = 'pf', depth = 6): GenObj | [] |
     return false;
   }
   let opts = opt.split('');
-  let filter = opts.includes('f');
+  let filter = !opts.includes('f');
   if (isPrimitive(obj) || (!isObject(obj) && (typeof obj !== 'function'))) {
     //return false; // Or the primitive?
     return obj;
@@ -947,17 +947,29 @@ export function allProps(obj: any, opt: string = 'pf', depth = 6): GenObj | [] |
 }
 
 export function allPropsWithTypes(obj: any) {
-  return allProps(obj, 'tf');
+  return allProps(obj, 't');
 }
 
-export function objInfo(arg: any) {
-  let objType = typeOf(arg);
+export function objInfo(arg: any, opt?:'tpv') {
+  let info: GenObj = {};
+  info.type = typeOf(arg);
   let objProps: any = {};
   if (isObject(arg)) {
-    objProps = allPropsWithTypes(arg);
-    console.log(`in objInfo, for objTO: [${objType}]`, { objProps });
+    let instance = isInstance(arg);
+    let inheritance = classStack(arg);
+    if (instance) {
+      info.instance = instance;
+    }
+    if (inheritance && Array.isArray(inheritance) && inheritance.length) {
+      info.inheritance = inheritance;
+    }
+    //objProps = allPropsWithTypes(arg);
+    objProps = allProps(arg, opt);
+    if (objProps) {
+      info.props = objProps;
+    }
   }
-  return { type: objType, props: objProps };
+  return info;
 }
 
 /**

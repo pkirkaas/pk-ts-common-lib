@@ -42,7 +42,7 @@ function tstProps() {
 function tstPropsx() {
     let anErr = new PkError('tstErr');
     let bres = {
-        inspP: allProps(anErr, 'fdv'),
+        inspP: allProps(anErr, 'dv'),
         anErr: getObjDets(anErr),
         PkError: getObjDets(PkError),
         isEmpty: getObjDets(isEmpty),
