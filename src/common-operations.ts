@@ -954,7 +954,7 @@ export function objInfo(arg: any, opt?:'tpv') {
   let info: GenObj = {};
   info.type = typeOf(arg);
   let objProps: any = {};
-  if (isObject(arg)) {
+  if (isParsable(arg)) {
     let instance = isInstance(arg);
     let inheritance = classStack(arg);
     if (instance) {

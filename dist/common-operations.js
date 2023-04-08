@@ -889,7 +889,7 @@ export function objInfo(arg, opt) {
     let info = {};
     info.type = typeOf(arg);
     let objProps = {};
-    if (isObject(arg)) {
+    if (isParsable(arg)) {
         let instance = isInstance(arg);
         let inheritance = classStack(arg);
         if (instance) {
