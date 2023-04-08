@@ -181,6 +181,13 @@ export declare const jsBuiltInObjMap: {
     Function: FunctionConstructor;
 };
 export declare const jsBuiltIns: (DateConstructor | StringConstructor | ObjectConstructor | Math | ArrayConstructor | FunctionConstructor)[];
+export declare function getAllBuiltInProps(): any[];
+/**
+ * As an exclude list for filtering out props from specific objects, but
+ * HAVE TO BE CAREFUL! - Somethings we don't want to exclude, like constructor,
+ * name, etc...
+ */
+export declare const builtInProps: any[];
 /**
  * Any point to decompose this with allProps?
  */

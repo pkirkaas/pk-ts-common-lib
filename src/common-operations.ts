@@ -751,6 +751,22 @@ export const jsBuiltInObjMap = {
 
 export const jsBuiltIns = Object.values(jsBuiltInObjMap);
 
+export function getAllBuiltInProps() {
+  let props = [];
+  for (let builtIn of jsBuiltIns) {
+    props = [...props, ...getProps(builtIn)]
+  }
+  props = uniqueVals(props);
+  return props;
+}
+
+/**
+ * As an exclude list for filtering out props from specific objects, but
+ * HAVE TO BE CAREFUL! - Somethings we don't want to exclude, like constructor,
+ * name, etc...
+ */
+export const builtInProps = getAllBuiltInProps();
+
 /**
  * Any point to decompose this with allProps?
  */
