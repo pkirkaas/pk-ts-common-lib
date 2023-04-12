@@ -119,6 +119,9 @@ export declare function checkUrlAxios(tstUrl: any, full?: boolean): Promise<any>
  *
  */
 export declare function checkUrl3(url: any): Promise<any>;
+/**
+ * This is a tough call & really hard to get right...
+ */
 export declare function isEmpty(arg: any): boolean;
 /**
  * returns arg, unless it is an empty object or array
@@ -136,7 +139,7 @@ export declare function isPrimitive(arg: any): boolean;
  * & values, not based on other types or prototypes
  */
 export declare function isSimpleObject(anobj: any): boolean;
-export declare function isObject(arg: any, alsoEmpty?: boolean): boolean;
+export declare function isObject(arg: any, alsoEmpty?: boolean, alsoFunction?: boolean): boolean;
 export declare function getConstructorChain(obj: any): any[];
 /**
  * Checks if arg is an instance of a class.

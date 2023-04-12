@@ -1,4 +1,5 @@
-import { PkError, isEmpty, classStack, getAllBuiltInProps, objInfo, toSnakeCase, stripStray, } from '../index.js';
+import { PkError, typeOf, isEmpty, isObject, classStack, getAllBuiltInProps, objInfo, } from '../index.js';
+import _ from 'lodash';
 import util from 'util';
 util.inspect.defaultOptions.maxArrayLength = null;
 util.inspect.defaultOptions.depth = null;
@@ -16,6 +17,27 @@ function camelize(str) {
 }
 let snakes = [" dog-cat ", ' "tiger-lion" ', " ' horse-cow '",];
 let camels = [" dogMouse ", ' "Dinosaur King" ', " ' NeverKnown '",];
+let strs = ['tag', 'donkey', 'animal', 'plant'];
+/*
+for (let str of strs) {
+    let strpd = stripStray(str);
+    let strpp = stripStray(strpd);
+    let camel = toCamelCase(strpp);
+    console.log({ str, strpd, strpp, camel });
+};
+*/
+let tstObjs = {
+    camelize, camels, empt: {}, Date, Math
+};
+for (let key in tstObjs) {
+    let val = tstObjs[key];
+    let toVal = typeOf(val);
+    let toval = typeof val;
+    let objLike = _.isObjectLike(val);
+    let isemp = isEmpty(val);
+    let isobj = isObject(val);
+    console.log({ key, toVal, toval, objLike, isobj, isemp });
+}
 /*
 console.log({ snakes, camels });
 for (let snake of snakes) {
@@ -25,14 +47,15 @@ for (let snake of snakes) {
     let myRes = toCamelCase(snake);
     console.log({ snake, str, cc, cmz, myRes });
 }
-*/
+
 for (let camel of camels) {
     let stripped = stripStray(camel);
     //let cc = camelCase(str);
     //let cmz = camelize(str);
     let snaked = toSnakeCase(camel);
-    console.log({ camel, stripped, snaked });
+    console.log({  camel, stripped, snaked });
 }
+*/
 let tstArr = ['dog', 'cat', 'horse', 'donky', 7, 12, { some: 'obj' }, 'today'];
 class Organ {
     age;

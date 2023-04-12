@@ -495,16 +495,27 @@ export async function checkUrl3(url) {
         return { msg: `Exception for URL:`, url, err };
     }
 }
-//Returns false also for empty objects
+/**
+ * This is a tough call & really hard to get right...
+ */
 export function isEmpty(arg) {
     if (!arg || (Array.isArray(arg) && !arg.length)) {
         return true;
     }
-    if (typeof arg === "object") {
-        if (!Object.keys(arg).length) {
+    let toarg = typeof arg;
+    if (toarg === "object") {
+        let props = getProps(arg);
+        let keys = Object.keys(arg);
+        let aninb = inArr1NinArr2(props, builtInProps);
+        //console.log({ props, keys,  aninb });
+        if (!keys.length && !aninb.length) {
             return true;
         }
     }
+    if (toarg === 'function') {
+        return false;
+    }
+    //console.error(`in isEmpty - returning false for:`, { arg });
     return false;
 }
 /**
@@ -540,10 +551,13 @@ export function isSimpleObject(anobj) {
     }
     return Object.getPrototypeOf(anobj) === Object.getPrototypeOf({});
 }
-export function isObject(arg, alsoEmpty = false) {
+export function isObject(arg, alsoEmpty = false, alsoFunction = true) {
     //if (!arg || isPrimitive(arg) || isEmpty(arg)) {
-    if (!arg || isPrimitive(arg)) {
+    if (!arg || isPrimitive(arg) || (isEmpty(arg) && !alsoEmpty)) {
         return false;
+    }
+    if (alsoFunction && (typeof arg === 'function')) {
+        return true;
     }
     return _.isObjectLike(arg);
 }
@@ -654,6 +668,9 @@ export function classStack(obj) {
  * BE WARNED!
  */
 export function getPrototypeChain(obj) {
+    if (!obj) {
+        return [];
+    }
     let i = 0;
     let prototype = obj;
     let prototypeConstructor = prototype?.constructor;
@@ -683,7 +700,7 @@ export function getPrototypeChain(obj) {
     return prototypeChain;
 }
 export function getObjDets(obj) {
-    if (!obj || isPrimitive(obj)) {
+    if (!obj || isPrimitive(obj) || !isObject(obj)) {
         return false;
     }
     let toObj = typeof obj;
@@ -759,6 +776,9 @@ export function isParsed(arg) {
  * but not for null - so catch the exception & return []
  */
 export function getProps(obj) {
+    if (!obj) {
+        return [];
+    }
     try {
         let tstObj = obj;
         let props = Object.getOwnPropertyNames(tstObj);
@@ -834,6 +854,9 @@ export function filterProps(props) {
  */
 //export function allProps(obj: any, { dets = 'p', filter = true }: { dets?: string, filter?: boolean } = {}) {
 export function allProps(obj, opt = 'tvp', depth = 6) {
+    if (!isObject(obj)) {
+        return typeOf(obj);
+    }
     if (depth-- < 0) {
         return 'END';
     }
@@ -907,8 +930,12 @@ export function allPropsWithTypes(obj) {
     return allProps(obj, 't');
 }
 export function objInfo(arg, opt = 'tpv') {
-    let info = {};
-    info.type = typeOf(arg);
+    let toArg = typeOf(arg);
+    let info = { type: toArg };
+    if (!isObject(arg)) {
+        console.error(`in objInfo - arg not object?`, { arg, toArg });
+        return info;
+    }
     let objProps = {};
     //SHOULD CHANGE BELOW TO isParsed()...
     if (isParsable(arg)) {
