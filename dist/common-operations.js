@@ -936,26 +936,31 @@ export function objInfo(arg, opt = 'tpv') {
         console.error(`in objInfo - arg not object?`, { arg, toArg });
         return info;
     }
-    let objProps = {};
-    //SHOULD CHANGE BELOW TO isParsed()...
-    if (isParsable(arg)) {
-        let instance = isInstance(arg);
-        let inheritance = classStack(arg);
-        if (instance) {
-            info.instance = instance;
+    try {
+        let objProps = {};
+        //SHOULD CHANGE BELOW TO isParsed()...
+        if (isParsable(arg)) {
+            let instance = isInstance(arg);
+            let inheritance = classStack(arg);
+            if (instance) {
+                info.instance = instance;
+            }
+            if (inheritance && Array.isArray(inheritance) && inheritance.length) {
+                info.inheritance = inheritance;
+            }
+            //objProps = allPropsWithTypes(arg);
+            objProps = allProps(arg, opt);
+            if (objProps) {
+                info.props = objProps;
+            }
         }
-        if (inheritance && Array.isArray(inheritance) && inheritance.length) {
-            info.inheritance = inheritance;
-        }
-        //objProps = allPropsWithTypes(arg);
-        objProps = allProps(arg, opt);
-        if (objProps) {
-            info.props = objProps;
+        else {
+            info.val = arg;
+            info.parsed = arg;
         }
     }
-    else {
-        info.val = arg;
-        info.parsed = arg;
+    catch (e) {
+        console.error(`Exception in objInfo for`, { e, arg, opt, info });
     }
     return info;
 }
