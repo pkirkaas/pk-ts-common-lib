@@ -1,7 +1,7 @@
 import {
 	filterInt, getRandEls, GenObj, dtFmt, pkToDate, deepMeld, uniqueVals, PkError, TagObj, TagObjCol, typeOf, isEmpty, allProps, JSON5, isSubset,
-	classStack, getAllBuiltInProps, objInfo,
-	arraysEqual, getConstructorChain, getPrototypeChain, getObjDets
+	classStack, getAllBuiltInProps, objInfo, toSnakeCase, toCamelCase,
+	arraysEqual, getConstructorChain, getPrototypeChain, getObjDets, stripStray,
 } from '../index.js';
 import util from 'util';
 
@@ -10,6 +10,40 @@ util.inspect.defaultOptions.depth = null;
 util.inspect.defaultOptions.breakLength = 200;
 console.log('In test.ts...');
 
+function camelCase(str) {
+	return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
+		return index == 0 ? word.toLowerCase() : word.toUpperCase();
+	}).replace(/\s+/g, '');
+}
+
+function camelize(str) {
+      return str.replace(/\W+(.)/g, function(match, chr)
+       {
+            return chr.toUpperCase();
+        });
+    }
+
+let snakes = [" dog-cat ", ' "tiger-lion" ', " ' horse-cow '",];
+let camels = [" dogMouse ", ' "Dinosaur King" ', " ' NeverKnown '",];
+
+/*
+console.log({ snakes, camels });
+for (let snake of snakes) {
+	let str = stripStray(snake);
+	let cc = camelCase(str);
+	let cmz = camelize(str);
+	let myRes = toCamelCase(snake);
+	console.log({ snake, str, cc, cmz, myRes });
+}
+*/
+
+for (let camel of camels) {
+	let stripped = stripStray(camel);
+	//let cc = camelCase(str);
+	//let cmz = camelize(str);
+	let snaked = toSnakeCase(camel);
+	console.log({  camel, stripped, snaked });
+}
 let tstArr = ['dog', 'cat', 'horse', 'donky', 7, 12, { some: 'obj' }, 'today'];
 class Organ {
 	age?: number;
@@ -19,7 +53,7 @@ class Organ {
 };
 class Animal extends Organ {
 	nick?: string;
-	constructor(age?:number, nick?:string) {
+	constructor(age?: number, nick?: string) {
 		super(age);
 		this.nick = nick;
 	}
@@ -54,7 +88,7 @@ function tstProps() {
 	let bres = {
 		aDog,
 		aDogOI: objInfo(aDog),
-		DogOI:objInfo(Dog),
+		DogOI: objInfo(Dog),
 		inspP: objInfo(anErr, 'dv'),
 		anErr: objInfo(anErr),
 		PkError: objInfo(PkError),
@@ -101,7 +135,7 @@ function tstProps() {
 	console.log({ bres });
 };
 
-tstProps();
+//tstProps();
 
 /*
 let tstDtArgs = { null: null, str1: '2023-12-01' };

@@ -289,4 +289,15 @@ export declare function JSONStringify(arg: any): any;
  * @return object
  */
 export declare function parseHeaderString(str: any): any;
+/**
+ * stupid name - but just removes all quotes, spaces, etc
+ * from a string.
+ */
+export declare function stripStray(str?: any): any;
+/** For attributes, etc, as valid JS variable.
+ * BONUS: Strips any extraneous quotes, etc.
+ * @return string - camelCased
+ */
+export declare function toCamelCase(str?: any): any;
+export declare function toSnakeCase(str?: any): any;
 //# sourceMappingURL=common-operations.d.ts.map

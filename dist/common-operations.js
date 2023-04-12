@@ -842,7 +842,8 @@ export function allProps(obj, opt = 'tvp', depth = 6) {
       return false;
     }
     */
-    let opts = opt.split('');
+    //let opts = opt.split('');
+    let opts = [...opt];
     let filter = !opts.includes('f');
     let res = isParsed(obj);
     if (res) {
@@ -1129,5 +1130,37 @@ export function parseHeaderString(str) {
         tokens[match[1]] = match[2];
     }
     return tokens;
+}
+/**
+ * stupid name - but just removes all quotes, spaces, etc
+ * from a string.
+ */
+export function stripStray(str) {
+    if (!str || typeof str !== 'string') {
+        return null;
+    }
+    str = str.replaceAll(/['" ]/g, '');
+    return str;
+}
+/** For attributes, etc, as valid JS variable.
+ * BONUS: Strips any extraneous quotes, etc.
+ * @return string - camelCased
+ */
+export function toCamelCase(str) {
+    if (!str || typeof str !== 'string') {
+        return null;
+    }
+    str = stripStray(str);
+    return str.replace(/\W+(.)/g, function (match, chr) {
+        return chr.toUpperCase();
+    });
+}
+export function toSnakeCase(str) {
+    if (!str || typeof str !== 'string') {
+        return null;
+    }
+    str = stripStray(str);
+    str = str.replace(/([a-z]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
+    return str;
 }
 //# sourceMappingURL=common-operations.js.map

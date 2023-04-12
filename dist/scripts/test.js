@@ -1,9 +1,38 @@
-import { PkError, isEmpty, classStack, getAllBuiltInProps, objInfo } from '../index.js';
+import { PkError, isEmpty, classStack, getAllBuiltInProps, objInfo, toSnakeCase, stripStray, } from '../index.js';
 import util from 'util';
 util.inspect.defaultOptions.maxArrayLength = null;
 util.inspect.defaultOptions.depth = null;
 util.inspect.defaultOptions.breakLength = 200;
 console.log('In test.ts...');
+function camelCase(str) {
+    return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
+        return index == 0 ? word.toLowerCase() : word.toUpperCase();
+    }).replace(/\s+/g, '');
+}
+function camelize(str) {
+    return str.replace(/\W+(.)/g, function (match, chr) {
+        return chr.toUpperCase();
+    });
+}
+let snakes = [" dog-cat ", ' "tiger-lion" ', " ' horse-cow '",];
+let camels = [" dogMouse ", ' "Dinosaur King" ', " ' NeverKnown '",];
+/*
+console.log({ snakes, camels });
+for (let snake of snakes) {
+    let str = stripStray(snake);
+    let cc = camelCase(str);
+    let cmz = camelize(str);
+    let myRes = toCamelCase(snake);
+    console.log({ snake, str, cc, cmz, myRes });
+}
+*/
+for (let camel of camels) {
+    let stripped = stripStray(camel);
+    //let cc = camelCase(str);
+    //let cmz = camelize(str);
+    let snaked = toSnakeCase(camel);
+    console.log({ camel, stripped, snaked });
+}
 let tstArr = ['dog', 'cat', 'horse', 'donky', 7, 12, { some: 'obj' }, 'today'];
 class Organ {
     age;
@@ -88,7 +117,7 @@ function tstProps() {
     console.log({ bres });
 }
 ;
-tstProps();
+//tstProps();
 /*
 let tstDtArgs = { null: null, str1: '2023-12-01' };
 let res: GenObj = {};

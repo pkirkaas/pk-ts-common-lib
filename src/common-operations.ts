@@ -862,7 +862,7 @@ export function isBuiltIn(arg) {
 
 //skipProps - maybe stuff like 'caller', 'callee', 'arguments'?
 export const keepProps = ['constructor', 'prototype', 'name', 'class',
-  'type', 'super', 'length', ];
+  'type', 'super', 'length',];
 
 
 export function filterProps(props: any[]) {
@@ -903,7 +903,8 @@ export function allProps(obj: any, opt: string = 'tvp', depth = 6): GenObj | [] 
     return false;
   }
   */
-  let opts = opt.split('');
+  //let opts = opt.split('');
+  let opts = [...opt];
   let filter = !opts.includes('f');
   let res = isParsed(obj);
   if (res) {
@@ -971,7 +972,7 @@ export function allPropsWithTypes(obj: any) {
   return allProps(obj, 't');
 }
 
-export function objInfo(arg: any, opt:string = 'tpv') {
+export function objInfo(arg: any, opt: string = 'tpv') {
   let info: GenObj = {};
   info.type = typeOf(arg);
   let objProps: any = {};
@@ -1206,4 +1207,39 @@ export function parseHeaderString(str) {
     tokens[match[1]] = match[2];
   }
   return tokens;
+}
+
+/**
+ * stupid name - but just removes all quotes, spaces, etc
+ * from a string.
+ */
+export function stripStray(str?: any) {
+  if (!str || typeof str !== 'string') {
+    return null;
+  }
+  str = str.replaceAll(/['" ]/g, '');
+  return str;
+}
+/** For attributes, etc, as valid JS variable.
+ * BONUS: Strips any extraneous quotes, etc.
+ * @return string - camelCased
+ */
+export function toCamelCase(str?: any) {
+  if (!str || typeof str !== 'string') {
+    return null;
+  }
+  str = stripStray(str);
+  return str.replace(/\W+(.)/g, function (match, chr) {
+    return chr.toUpperCase();
+  });
+}
+
+
+export function toSnakeCase(str?: any) {
+  if (!str || typeof str !== 'string') {
+    return null;
+  }
+  str = stripStray(str);
+  str = str.replace(/([a-z]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
+  return str;
 }
