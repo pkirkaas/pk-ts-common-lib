@@ -8,7 +8,7 @@ import { jsonClone, isSubset, arraysEqual, intersect } from './index.js';
 // TODO: Rename labels
 // Get all labels from collection
 function errRep(msg, ...data) {
-    console.error(msg, { ...data });
+    console.error(msg, Object.assign({}, data));
     throw new Error(msg);
 }
 /**
@@ -61,13 +61,6 @@ export class BaseTags {
  * Associates any kind of data with a set of tags
  */
 export class TagObj extends BaseTags {
-    //Takes any kind of data, with a string tag, array of string tags, or empty
-    /**
-     * @param tdata - any kind of data, including null
-     * @param tags - tag string, array of strings, or empty/null
-     */
-    tags;
-    tdata;
     constructor(tdata = null, tags) {
         //@ts-ignore
         super(...arguments);
@@ -113,11 +106,6 @@ export class TagObj extends BaseTags {
  * Manages a collection of TagObj instances
  */
 export class TagObjCol extends BaseTags {
-    /** Creates an instance of TagObjCol
-     * @param tagObjs -  null, TagObj instance, empty array, array of TagObj instances
-     * or array of {tdata:?, tags:?}
-     */
-    tagObjs;
     constructor(tagObjs = null) {
         //@ts-ignore
         super(...arguments);

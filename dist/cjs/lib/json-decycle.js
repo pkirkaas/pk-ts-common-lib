@@ -12,13 +12,14 @@ const toPointer = (parts) => '#' + parts.map(part => String(part).replace(/~/g, 
 const decycle = () => {
     const paths = new WeakMap();
     return function replacer(key, value) {
+        var _a;
         if (key !== '$ref' && isObject(value)) {
             const seen = paths.has(value);
             if (seen) {
                 return { $ref: toPointer(paths.get(value)) };
             }
             else {
-                paths.set(value, [...paths.get(this) ?? [], key]);
+                paths.set(value, [...(_a = paths.get(this)) !== null && _a !== void 0 ? _a : [], key]);
             }
         }
         return value;
