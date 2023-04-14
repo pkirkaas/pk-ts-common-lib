@@ -81,7 +81,7 @@ export declare function pkToDate(arg: any): false | Date;
  * @param string fmt - one of an array
  * @param dt - datable or if null now  - but - if invalid, though returns false
  */
-export declare function dtFmt(fmt?: any, dt?: any): string;
+export declare function dtFmt(fmt?: any, dt?: any): any;
 /**
  * Return elements in arr1 Not In arr2
  */
@@ -132,14 +132,14 @@ export declare function trueVal(arg: any): any;
  * risk of unintended changes
  */
 export declare function isByRef(arg: any): boolean;
-export declare function isSimpleType(arg: any): boolean;
+export declare function isSimpleType(arg: any): any;
 export declare function isPrimitive(arg: any): boolean;
 /**
  * Tests if the argument is a "simple" JS object - with just keys
  * & values, not based on other types or prototypes
  */
 export declare function isSimpleObject(anobj: any): boolean;
-export declare function isObject(arg: any, alsoEmpty?: boolean, alsoFunction?: boolean): boolean;
+export declare function isObject(arg: any, alsoEmpty?: boolean, alsoFunction?: boolean): any;
 export declare function getConstructorChain(obj: any): any[];
 /**
  * Checks if arg is an instance of a class.
@@ -184,7 +184,7 @@ export declare const jsBuiltInObjMap: {
     String: StringConstructor;
     Function: FunctionConstructor;
 };
-export declare const jsBuiltIns: (DateConstructor | NumberConstructor | StringConstructor | ObjectConstructor | ArrayConstructor | FunctionConstructor)[];
+export declare const jsBuiltIns: any;
 export declare function getAllBuiltInProps(): any[];
 /**
  * As an exclude list for filtering out props from specific objects, but
