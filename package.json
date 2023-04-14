@@ -16,7 +16,7 @@
       "import": "./dist/esm/index.js",
       "require": "./dist/cjs/index.js"
     },
-    "./tsconfig.json": "./tsconfig.json"
+    "./tsconfig.common.json": "./tsconfig.common.json"
   },
   "type": "module",
   "scripts": {
