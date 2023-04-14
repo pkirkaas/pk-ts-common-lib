@@ -12,13 +12,12 @@
   "exports": {
     ".": {
       "types": "./dist/esm/index.d.ts",
-      "default": "./dist/esm/index.js",
+      "default": "./dist/cjs/index.js",
       "import": "./dist/esm/index.js",
       "require": "./dist/cjs/index.js"
     },
     "./tsconfig.common.json": "./tsconfig.common.json"
   },
-  "type": "module",
   "scripts": {
     "build": "tsc -p ./tsconfig.esm.json && tsc -p ./tsconfig.cjs.json",
     "clean": "rm -rf ./dist ./node_modules package-lock.json",
