@@ -30,6 +30,7 @@
   ],
   "include": [
     "./src/**/*",
+    "./*.json",
   ],
    "typeRoots": [
       "node_modules/@types",

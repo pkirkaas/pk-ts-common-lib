@@ -1,0 +1,17 @@
+{
+    "extends": "./tsconfig.common.json",
+    "compilerOptions": {
+        "outDir": "./dist/cjs",
+        "module": "commonjs"
+    },
+    "include": [
+        "./src/**/*",
+        "./*.json",
+    ],
+    "ts-node": {
+        "require": [
+            "tsconfig-paths/register"
+        ],
+        "esm": false
+    }
+}

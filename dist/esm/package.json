@@ -1,0 +1,54 @@
+{
+    "name": "pk-ts-common-lib",
+    "version": "l.0.1",
+    "author": "Paul Kirkaas",
+    "license": "UNLICENSED",
+    "description": "TS/JS Utilities for both client & node apps",
+    "engines": {
+        "node": ">= 18.0.0"
+    },
+    "module": "./dist/esm/index.js",
+    "type": "module",
+    "main": "dist/cjs/index.js",
+    "exports": {
+        ".": {
+            "types": "./dist/esm/index.d.ts",
+            "default": "./dist/cjs/index.js",
+            "import": "./dist/esm/index.js",
+            "require": "./dist/cjs/index.js"
+        },
+        "./tsconfig.common.json": "./tsconfig.common.json"
+    },
+    "scripts": {
+        "build": "tsc -p ./tsconfig.esm.json && tsc -p ./tsconfig.cjs.json",
+        "clean": "rm -rf ./dist ./node_modules package-lock.json",
+        "tstarg": "echo Something and --"
+    },
+    "dependencies": {
+        "axios": "*",
+        "date-fns": "latest",
+        "error-stack-parser": "*",
+        "file-type": "latest",
+        "json-decycle": "*",
+        "json5": "*",
+        "lodash": "latest",
+        "stack-trace": "*",
+        "stacktracey": "*",
+        "ts-node": "*",
+        "uuidv4": "*",
+        "tsconfig-paths": "*",
+        "url-status-code": "^2.0.0",
+        "url-join": "latest",
+        "uuid": "*",
+        "@tsconfig/node18": "^1.0.1",
+        "@types/lodash": "*",
+        "@types/node": "*",
+        "@typescript-eslint/eslint-plugin": "*",
+        "@typescript-eslint/parser": "*",
+        "eslint": "*",
+        "eslint-config-prettier": "*",
+        "eslint-plugin-prettier": "*",
+        "prettier": "*",
+        "typescript": "*"
+    }
+}
