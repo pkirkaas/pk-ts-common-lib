@@ -153,6 +153,8 @@ export function JSON5Parse(str: string) {
     }
   }
 }
+
+
 /** Try to make simple copies of complex objects (like with cyclic references)
  * to be storable in MongoDB
  * Primitives will just be returned unchanged.
