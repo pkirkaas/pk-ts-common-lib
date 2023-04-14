@@ -7,15 +7,15 @@
     "engines": {
         "node": ">= 18.0.0"
     },
-    "module": "./dist/esm/index.js",
+    "module": "./dist/esm/src/index.js",
     "type": "module",
-    "main": "dist/cjs/index.js",
+    "main": "./dist/cjs/src/index.js",
     "exports": {
         ".": {
-            "types": "./dist/esm/index.d.ts",
-            "default": "./dist/cjs/index.js",
-            "import": "./dist/esm/index.js",
-            "require": "./dist/cjs/index.js"
+            "types": "./dist/esm/src/index.d.ts",
+            "default": "./dist/cjs/src/index.js",
+            "import": "./dist/esm/src/index.js",
+            "require": "./dist/cjs/src/index.js"
         },
         "./tsconfig.common.json": "./tsconfig.common.json"
     },
