@@ -20,6 +20,7 @@
     "./tsconfig.common.json": "./tsconfig.common.json",
     "./tsconfig.esm.json": "./tsconfig.esm.json",
     "./tsconfig.cjs.json": "./tsconfig.cjs.json",
+    "./tsconfig.json": "./tsconfig.json",
   },
   "scripts": {
     "build": "tsc -p ./tsconfig.esm.json && tsc -p ./tsconfig.cjs.json",
