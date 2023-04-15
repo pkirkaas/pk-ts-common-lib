@@ -4,10 +4,6 @@
     "outDir": "./dist/esm",
     "module": "ESNext"
   },
-  "include": [
-    "./src/**/*",
-    "./*.json",
-  ],
   "ts-node": {
     "require": [
       "tsconfig-paths/register"

@@ -1,9 +1,10 @@
 {
-  "extends":"@tsconfig/node18/tsconfig.json",
   "compilerOptions": {
     "target":"ES6",
+    "resolvePackageJsonImports": true,
+    "lib":["es6","esnext", "dom"],
     "esModuleInterop": true,
-    "baseUrl": ".",
+    "baseUrl": "./",
     "declaration": true,
     "declarationMap": true,
     "strict": false,
@@ -18,19 +19,10 @@
     "allowUmdGlobalAccess": true,
     "allowJs": true,
     "newLine": "lf",
-    "moduleResolution": "Node",
+    "moduleResolution": "nodenext",
   },
-  "exclude": [
-    "node_modules",
-    "dist",
-    "dist/**/*",
-    "*.d.ts",
-    "./src/index.ts",
-    "./src/common-operations.ts"
-  ],
   "include": [
     "./src/**/*",
-    "./*.json",
   ],
    "typeRoots": [
       "node_modules/@types",
