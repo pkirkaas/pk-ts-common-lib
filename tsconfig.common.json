@@ -4,6 +4,7 @@
     "resolvePackageJsonImports": true,
     "lib":["es6","esnext", "dom"],
     "esModuleInterop": true,
+    "module": "ESNext",
     "baseUrl": "./",
     "declaration": true,
     "declarationMap": true,
