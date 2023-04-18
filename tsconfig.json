@@ -1,3 +1,15 @@
 {
-  "extends":"./tsconfig.esm.json",
+  "extends": "./tsconfig.esm.json",
+  "compilerOptions": {
+    "target": "ES6",
+    "baseUrl": "./",
+    "outDir": "./dist/esm",
+    "module": "ESNext"
+  },
+  "ts-node": {
+    "require": [
+      "tsconfig-paths/register"
+    ],
+    "esm":true
+  },
 }
