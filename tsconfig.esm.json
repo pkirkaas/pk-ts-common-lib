@@ -3,7 +3,8 @@
   "compilerOptions": {
     "outDir": "./dist/esm",
     "baseUrl": "./",
-    "module": "ESNext"
+    "module": "ESNext",
+    "target": "ES6",
   },
   "ts-node": {
     "require": [
