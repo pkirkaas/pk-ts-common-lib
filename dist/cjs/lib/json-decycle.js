@@ -59,14 +59,19 @@ function retrocycle() {
 }
 exports.retrocycle = retrocycle;
 const extend = (JSON) => {
-    return Object.defineProperties(JSON, {
-        decycle: {
-            value: (object, space) => JSON.stringify(object, (0, exports.decycle)(), space)
-        },
-        retrocycle: {
-            value: (s) => JSON.parse(s, retrocycle())
-        }
-    });
+    try {
+        return Object.defineProperties(JSON, {
+            decycle: {
+                value: (object, space) => JSON.stringify(object, (0, exports.decycle)(), space)
+            },
+            retrocycle: {
+                value: (s) => JSON.parse(s, retrocycle())
+            }
+        });
+    }
+    catch (e) {
+        console.error(`retrocycle & decycle already defined on JSON - Exception:`, e);
+    }
 };
 exports.extend = extend;
 //# sourceMappingURL=json-decycle.js.map

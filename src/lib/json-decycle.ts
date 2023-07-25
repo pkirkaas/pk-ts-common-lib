@@ -63,12 +63,16 @@ export function retrocycle() {
 }
 
 export const extend = (JSON: JSON) => {
-  return Object.defineProperties(JSON, {
-    decycle: {
-      value: (object: any, space: string | number): string => JSON.stringify(object, decycle(), space)
-    },
-    retrocycle: {
-      value: (s: string): any => JSON.parse(s, retrocycle())
-    }
-  })
+  try {
+    return Object.defineProperties(JSON, {
+      decycle: {
+        value: (object: any, space: string | number): string => JSON.stringify(object, decycle(), space)
+      },
+      retrocycle: {
+        value: (s: string): any => JSON.parse(s, retrocycle())
+      }
+    })
+  } catch (e) {
+    console.error(`retrocycle & decycle already defined on JSON - Exception:`, e);
+  }
 }
