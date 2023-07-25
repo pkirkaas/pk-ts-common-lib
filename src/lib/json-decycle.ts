@@ -73,6 +73,7 @@ export const extend = (JSON: JSON) => {
       }
     })
   } catch (e) {
-    console.error(`retrocycle & decycle already defined on JSON - Exception:`, e);
+    //TODO: FIX THIS
+    //console.error(`retrocycle & decycle already defined on JSON - Exception:`, e);
   }
 }
