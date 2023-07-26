@@ -20,7 +20,7 @@
     "allowUmdGlobalAccess": true,
     "allowJs": true,
     "newLine": "lf",
-    "moduleResolution": "nodenext",
+    "moduleResolution": "node",
   },
   "include": [
     "./src/**/*",
