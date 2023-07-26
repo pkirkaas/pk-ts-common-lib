@@ -1,15 +1,37 @@
 {
-  "extends": "./tsconfig.esm.json",
   "compilerOptions": {
-    "target": "ES6",
+    "target":"ES6",
+    "resolvePackageJsonImports": true,
+    "lib":["es6","esnext", "dom"],
+    "esModuleInterop": true,
+    "module": "NodeNext",
     "baseUrl": "./",
-    "outDir": "./dist/esm",
-    "module": "ESNext"
+    "declaration": true,
+    "declarationMap": true,
+    "strict": false,
+    "resolveJsonModule" : true,
+    "sourceMap": true,
+    "checkJs": true,
+    "skipLibCheck": true,
+    "noImplicitAny": false,
+    "allowSyntheticDefaultImports": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowUmdGlobalAccess": true,
+    "allowJs": true,
+    "newLine": "lf",
+    "moduleResolution": "NodeNext",
   },
+  "include": [
+    "./src/**/*",
+  ],
   "ts-node": {
     "require": [
       "tsconfig-paths/register"
     ],
     "esm":true
   },
+   "typeRoots": [
+      "node_modules/@types",
+  ]
 }
