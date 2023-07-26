@@ -4,7 +4,7 @@
     "resolvePackageJsonImports": true,
     "lib":["es6","esnext", "dom"],
     "esModuleInterop": true,
-    "module": "ESNext",
+    "module": "NodeNext",
     "baseUrl": "./",
     "declaration": true,
     "declarationMap": true,
@@ -20,7 +20,7 @@
     "allowUmdGlobalAccess": true,
     "allowJs": true,
     "newLine": "lf",
-    "moduleResolution": "node",
+    "moduleResolution": "NodeNext",
   },
   "include": [
     "./src/**/*",
