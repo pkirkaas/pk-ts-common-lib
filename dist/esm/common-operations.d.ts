@@ -81,7 +81,7 @@ export declare function pkToDate(arg: any): false | Date;
  * @param string fmt - one of an array
  * @param dt - datable or if null now  - but - if invalid, though returns false
  */
-export declare function dtFmt(fmt?: any, dt?: any): string;
+export declare function dtFmt(fmt?: any, dt?: any): any;
 /**
  * Return elements in arr1 Not In arr2
  */
@@ -139,7 +139,7 @@ export declare function isPrimitive(arg: any): boolean;
  * & values, not based on other types or prototypes
  */
 export declare function isSimpleObject(anobj: any): boolean;
-export declare function isObject(arg: any, alsoEmpty?: boolean, alsoFunction?: boolean): boolean;
+export declare function isObject(arg: any, alsoEmpty?: boolean, alsoFunction?: boolean): any;
 export declare function getConstructorChain(obj: any): any[];
 /**
  * Checks if arg is an instance of a class.

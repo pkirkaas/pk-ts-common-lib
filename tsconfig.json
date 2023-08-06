@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target":"ES6",
+    "outDir": "./dist/esm",
     "resolvePackageJsonImports": true,
     "lib":["es6","esnext", "dom"],
     "esModuleInterop": true,
