@@ -17,3 +17,6 @@ Make a CJS tsconfig.cjs.json, extending tsconfige & overriding for cjs
 
 Eliminate tsconfig.common.json, tsconfig.esm.json, tsconfig.base.json
 
+So, only 2 tsconfig files: tsconfig.json & tsconfig.cjs.json
+
+EXPORT them in package.json
