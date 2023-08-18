@@ -11,7 +11,7 @@ const index_js_1 = require("./index.js");
 // TODO: Rename labels
 // Get all labels from collection
 function errRep(msg, ...data) {
-    console.error(msg, Object.assign({}, data));
+    console.error(msg, { ...data });
     throw new Error(msg);
 }
 /**

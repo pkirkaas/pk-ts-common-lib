@@ -5,7 +5,7 @@
   "license": "UNLICENSED",
   "description": "TS/JS Utilities for both client & node apps",
   "engines": {
-    "node": ">= 18.0.0"
+    "node": ">= 20.0.0"
   },
   "type":"module",
   "module":"./dist/esm/index.js",
@@ -22,7 +22,7 @@
   },
   "scripts": {
     "build": "tsc -p ./tsconfig.json && tsc -p ./tsconfig.cjs.json",
-    "clean": "rm -rf ./dist ./node_modules package-lock.json",
+    "clean": "rm -rf ./dist ./node_modules package-lock.json && npm i",
     "tstarg" : "echo Something and --"
   },
   "dependencies": {
