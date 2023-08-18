@@ -1,7 +1,7 @@
 import {
 	filterInt, getRandEls, GenObj, dtFmt, pkToDate, deepMeld, uniqueVals, PkError, TagObj, TagObjCol, typeOf, isEmpty, allProps, JSON5, isSubset, isObject,
 	classStack, getAllBuiltInProps, objInfo, toSnakeCase, toCamelCase,
-	arraysEqual, getConstructorChain, getPrototypeChain, getObjDets, stripStray,
+	arraysEqual, getConstructorChain, getPrototypeChain, getObjDets, stripStray, arrayToLower
 } from '../index.js';
 import _ from 'lodash';
 import util from 'util';
@@ -25,7 +25,11 @@ function camelize(str) {
     }
 
 let snakes = [" dog-cat ", ' "tiger-lion" ', " ' horse-cow '",];
-let camels = [" dogMouse ", ' "Dinosaur King" ', " ' NeverKnown '",];
+let camels = [" dogMouse ", 9, null, ' "Dinosaur King" ', " ' NeverKnown '",];
+
+let tll = arrayToLower(camels);
+
+console.log({ tll });
 
 let strs = ['tag', 'donkey', 'animal', 'plant'];
 /*

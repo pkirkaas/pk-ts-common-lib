@@ -1,4 +1,4 @@
-import { PkError, typeOf, isEmpty, isObject, classStack, getAllBuiltInProps, objInfo, } from '../index.js';
+import { PkError, typeOf, isEmpty, isObject, classStack, getAllBuiltInProps, objInfo, arrayToLower } from '../index.js';
 import _ from 'lodash';
 import util from 'util';
 util.inspect.defaultOptions.maxArrayLength = null;
@@ -16,7 +16,9 @@ function camelize(str) {
     });
 }
 let snakes = [" dog-cat ", ' "tiger-lion" ', " ' horse-cow '",];
-let camels = [" dogMouse ", ' "Dinosaur King" ', " ' NeverKnown '",];
+let camels = [" dogMouse ", 9, null, ' "Dinosaur King" ', " ' NeverKnown '",];
+let tll = arrayToLower(camels);
+console.log({ tll });
 let strs = ['tag', 'donkey', 'animal', 'plant'];
 /*
 for (let str of strs) {

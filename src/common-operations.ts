@@ -280,6 +280,10 @@ export function intersect(a?: any[], b?: any[]): any[] {
   return [...new Set(a)].filter(x => setB.has(x));
 }
 
+export function arrayToLower(arr: any[]) {
+  return arr.map((e) => (typeof e === 'string') ? e.toLowerCase() : e);
+}
+
 /**
  * Compares arrays by VALUES - independant of order
  */

@@ -90,6 +90,7 @@ export declare function inArr1NinArr2(arr1: any[], arr2: any[]): any[];
  * Uniqe intersection of two arrays
  */
 export declare function intersect(a?: any[], b?: any[]): any[];
+export declare function arrayToLower(arr: any[]): any[];
 /**
  * Compares arrays by VALUES - independant of order
  */

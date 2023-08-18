@@ -21,7 +21,9 @@ function camelize(str) {
     });
 }
 let snakes = [" dog-cat ", ' "tiger-lion" ', " ' horse-cow '",];
-let camels = [" dogMouse ", ' "Dinosaur King" ', " ' NeverKnown '",];
+let camels = [" dogMouse ", 9, null, ' "Dinosaur King" ', " ' NeverKnown '",];
+let tll = (0, index_js_1.arrayToLower)(camels);
+console.log({ tll });
 let strs = ['tag', 'donkey', 'animal', 'plant'];
 /*
 for (let str of strs) {
