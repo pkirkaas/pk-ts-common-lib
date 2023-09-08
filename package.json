@@ -7,8 +7,8 @@
   "engines": {
     "node": ">= 20.0.0"
   },
-  "type":"module",
-  "module":"./dist/esm/index.js",
+  "type": "module",
+  "module": "./dist/esm/index.js",
   "main": "./dist/cjs/index.js",
   "exports": {
     ".": {
@@ -23,32 +23,32 @@
   "scripts": {
     "build": "tsc -p ./tsconfig.json && tsc -p ./tsconfig.cjs.json",
     "clean": "rm -rf ./dist ./node_modules package-lock.json && npm i",
-    "tstarg" : "echo Something and --"
+    "tstarg": "echo Something and --"
   },
   "dependencies": {
-    "axios": "*",
+    "@types/lodash": "^4.14.198",
+    "@types/node": "^20.5.9",
+    "@typescript-eslint/eslint-plugin": "^6.6.0",
+    "@typescript-eslint/parser": "^6.6.0",
+    "axios": "^1.5.0",
     "date-fns": "latest",
     "error-stack-parser": "*",
+    "eslint": "^8.49.0",
+    "eslint-config-prettier": "*",
+    "eslint-plugin-prettier": "*",
     "file-type": "latest",
     "json-decycle": "*",
     "json5": "*",
     "lodash": "latest",
-    "stack-trace": "*",
+    "prettier": "^3.0.3",
+    "stack-trace": "^0.0.10",
     "stacktracey": "*",
     "ts-node": "*",
-    "uuidv4": "*",
     "tsconfig-paths": "*",
-    "url-status-code": "^2.0.0",
+    "typescript": "^5.2.2",
     "url-join": "latest",
+    "url-status-code": "^2.0.0",
     "uuid": "*",
-    "@types/lodash": "*",
-    "@types/node": "*",
-    "@typescript-eslint/eslint-plugin": "*",
-    "@typescript-eslint/parser": "*",
-    "eslint": "*",
-    "eslint-config-prettier": "*",
-    "eslint-plugin-prettier": "*",
-    "prettier": "*",
-    "typescript": "*"
+    "uuidv4": "*"
   }
 }
