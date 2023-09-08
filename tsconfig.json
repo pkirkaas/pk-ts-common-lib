@@ -2,7 +2,6 @@
   "compilerOptions": {
     "target":"ES2020",
     "outDir": "./dist/esm",
-    "resolvePackageJsonImports": true,
     "lib":["es6","esnext", "es2020", "dom"],
     "esModuleInterop": true,
     "module": "NodeNext",
@@ -10,7 +9,8 @@
     "declaration": true,
     "declarationMap": true,
     "strict": false,
-    "resolveJsonModule" : true,
+    //"resolveJsonModule" : true,
+    //"resolvePackageJsonImports": true,
     "sourceMap": true,
     "checkJs": true,
     "skipLibCheck": true,
