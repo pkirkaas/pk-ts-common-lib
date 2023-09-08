@@ -3,7 +3,7 @@
   "compilerOptions": {
     "outDir": "./dist/cjs",
     "module": "commonjs",
-    "moduleResolution": "node",
+    "moduleResolution": "Classic",
   },
   "ts-node": {
     "require": [
