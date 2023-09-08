@@ -5,7 +5,7 @@
     "resolvePackageJsonImports": true,
     "lib":["es6","esnext", "es2020", "dom"],
     "esModuleInterop": true,
-    "module": "es2020",
+    "module": "NodeNext",
     "baseUrl": "./",
     "declaration": true,
     "declarationMap": true,
