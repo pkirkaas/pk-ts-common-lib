@@ -4,6 +4,8 @@ import { GenericObject, GenObj } from './index.js';
 export { urlStatus, JSON5, GenericObject, GenObj };
 /** NODE SPECIFIC
 */
+export declare function isESM(): boolean;
+export declare function isCommonJS(): boolean;
 /**
  * Returns stack trace as array
  * Error().stack returns a string. Convert to array

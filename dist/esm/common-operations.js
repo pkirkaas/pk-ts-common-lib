@@ -23,6 +23,18 @@ export { urlStatus, JSON5 };
 //const path = require("path/posix");
 /** NODE SPECIFIC
 */
+///////////////  Check if running in commonJS or ESM Module env. TOTALLY UNTESTED - CODE FROM BARD -in 2023
+// But it finally compiles in tsc for each target - commonjs & esm - try testing !!
+export function isESM() {
+    return typeof module === 'object'
+        && module.exports
+        && typeof Symbol !== 'undefined'
+        && String(Symbol.toStringTag) === 'Module';
+}
+export function isCommonJS() {
+    return typeof module !== 'undefined'
+        && typeof module.exports === 'object';
+}
 /**
  * Returns stack trace as array
  * Error().stack returns a string. Convert to array

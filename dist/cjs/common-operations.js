@@ -3,8 +3,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.allProps = exports.filterProps = exports.keepProps = exports.isBuiltIn = exports.builtInName = exports.getProps = exports.isParsed = exports.isParsable = exports.builtInProps = exports.getAllBuiltInProps = exports.jsBuiltIns = exports.jsBuiltInObjMap = exports.getObjDets = exports.getPrototypeChain = exports.classStack = exports.isClassOrFunction = exports.isInstance = exports.getConstructorChain = exports.isObject = exports.isSimpleObject = exports.isPrimitive = exports.isSimpleType = exports.isByRef = exports.trueVal = exports.isEmpty = exports.checkUrl3 = exports.checkUrlAxios = exports.checkUrl = exports.rewriteHttpsToHttp = exports.isCli = exports.isSubset = exports.arraysEqual = exports.arrayToLower = exports.intersect = exports.inArr1NinArr2 = exports.dtFmt = exports.pkToDate = exports.asNumeric = exports.isNumeric = exports.jsonClone = exports.JSON5Parse = exports.eventInfo = exports.filterInt = exports.isPromise = exports.strIncludesAny = exports.validateDateFnsDuration = exports.subObj = exports.getStack = exports.JSON5 = exports.urlStatus = void 0;
-exports.toSnakeCase = exports.toCamelCase = exports.stripStray = exports.parseHeaderString = exports.JSONStringify = exports.JSON5Stringify = exports.valWithType = exports.typeOfEach = exports.randInt = exports.getRandEls = exports.getRand = exports.typeOf = exports.uniqueVals = exports.objInfo = exports.allPropsWithTypes = void 0;
+exports.keepProps = exports.isBuiltIn = exports.builtInName = exports.getProps = exports.isParsed = exports.isParsable = exports.builtInProps = exports.getAllBuiltInProps = exports.jsBuiltIns = exports.jsBuiltInObjMap = exports.getObjDets = exports.getPrototypeChain = exports.classStack = exports.isClassOrFunction = exports.isInstance = exports.getConstructorChain = exports.isObject = exports.isSimpleObject = exports.isPrimitive = exports.isSimpleType = exports.isByRef = exports.trueVal = exports.isEmpty = exports.checkUrl3 = exports.checkUrlAxios = exports.checkUrl = exports.rewriteHttpsToHttp = exports.isCli = exports.isSubset = exports.arraysEqual = exports.arrayToLower = exports.intersect = exports.inArr1NinArr2 = exports.dtFmt = exports.pkToDate = exports.asNumeric = exports.isNumeric = exports.jsonClone = exports.JSON5Parse = exports.eventInfo = exports.filterInt = exports.isPromise = exports.strIncludesAny = exports.validateDateFnsDuration = exports.subObj = exports.getStack = exports.isCommonJS = exports.isESM = exports.JSON5 = exports.urlStatus = void 0;
+exports.toSnakeCase = exports.toCamelCase = exports.stripStray = exports.parseHeaderString = exports.JSONStringify = exports.JSON5Stringify = exports.valWithType = exports.typeOfEach = exports.randInt = exports.getRandEls = exports.getRand = exports.typeOf = exports.uniqueVals = exports.objInfo = exports.allPropsWithTypes = exports.allProps = exports.filterProps = void 0;
 //const urlStatus = require('url-status-code');
 const url_status_code_1 = __importDefault(require("url-status-code"));
 exports.urlStatus = url_status_code_1.default;
@@ -31,6 +31,20 @@ const date_fns_1 = require("date-fns");
 //const path = require("path/posix");
 /** NODE SPECIFIC
 */
+///////////////  Check if running in commonJS or ESM Module env. TOTALLY UNTESTED - CODE FROM BARD -in 2023
+// But it finally compiles in tsc for each target - commonjs & esm - try testing !!
+function isESM() {
+    return typeof module === 'object'
+        && module.exports
+        && typeof Symbol !== 'undefined'
+        && String(Symbol.toStringTag) === 'Module';
+}
+exports.isESM = isESM;
+function isCommonJS() {
+    return typeof module !== 'undefined'
+        && typeof module.exports === 'object';
+}
+exports.isCommonJS = isCommonJS;
 /**
  * Returns stack trace as array
  * Error().stack returns a string. Convert to array
