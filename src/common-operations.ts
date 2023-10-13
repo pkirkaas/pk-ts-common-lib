@@ -564,7 +564,7 @@ export function isEmpty(arg) {
   if (toarg === "object") {
     let props = getProps(arg);
     let keys = Object.keys(arg);
-    let aninb = inArr1NinArr2(props, builtInProps); 
+    let aninb = inArr1NinArr2(props, builtInProps);
     //console.log({ props, keys,  aninb });
     if (!keys.length && !aninb.length) {
       return true;
@@ -1019,7 +1019,7 @@ export function allPropsWithTypes(obj: any) {
 
 export function objInfo(arg: any, opt: string = 'tpv') {
   let toArg = typeOf(arg);
-  let info: GenObj = {type:toArg};
+  let info: GenObj = { type: toArg };
   if (!isObject(arg)) {
     console.error(`in objInfo - arg not object?`, { arg, toArg });
     return info;
