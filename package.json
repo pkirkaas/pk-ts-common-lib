@@ -47,8 +47,6 @@
     "tsconfig-paths": "*",
     "typescript": "*",
     "url-join": "latest",
-    "url-status-code": "*",
-    "uuid": "*",
-    "uuidv4": "*"
+    "url-status-code": "*"
   }
 }
