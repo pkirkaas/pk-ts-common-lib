@@ -1,10 +1,15 @@
 {
   "compilerOptions": {
-    "target":"ES2020",
     "outDir": "./dist/esm",
     "lib":["es6","esnext", "es2020", "dom"],
     "esModuleInterop": true,
+
+    //These 3 settings - can't get right - esnext, nodenext, all the same, ???
+
+    "target":"ES2020",
     "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+
     "baseUrl": "./",
     "declaration": true,
     "declarationMap": true,
@@ -21,7 +26,6 @@
     "allowUmdGlobalAccess": true,
     "allowJs": true,
     "newLine": "lf",
-    "moduleResolution": "NodeNext",
   },
   "include": [
     "./src/**/*",

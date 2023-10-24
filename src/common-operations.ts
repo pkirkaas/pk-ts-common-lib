@@ -196,7 +196,7 @@ export function jsonClone(arg) {
  * 
  */
 
-export function isNumeric(arg: any, asNum = false) {
+export function isNumeric(arg: any, asNum = false) : number | boolean {
   let num = Number(arg);
   if (num !== parseFloat(arg)) {
     return false;
@@ -210,7 +210,7 @@ export function isNumeric(arg: any, asNum = false) {
 /**
  * Returns the numeric value, or boolean false
  */
-export function asNumeric(arg) {
+export function asNumeric(arg):number | boolean {
   return isNumeric(arg, true);
 }
 
