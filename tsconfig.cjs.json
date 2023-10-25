@@ -2,8 +2,10 @@
   "extends":"./tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist/cjs",
-    "module": "commonjs",
-    "moduleResolution": "Node",
+    //"module": "commonjs",
+    // May break for browsers??
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
   },
   "ts-node": {
     "require": [

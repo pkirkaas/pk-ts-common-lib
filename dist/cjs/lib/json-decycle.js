@@ -1,6 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.extend = exports.retrocycle = exports.decycle = void 0;
 const isObject = (value) => typeof value === 'object'
     && value != null
     && !(value instanceof Boolean)
@@ -9,7 +6,7 @@ const isObject = (value) => typeof value === 'object'
     && !(value instanceof RegExp)
     && !(value instanceof String);
 const toPointer = (parts) => '#' + parts.map(part => String(part).replace(/~/g, '~0').replace(/\//g, '~1')).join('/');
-const decycle = () => {
+export const decycle = () => {
     const paths = new WeakMap();
     return function replacer(key, value) {
         if (key !== '$ref' && isObject(value)) {
@@ -24,8 +21,7 @@ const decycle = () => {
         return value;
     };
 };
-exports.decycle = decycle;
-function retrocycle() {
+export function retrocycle() {
     const parents = new WeakMap();
     const keys = new WeakMap();
     const refs = new Set();
@@ -56,12 +52,11 @@ function retrocycle() {
         return value;
     };
 }
-exports.retrocycle = retrocycle;
-const extend = (JSON) => {
+export const extend = (JSON) => {
     try {
         return Object.defineProperties(JSON, {
             decycle: {
-                value: (object, space) => JSON.stringify(object, (0, exports.decycle)(), space)
+                value: (object, space) => JSON.stringify(object, decycle(), space)
             },
             retrocycle: {
                 value: (s) => JSON.parse(s, retrocycle())
@@ -73,5 +68,4 @@ const extend = (JSON) => {
         //console.error(`retrocycle & decycle already defined on JSON - Exception:`, e);
     }
 };
-exports.extend = extend;
 //# sourceMappingURL=json-decycle.js.map

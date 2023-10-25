@@ -1,13 +1,10 @@
-"use strict";
 /**
  * Experimental implementation of data access by tags - - to retrieve objects by tags rather than just key->value
  * March 2023
  * Paul Kirkaas
  *
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TagObjCol = exports.TagObj = exports.BaseTags = void 0;
-const index_js_1 = require("./index.js");
+import { jsonClone, isSubset, arraysEqual, intersect } from './index.js';
 // TODO: Rename labels
 // Get all labels from collection
 function errRep(msg, ...data) {
@@ -17,7 +14,7 @@ function errRep(msg, ...data) {
 /**
  * Base utility class for TagObjs & TagObjCollections
  */
-class BaseTags {
+export class BaseTags {
     /** Takes a 'tags' arg - null, empty array, or array of strings,
      * and returns array of string tags - or throws error
      */
@@ -60,11 +57,10 @@ class BaseTags {
         return false;
     }
 }
-exports.BaseTags = BaseTags;
 /**
  * Associates any kind of data with a set of tags
  */
-class TagObj extends BaseTags {
+export class TagObj extends BaseTags {
     constructor(tdata = null, tags) {
         //@ts-ignore
         super(...arguments);
@@ -87,8 +83,8 @@ class TagObj extends BaseTags {
         let tdata = JSON.parse(JSON.stringify(this.tdata));
         let tags = JSON.parse(JSON.stringify(this.tags));
         */
-        let tdata = (0, index_js_1.jsonClone)(this.tdata);
-        let tags = (0, index_js_1.jsonClone)(this.tags);
+        let tdata = jsonClone(this.tdata);
+        let tags = jsonClone(this.tags);
         //let cloned = new this.constructor(tdata, tags);
         let cloned = new TagObj(tdata, tags);
         return cloned;
@@ -106,11 +102,10 @@ class TagObj extends BaseTags {
         return this;
     }
 }
-exports.TagObj = TagObj;
 /**
  * Manages a collection of TagObj instances
  */
-class TagObjCol extends BaseTags {
+export class TagObjCol extends BaseTags {
     constructor(tagObjs = null) {
         //@ts-ignore
         super(...arguments);
@@ -161,7 +156,7 @@ class TagObjCol extends BaseTags {
         tags = this.constructor['normTags'](tags);
         let tagObjs = [];
         for (let tagObj of this.tagObjs) {
-            if ((0, index_js_1.intersect)(tags, tagObj.tags).length) {
+            if (intersect(tags, tagObj.tags).length) {
                 tagObjs.push(tagObj);
             }
         }
@@ -176,7 +171,7 @@ class TagObjCol extends BaseTags {
         tags = this.constructor['normTags'](tags);
         let tagObjs = [];
         for (let tagObj of this.tagObjs) {
-            if ((0, index_js_1.isSubset)(tags, tagObj.tags)) {
+            if (isSubset(tags, tagObj.tags)) {
                 tagObjs.push(tagObj);
             }
         }
@@ -188,7 +183,7 @@ class TagObjCol extends BaseTags {
         tags = this.constructor['normTags'](tags);
         let tagObjs = [];
         for (let tagObj of this.tagObjs) {
-            if ((0, index_js_1.arraysEqual)(tags, tagObj.tags)) {
+            if (arraysEqual(tags, tagObj.tags)) {
                 tagObjs.push(tagObj);
             }
         }
@@ -221,5 +216,4 @@ class TagObjCol extends BaseTags {
         return this;
     }
 }
-exports.TagObjCol = TagObjCol;
 //# sourceMappingURL=tag-classes.js.map

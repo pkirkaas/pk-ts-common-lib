@@ -1,14 +1,9 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const index_js_1 = require("../index.js");
-const lodash_1 = __importDefault(require("lodash"));
-const util_1 = __importDefault(require("util"));
-util_1.default.inspect.defaultOptions.maxArrayLength = null;
-util_1.default.inspect.defaultOptions.depth = null;
-util_1.default.inspect.defaultOptions.breakLength = 200;
+import { PkError, typeOf, isEmpty, isObject, classStack, getAllBuiltInProps, objInfo, arrayToLower } from '../index.js';
+import _ from 'lodash';
+import util from 'util';
+util.inspect.defaultOptions.maxArrayLength = null;
+util.inspect.defaultOptions.depth = null;
+util.inspect.defaultOptions.breakLength = 200;
 console.log('In test.ts...');
 function camelCase(str) {
     return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
@@ -22,7 +17,7 @@ function camelize(str) {
 }
 let snakes = [" dog-cat ", ' "tiger-lion" ', " ' horse-cow '",];
 let camels = [" dogMouse ", 9, null, ' "Dinosaur King" ', " ' NeverKnown '",];
-let tll = (0, index_js_1.arrayToLower)(camels);
+let tll = arrayToLower(camels);
 console.log({ tll });
 let strs = ['tag', 'donkey', 'animal', 'plant'];
 /*
@@ -38,11 +33,11 @@ let tstObjs = {
 };
 for (let key in tstObjs) {
     let val = tstObjs[key];
-    let toVal = (0, index_js_1.typeOf)(val);
+    let toVal = typeOf(val);
     let toval = typeof val;
-    let objLike = lodash_1.default.isObjectLike(val);
-    let isemp = (0, index_js_1.isEmpty)(val);
-    let isobj = (0, index_js_1.isObject)(val);
+    let objLike = _.isObjectLike(val);
+    let isemp = isEmpty(val);
+    let isobj = isObject(val);
     console.log({ key, toVal, toval, objLike, isobj, isemp });
 }
 /*
@@ -91,27 +86,27 @@ function tstFnNames(arg) {
 }
 let aDog = new Dog(22, 'buck', 'mutt', 'daddy');
 function tstPropsY() {
-    let biProps = (0, index_js_1.getAllBuiltInProps)();
+    let biProps = getAllBuiltInProps();
     console.log({ biProps });
 }
 function tstProps() {
-    let anErr = new index_js_1.PkError('tstErr');
+    let anErr = new PkError('tstErr');
     let bres = {
         aDog,
-        aDogOI: (0, index_js_1.objInfo)(aDog),
-        DogOI: (0, index_js_1.objInfo)(Dog),
-        inspP: (0, index_js_1.objInfo)(anErr, 'dv'),
-        anErr: (0, index_js_1.objInfo)(anErr),
-        PkError: (0, index_js_1.objInfo)(index_js_1.PkError),
-        isEmpty: (0, index_js_1.objInfo)(index_js_1.isEmpty),
-        emptyObj: (0, index_js_1.objInfo)({}),
-        emptyArr: (0, index_js_1.objInfo)([]),
-        string: (0, index_js_1.objInfo)(' '),
+        aDogOI: objInfo(aDog),
+        DogOI: objInfo(Dog),
+        inspP: objInfo(anErr, 'dv'),
+        anErr: objInfo(anErr),
+        PkError: objInfo(PkError),
+        isEmpty: objInfo(isEmpty),
+        emptyObj: objInfo({}),
+        emptyArr: objInfo([]),
+        string: objInfo(' '),
         //aDogPChain: getPrototypeChain(aDog),
         //anErrPChain: getPrototypeChain(anErr),
-        aDogCS: (0, index_js_1.classStack)(aDog),
+        aDogCS: classStack(aDog),
         //DogPChain: getPrototypeChain(Dog),
-        DogCS: (0, index_js_1.classStack)(Dog),
+        DogCS: classStack(Dog),
         /*
         inspP: allProps(anErr, 'dv'),
         anErr: getObjDets(anErr),
