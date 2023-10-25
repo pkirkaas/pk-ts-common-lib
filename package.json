@@ -26,16 +26,9 @@
     "tstarg": "echo Something and --"
   },
   "dependencies": {
-    "@types/lodash": "*",
-    "@types/node": "^20.8.4",
-    "@typescript-eslint/eslint-plugin": "*",
-    "@typescript-eslint/parser": "*",
     "axios": "*",
     "date-fns": "latest",
     "error-stack-parser": "*",
-    "eslint": "*",
-    "eslint-config-prettier": "*",
-    "eslint-plugin-prettier": "*",
     "file-type": "latest",
     "json-decycle": "*",
     "json5": "*",
@@ -43,10 +36,20 @@
     "prettier": "*",
     "stack-trace": "*",
     "stacktracey": "*",
+    "url-join": "latest",
+    "url-status-code": "*"
+  },
+  "devDependencies": {
     "ts-node": "*",
     "tsconfig-paths": "*",
     "typescript": "*",
-    "url-join": "latest",
-    "url-status-code": "*"
+    "eslint": "*",
+    "eslint-config-prettier": "*",
+    "eslint-plugin-prettier": "*",
+    "@types/lodash": "*",
+    "@types/node": "^20.8.4",
+    "@typescript-eslint/eslint-plugin": "*",
+    "@typescript-eslint/parser": "*",
+    "nodemon": "^3.0.1"
   }
 }
