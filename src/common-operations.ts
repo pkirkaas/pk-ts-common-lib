@@ -590,7 +590,7 @@ export function isEmpty(arg):boolean {
     let aninb = inArr1NinArr2(props, builtInProps);
     //console.log({ props, keys,  aninb });
     if (!keys.length && !aninb.length) {
-      returg true;
+      return true;
     }
   }
   if (toarg === 'function') {

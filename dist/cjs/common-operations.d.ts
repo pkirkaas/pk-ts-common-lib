@@ -101,6 +101,11 @@ export declare function arraysEqual(a: any, b: any): boolean;
  * Is 'a' a subset of 'b' ?
  */
 export declare function isSubset(a: any, b: any): any;
+/**
+ * Takes an array and an element, returns a new array with
+ * the element inserted between each element of the original array.
+ */
+export declare function insertBetween(arr: Array<any>, item: any): any[];
 export declare function isCli(report?: boolean): boolean;
 export declare function rewriteHttpsToHttp(url: any): string;
 /**
