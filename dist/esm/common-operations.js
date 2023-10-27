@@ -280,6 +280,20 @@ export function isSubset(a, b) {
     b = [...new Set(b)];
     return a.every((val) => b.includes(val));
 }
+/**
+ * Takes an array and an element, returns a new array with
+ * the element inserted between each element of the original array.
+ */
+export function insertBetween(arr, item) {
+    let result = [];
+    for (let i = 0; i < arr.length; i++) {
+        result.push(arr[i]);
+        if (i < arr.length - 1) {
+            result.push(item);
+        }
+    }
+    return result;
+}
 //TODO - REDO! This sucks...
 export function isCli(report = false) {
     let runtime = process.env.RUNTIME;
@@ -524,7 +538,8 @@ export function isEmpty(arg) {
         let aninb = inArr1NinArr2(props, builtInProps);
         //console.log({ props, keys,  aninb });
         if (!keys.length && !aninb.length) {
-            return true;
+            returg;
+            true;
         }
     }
     if (toarg === 'function') {

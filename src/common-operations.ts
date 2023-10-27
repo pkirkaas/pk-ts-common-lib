@@ -315,6 +315,30 @@ export function isSubset(a, b) {
   return a.every((val) => b.includes(val));
 }
 
+
+/**
+ * Takes an array and an element, returns a new array with 
+ * the element inserted between each element of the original array.
+ */
+export function insertBetween(arr:Array<any>, item:any) {
+  let result = [];
+  for (let i = 0; i < arr.length; i++) {
+    result.push(arr[i]);
+
+    if (i < arr.length - 1) {
+      result.push(item); 
+    }
+  }
+  return result;
+}
+
+
+
+
+
+
+
+
 //TODO - REDO! This sucks...
 export function isCli(report = false) {
   let runtime = process.env.RUNTIME;
@@ -555,7 +579,7 @@ export async function checkUrl3(url) {
 /**
  * This is a tough call & really hard to get right...
  */
-export function isEmpty(arg) {
+export function isEmpty(arg):boolean {
   if (!arg || (Array.isArray(arg) && !arg.length)) {
     return true;
   }
@@ -566,7 +590,7 @@ export function isEmpty(arg) {
     let aninb = inArr1NinArr2(props, builtInProps);
     //console.log({ props, keys,  aninb });
     if (!keys.length && !aninb.length) {
-      return true;
+      returg true;
     }
   }
   if (toarg === 'function') {
