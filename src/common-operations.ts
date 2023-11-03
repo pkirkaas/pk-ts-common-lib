@@ -960,80 +960,84 @@ export function filterProps(props: any[]) {
  */
 //export function allProps(obj: any, { dets = 'p', filter = true }: { dets?: string, filter?: boolean } = {}) {
 export function allProps(obj: any, opt: string = 'tvp', depth = 6): GenObj | [] | string | boolean {
-  if (!isObject(obj)) {
-    return typeOf(obj);
-  }
-  if (depth-- < 0) {
-    return 'END';
-  }
-  /*
-  if (!isParsable(obj)) {
-    return false;
-  }
-  */
-  //let opts = opt.split('');
-  let opts = [...opt];
-  let filter = !opts.includes('f');
-  let res = isParsed(obj);
-  if (res) {
-    return {
-      val: res, type: typeOf(res), parsed: res,
-    };
-  }
-  /*
-  if (isPrimitive(obj) || (!isObject(obj) && (typeof obj !== 'function'))) {
-    //return false; // Or the primitive?
-    return obj;
-  }
-  */
-  let tstKeys = [];
-  for (let prop of keepProps) {
-    try {
+  try {
+    if (!isObject(obj)) {
+      return typeOf(obj);
+    }
+    if (depth-- < 0) {
+      return 'END';
+    }
+    /*
+    if (!isParsable(obj)) {
+      return false;
+    }
+    */
+    //let opts = opt.split('');
+    let opts = [...opt];
+    let filter = !opts.includes('f');
+    let res = isParsed(obj);
+    if (res) {
+      return {
+        val: res, type: typeOf(res), parsed: res,
+      };
+    }
+    /*
+    if (isPrimitive(obj) || (!isObject(obj) && (typeof obj !== 'function'))) {
+      //return false; // Or the primitive?
+      return obj;
+    }
+    */
+    let tstKeys = [];
+    for (let prop of keepProps) {
+      try {
+        let val = obj[prop];
+        if (val === undefined) {
+          continue;
+        }
+        tstKeys.push(prop);
+      } catch (e) {
+        console.error(`error in probeProps with prop [${prop}]`, e, obj);
+      }
+    }
+
+
+    let objProps = getProps(obj);
+    if (filter) {
+      objProps = filterProps(objProps);
+    }
+
+    let unique = uniqueVals(objProps, tstKeys);
+    if (isEmpty(intersect(opts, ['t', 'v', 'p',]))) { //Just the array of props
+      return unique;
+    } //We want more...
+
+    let retObj: GenObj = {};
+    for (let prop of unique) {
+      let ret: GenObj = {};
       let val = obj[prop];
-      if (val === undefined) {
-        continue;
+      if (['prototype', 'constructor'].includes(prop)) {
+        let bi: any;
+        if (bi = isBuiltIn(val)) {
+          ret.val = bi;
+          retObj[prop] = ret;
+          continue;
+        }
       }
-      tstKeys.push(prop);
-    } catch (e) {
-      console.error(`error in probeProps with prop [${prop}]`, e, obj);
-    }
-  }
-
-
-  let objProps = getProps(obj);
-  if (filter) {
-    objProps = filterProps(objProps);
-  }
-
-  let unique = uniqueVals(objProps, tstKeys);
-  if (isEmpty(intersect(opts, ['t', 'v', 'p',]))) { //Just the array of props
-    return unique;
-  } //We want more...
-
-  let retObj: GenObj = {};
-  for (let prop of unique) {
-    let ret: GenObj = {};
-    let val = obj[prop];
-    if (['prototype', 'constructor'].includes(prop)) {
-      let bi: any;
-      if (bi = isBuiltIn(val)) {
-        ret.val = bi;
-        retObj[prop] = ret;
-        continue;
+      if (opts.includes('v')) {
+        ret.val = val;
       }
+      if (opts.includes('t')) {
+        ret.type = typeOf(val);
+      }
+      if (opts.includes('p') && isParsable(val)) {
+        ret.parsed = allProps(val, opt, depth);
+      }
+      retObj[prop] = ret;
     }
-    if (opts.includes('v')) {
-      ret.val = val;
-    }
-    if (opts.includes('t')) {
-      ret.type = typeOf(val);
-    }
-    if (opts.includes('p') && isParsable(val)) {
-      ret.parsed = allProps(val, opt, depth);
-    }
-    retObj[prop] = ret;
+    return retObj;
+  } catch (e) {
+    return `Exception in allProps at depth [${depth}] w. msg: [${e}]`;
   }
-  return retObj;
 }
 
 export function allPropsWithTypes(obj: any) {
@@ -1215,10 +1219,10 @@ export function getRandEls(arr: any[], cnt = null) {
 /**
  * Retuns a random integer
  * @param numeric to - max int to return
- * @param numberic from default 0 - optional starting/min number
+ * @param numeric from default 0 - optional starting/min number
  * @return int
  */
-export function randInt(to: any, from: any = 0) {
+export function randInt(to: any, from: any = 0):Number {
   // Convert args to ints if possible, else throw
   //@ts-ignore
   if (isNaN((to = parseInt(to)) || isNaN((from = parseInt(from))))) {

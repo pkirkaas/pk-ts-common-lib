@@ -286,10 +286,10 @@ export declare function getRandEls(arr: any[], cnt?: any): any;
 /**
  * Retuns a random integer
  * @param numeric to - max int to return
- * @param numberic from default 0 - optional starting/min number
+ * @param numeric from default 0 - optional starting/min number
  * @return int
  */
-export declare function randInt(to: any, from?: any): any;
+export declare function randInt(to: any, from?: any): Number;
 /**
  * Lazy way to get type of multiple variables at once
  * @param simple object obj - collection of properties to type
