@@ -260,6 +260,13 @@ export declare function allProps(obj: any, opt?: string, depth?: number): GenObj
 export declare function allPropsWithTypes(obj: any): string | boolean | GenObj | [];
 export declare function objInfo(arg: any, opt?: string): GenObj;
 /**
+ * Returns a new object as deepMerge of arg objs, BUT with arrays concatenated
+ * @param objs - unlimited number of input objects
+ * @return object - a new object with the input objects merged,
+ *   and arrays concatenated
+ */
+export declare function mergeAndConcat(...objs: any[]): any;
+/**
  * Take input arrays, merge, & return single array w. unique values
  */
 export declare function uniqueVals(...arrs: any[]): any[];

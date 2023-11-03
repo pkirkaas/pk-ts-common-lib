@@ -1076,6 +1076,22 @@ export function objInfo(arg: any, opt: string = 'tpv') {
 }
 
 /**
+ * Returns a new object as deepMerge of arg objs, BUT with arrays concatenated
+ * @param objs - unlimited number of input objects
+ * @return object - a new object with the input objects merged,
+ *   and arrays concatenated
+ */
+
+export function mergeAndConcat(...objs) {
+  	let customizer = function (objValue, srcValue) {
+			if (_.isArray(objValue)) {
+				return objValue.concat(srcValue);
+			}
+		}
+  return _.mergeWith({}, ...objs, customizer);
+}
+
+/**
  * Take input arrays, merge, & return single array w. unique values
  */
 export function uniqueVals(...arrs): any[] {
