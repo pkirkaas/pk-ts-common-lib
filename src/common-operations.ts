@@ -1014,7 +1014,13 @@ export function allProps(obj: any, opt: string = 'tvp', depth = 6): GenObj | [] 
     let retObj: GenObj = {};
     for (let prop of unique) {
       let ret: GenObj = {};
-      let val = obj[prop];
+      let val: any;
+      try {
+         val = obj[prop];
+      } catch (e) {
+        retObj[prop] = { error: `allProps`, depth, prop, opt };
+        continue;
+      }
       if (['prototype', 'constructor'].includes(prop)) {
         let bi: any;
         if (bi = isBuiltIn(val)) {

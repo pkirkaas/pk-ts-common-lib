@@ -934,7 +934,14 @@ export function allProps(obj, opt = 'tvp', depth = 6) {
         let retObj = {};
         for (let prop of unique) {
             let ret = {};
-            let val = obj[prop];
+            let val;
+            try {
+                val = obj[prop];
+            }
+            catch (e) {
+                retObj[prop] = { error: `allProps`, depth, prop, opt };
+                continue;
+            }
             if (['prototype', 'constructor'].includes(prop)) {
                 let bi;
                 if (bi = isBuiltIn(val)) {
