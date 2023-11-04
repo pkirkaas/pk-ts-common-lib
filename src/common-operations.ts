@@ -989,14 +989,16 @@ export function allProps(obj: any, opt: string = 'tvp', depth = 6): GenObj | [] 
     */
     let tstKeys = [];
     for (let prop of keepProps) {
+      let val: any;
       try {
-        let val = obj[prop];
+        val = obj[prop];
         if (val === undefined) {
           continue;
         }
         tstKeys.push(prop);
       } catch (e) {
-        console.error(`error in probeProps with prop [${prop}]`, e, obj);
+        // Don't need to catch it
+        //console.error(`error in probeProps with prop [${prop}]`, e, obj);
       }
     }
 

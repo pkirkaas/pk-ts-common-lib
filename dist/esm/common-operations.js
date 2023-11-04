@@ -912,15 +912,17 @@ export function allProps(obj, opt = 'tvp', depth = 6) {
         */
         let tstKeys = [];
         for (let prop of keepProps) {
+            let val;
             try {
-                let val = obj[prop];
+                val = obj[prop];
                 if (val === undefined) {
                     continue;
                 }
                 tstKeys.push(prop);
             }
             catch (e) {
-                console.error(`error in probeProps with prop [${prop}]`, e, obj);
+                // Don't need to catch it
+                //console.error(`error in probeProps with prop [${prop}]`, e, obj);
             }
         }
         let objProps = getProps(obj);
