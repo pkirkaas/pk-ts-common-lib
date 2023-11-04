@@ -218,6 +218,12 @@ export declare const builtInProps: any[];
 export declare function isParsable(arg: any): boolean;
 export declare function isParsed(arg: any): any;
 /**
+ * Returns a version of the object with all properties as enumerable
+ * @param GenObj - object to enumerate
+ * @param int depth - how deep to recurse
+ */
+export declare function asEnumerable(obj: GenObj, depth?: number): GenObj;
+/**
  * Returns property names from prototype tree. Even works for primitives,
  * but not for null - so catch the exception & return []
  */

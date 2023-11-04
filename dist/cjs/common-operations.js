@@ -801,6 +801,34 @@ export function isParsed(arg) {
     return false;
 }
 /**
+ * Returns a version of the object with all properties as enumerable
+ * @param GenObj - object to enumerate
+ * @param int depth - how deep to recurse
+ */
+export function asEnumerable(obj, depth = 6) {
+    if (!isObject(obj) || !depth) {
+        return obj;
+    }
+    depth--;
+    let allKeys = Object.getOwnPropertyNames(obj);
+    let retObj = {};
+    for (let key of allKeys) {
+        let val;
+        try {
+            val = obj[key];
+        }
+        catch (e) {
+            let toObj = typeOf(obj);
+            val = `Exception in asEnumerable for objType [${toObj}], key [${key}], depth: [${depth}]`;
+        }
+        if (isObject(val)) {
+            val = asEnumerable(val, depth);
+        }
+        retObj[key] = val;
+    }
+    return retObj;
+}
+/**
  * Returns property names from prototype tree. Even works for primitives,
  * but not for null - so catch the exception & return []
  */
@@ -904,12 +932,6 @@ export function allProps(obj, opt = 'tvp', depth = 6) {
                 val: res, type: typeOf(res), parsed: res,
             };
         }
-        /*
-        if (isPrimitive(obj) || (!isObject(obj) && (typeof obj !== 'function'))) {
-          //return false; // Or the primitive?
-          return obj;
-        }
-        */
         let tstKeys = [];
         for (let prop of keepProps) {
             let val;
