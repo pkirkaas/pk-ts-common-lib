@@ -9,7 +9,8 @@ import { PkError } from './index.js';
 //@ts-ignore
 //import jsondecycle from "json-decycle";
 //import { jsondecycle } from "./lib/json-decycle.js";
-import { extend } from "./lib/json-decycle.js";
+//import { decycle, retrocycle, extend } from "./lib/json-decycle.js";
+import { extend } from "./lib/json5-decycle.js";
 //export { jsondecycle };
 //decycle, retrocycle, extend
 //@ts-ignore

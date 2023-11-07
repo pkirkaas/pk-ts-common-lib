@@ -1,5 +1,5 @@
 /** Init shared by MongoQP-api & MongoQP-client */
-export * from './lib/json-decycle.js';
+export * from './lib/json5-decycle.js';
 import axios from 'axios';
 export type OptArrStr = string | string[];
 export type Falsy = false | 0 | "" | null | undefined;
