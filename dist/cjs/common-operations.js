@@ -1203,7 +1203,7 @@ export function isJsonStr(arg) {
     try {
         JSON.parse(arg);
         //@ts-ignore
-        JSON.retrocycle(arg);
+        //JSON.retrocycle(arg);
         return true;
     }
     catch (e) {
