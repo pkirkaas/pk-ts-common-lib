@@ -1,5 +1,5 @@
 /** Init shared by MongoQP-api & MongoQP-client */
-export * from './lib/json5-decycle.js';
+export * from "./lib/json-decyle-3.js";
 export type OptArrStr = string | string[];
 export type Falsy = false | 0 | "" | null | undefined;
 export type GenericObject = {
@@ -11,6 +11,14 @@ export type GenObj = {
 declare global {
     interface Array<T> {
         readonly random: any;
+    }
+    interface JSON {
+        decycle(object: any): any;
+        retrocycle(object: any): any;
+    }
+    interface JSON5 {
+        decycle(object: any): any;
+        retrocycle(object: any): any;
     }
 }
 export * from './common-operations.js';

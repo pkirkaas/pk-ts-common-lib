@@ -31,7 +31,7 @@
     "date-fns": "latest",
     "error-stack-parser": "*",
     "file-type": "latest",
-    "json-decycle": "*",
+    "json-decycle": "^3.0.0",
     "json5": "*",
     "lodash": "latest",
     "prettier": "*",
@@ -41,16 +41,16 @@
     "url-status-code": "*"
   },
   "devDependencies": {
-    "ts-node": "*",
-    "tsconfig-paths": "*",
-    "typescript": "*",
-    "eslint": "*",
-    "eslint-config-prettier": "*",
-    "eslint-plugin-prettier": "*",
     "@types/lodash": "*",
     "@types/node": "^20.8.4",
     "@typescript-eslint/eslint-plugin": "*",
     "@typescript-eslint/parser": "*",
-    "nodemon": "^3.0.1"
+    "eslint": "*",
+    "eslint-config-prettier": "*",
+    "eslint-plugin-prettier": "*",
+    "nodemon": "^3.0.1",
+    "ts-node": "*",
+    "tsconfig-paths": "*",
+    "typescript": "*"
   }
 }

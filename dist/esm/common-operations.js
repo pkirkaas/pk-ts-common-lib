@@ -1,8 +1,6 @@
 //const urlStatus = require('url-status-code');
 import urlStatus from 'url-status-code';
 import JSON5 from 'json5';
-//const JSON5 = require('json5');
-//linked?
 //const _ = require("lodash");
 import _ from "lodash";
 import { PkError } from './index.js';
@@ -10,7 +8,13 @@ import { PkError } from './index.js';
 //import jsondecycle from "json-decycle";
 //import { jsondecycle } from "./lib/json-decycle.js";
 //import { decycle, retrocycle, extend } from "./lib/json-decycle.js";
-import { extend } from "./lib/json5-decycle.js";
+//import { decycle, retrocycle, extend } from "./lib/json5-decycle.js";
+//import { decycle, retrocycle, extend } from "json-decycle";
+//import jsonDecycle from "json-decycle";
+//const { decycle, retrocycle, extend } = jsonDecycle;
+//import { decycle, retrocycle, extend } from "./lib/json-decycle-3.js";
+import { extend } from "./lib/json-decyle-3.js";
+//json-decyle-3
 //export { jsondecycle };
 //decycle, retrocycle, extend
 //@ts-ignore
@@ -137,19 +141,6 @@ export function eventInfo(ev) {
         eventDets[prop] = jsonClone(ev[prop]);
     }
     return eventDets;
-}
-export function JSON5Parse(str) {
-    try {
-        return JSON5.parse(str);
-    }
-    catch (e) {
-        let eInfo = objInfo(e);
-        return {
-            json5ParseError: e,
-            eInfo,
-            origStr: str,
-        };
-    }
 }
 /** Try to make simple copies of complex objects (like with cyclic references)
  * to be storable in MongoDB
@@ -1202,15 +1193,68 @@ export function typeOfEach(obj) {
 export function valWithType(val) {
     return { type: typeOf(val), val };
 }
-/** Safe stringify - try first, then acycling */
-export function JSON5Stringify(arg) {
+/**
+ * Returns true if arg is string & can be JSON parsed
+ */
+export function isJsonStr(arg) {
+    if (typeof arg !== 'string') {
+        return false;
+    }
     try {
-        return JSON5.stringify(arg, null, 2);
+        JSON.parse(arg);
+        //@ts-ignore
+        JSON.retrocycle(arg);
+        return true;
     }
     catch (e) {
-        //@ts-ignore
-        return JSON5.decycle(arg, null, 2);
+        return false;
     }
+}
+/**
+ * Returns true if arg is string & can be JSON parsed
+ */
+export function isJson5Str(arg) {
+    if (typeof arg !== 'string') {
+        return false;
+    }
+    try {
+        //@ts-ignore
+        JSON5.retrocycle(arg);
+        return true;
+    }
+    catch (e) {
+        return false;
+    }
+}
+/**
+ * Experiment with Use retrocycle to parse
+ */
+export function JSON5Parse(str) {
+    //try {
+    //return JSON5.parse(str);
+    //@ts-ignore
+    return JSON5.retrocycle(str);
+    //} catch (e) {
+    //   let eInfo = objInfo(e);
+    //   return {
+    //     json5ParseError: e,
+    //     eInfo,
+    //     origStr: str,
+    //   }
+    // }
+}
+/** Safe stringify -
+ * Experiment with just decycle for all stringify
+ */
+export function JSON5Stringify(arg) {
+    //try {
+    //return JSON5.stringify(arg, null, 2);
+    //@ts-ignore
+    return JSON5.decycle(arg, null, 2);
+    //} catch (e) {
+    //@ts-ignore
+    return JSON5.decycle(arg, null, 2);
+    //}
 }
 export function JSONStringify(arg) {
     /*
@@ -1220,13 +1264,12 @@ export function JSONStringify(arg) {
       return 'null';
     }
     */
-    try {
-        return JSON.stringify(arg, null, 2);
-    }
-    catch (e) {
-        //@ts-ignore
-        return JSON.decycle(arg, null, 2);
-    }
+    //  try {
+    //   return JSON.stringify(arg, null, 2);
+    // } catch (e) {
+    //@ts-ignore
+    return JSON.decycle(arg, null, 2);
+    //}
 }
 /** Totally lifted from Axios - but they don't export it!
  * Takes an HTTP header string and objectifies it -

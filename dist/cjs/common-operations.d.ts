@@ -1,5 +1,15 @@
 import urlStatus from 'url-status-code';
 import JSON5 from 'json5';
+declare global {
+    interface JSON {
+        decycle(object: any): any;
+        retrocycle(object: any): any;
+    }
+    interface JSON5 {
+        decycle(object: any): any;
+        retrocycle(object: any): any;
+    }
+}
 import { GenericObject, GenObj } from './index.js';
 export { urlStatus, JSON5, GenericObject, GenObj };
 /** NODE SPECIFIC
@@ -37,7 +47,6 @@ export declare function filterInt(value: any): number | false;
  * Move this to browser library when the time comes
  */
 export declare function eventInfo(ev: any): {};
-export declare function JSON5Parse(str: string): any;
 /** Try to make simple copies of complex objects (like with cyclic references)
  * to be storable in MongoDB
  * Primitives will just be returned unchanged.
@@ -303,7 +312,21 @@ export declare function randInt(to: any, from?: any): Number;
  */
 export declare function typeOfEach(obj: any): any;
 export declare function valWithType(val: any): any;
-/** Safe stringify - try first, then acycling */
+/**
+ * Returns true if arg is string & can be JSON parsed
+ */
+export declare function isJsonStr(arg: any): boolean;
+/**
+ * Returns true if arg is string & can be JSON parsed
+ */
+export declare function isJson5Str(arg: any): boolean;
+/**
+ * Experiment with Use retrocycle to parse
+ */
+export declare function JSON5Parse(str: string): any;
+/** Safe stringify -
+ * Experiment with just decycle for all stringify
+ */
 export declare function JSON5Stringify(arg: any): any;
 export declare function JSONStringify(arg: any): any;
 /** Totally lifted from Axios - but they don't export it!
