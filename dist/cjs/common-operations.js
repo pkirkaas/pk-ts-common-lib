@@ -1226,6 +1226,9 @@ export function isJson5Str(arg) {
         return false;
     }
 }
+export function JSONParse(str) {
+    return JSON.retrocycle(str);
+}
 /**
  * Experiment with Use retrocycle to parse
  */
@@ -1242,6 +1245,49 @@ export function JSON5Parse(str) {
     //     origStr: str,
     //   }
     // }
+}
+/**
+ * Takes a (possibly complex, deep) arg - primitie, object, array
+ * @param any arg - Object, array or primitive
+ * @param boolean toJson - false
+ * Deep iterates for key names ending in '*JSON'
+ * If toJson === true, converts value of key to a JSON string
+ * If toJson === false, converts value of key from a JSON string
+ * @return arg - converted
+ */
+export function keysToFromJson(arg, toJson = false) {
+    if (Array.isArray(arg)) {
+        for (let idx = 0; idx < arg.length; idx++) {
+            arg[idx] = keysToFromJson(arg[idx], toJson);
+        }
+    }
+    else if (isSimpleObject(arg)) {
+        let keys = Object.keys(arg);
+        for (let key of keys) {
+            if (key.endsWith('JSON')) {
+                if (toJson) {
+                    if (!isJsonStr(arg[key])) {
+                        arg[key] = JSON.stringify(arg[key]);
+                    }
+                }
+                else if (!toJson) { // Parse
+                    if (isJsonStr(arg[key])) {
+                        arg[key] = JSON.parse(arg[key]);
+                    }
+                }
+            }
+            else {
+                arg[key] = keysToFromJson(arg[key], toJson);
+            }
+        }
+    }
+    return arg;
+}
+export function keysToJson(arg) {
+    return keysToFromJson(arg, true);
+}
+export function keysFromJson(arg) {
+    return keysToFromJson(arg, false);
 }
 /** Safe stringify -
  * Experiment with just decycle for all stringify

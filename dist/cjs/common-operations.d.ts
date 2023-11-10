@@ -320,10 +320,23 @@ export declare function isJsonStr(arg: any): boolean;
  * Returns true if arg is string & can be JSON parsed
  */
 export declare function isJson5Str(arg: any): boolean;
+export declare function JSONParse(str: string): any;
 /**
  * Experiment with Use retrocycle to parse
  */
 export declare function JSON5Parse(str: string): any;
+/**
+ * Takes a (possibly complex, deep) arg - primitie, object, array
+ * @param any arg - Object, array or primitive
+ * @param boolean toJson - false
+ * Deep iterates for key names ending in '*JSON'
+ * If toJson === true, converts value of key to a JSON string
+ * If toJson === false, converts value of key from a JSON string
+ * @return arg - converted
+ */
+export declare function keysToFromJson(arg: any, toJson?: boolean): any;
+export declare function keysToJson(arg: any): any;
+export declare function keysFromJson(arg: any): any;
 /** Safe stringify -
  * Experiment with just decycle for all stringify
  */
