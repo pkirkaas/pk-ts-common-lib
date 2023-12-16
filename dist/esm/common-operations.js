@@ -857,8 +857,7 @@ export function getProps(obj, wVal = false) {
                     ret[key] = val;
                 }
                 catch (e) {
-                    ret[key] = e.getMessage();
-                    ;
+                    ret[key] = e.message;
                 }
             }
             console.error(`What's up? Have props - `, { ret, props });

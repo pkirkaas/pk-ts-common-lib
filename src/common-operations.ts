@@ -947,7 +947,7 @@ export function getProps(obj, wVal = false):any[]|GenObj {
           //ret[key] = obj[key];
           ret[key] = val;
         } catch (e) {
-          ret[key] = e.getMessage();;
+          ret[key] = e.message;
         }
       }
       console.error(`What's up? Have props - `, { ret, props });
