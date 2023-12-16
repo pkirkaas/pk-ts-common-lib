@@ -850,6 +850,7 @@ export function getProps(obj, wVal = false) {
             for (let key of props) {
                 ret[key] = obj[key];
             }
+            console.log(`What's up? Have props - `, { ret, props });
             return ret;
         }
     }

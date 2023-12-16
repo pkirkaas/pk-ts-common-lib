@@ -941,6 +941,7 @@ export function getProps(obj, wVal = false):any[]|GenObj {
       for (let key of props) {
         ret[key] = obj[key];
       }
+      console.log(`What's up? Have props - `, { ret, props });
       return ret;
     }
 
