@@ -598,7 +598,7 @@ export function isEmpty(arg):boolean {
   if (toarg === "object") {
     let props = getProps(arg);
     let keys = Object.keys(arg);
-    let aninb = inArr1NinArr2(props, builtInProps);
+    let aninb = inArr1NinArr2(<string []>props, builtInProps);
     //console.log({ props, keys,  aninb });
     if (!keys.length && !aninb.length) {
       return true;
@@ -913,10 +913,12 @@ export function asEnumerable(obj: GenObj, depth = 6): GenObj {
 }
 
 /**
- * Returns property names from prototype tree. Even works for primitives,
+ * get property names from prototype tree. Even works for primitives,
+ * If wVal: false (default) - return all keys
+ * else - obj. with keys/values
  * but not for null - so catch the exception & return []
  */
-export function getProps(obj) {
+export function getProps(obj, wVal = false):any[]|GenObj {
   if (!obj) {
     return [];
   }
@@ -929,7 +931,17 @@ export function getProps(obj) {
         props.push(key);
       }
     }
-    return uniqueVals(props);
+    props = uniqueVals(props); 
+    if (!wVal) {
+      return props;
+    } else {
+      let ret:GenObj = {};
+      for (let key of props) {
+        ret[key] = tstObj[key];
+      }
+      return ret;
+    }
+
   } catch (e) {
     new PkError(`Exception in getProps-`, { obj, e });
   }
@@ -1038,7 +1050,7 @@ export function allProps(obj: any, opt: string = 'tvp', depth = 6): GenObj | [] 
 
     let objProps = getProps(obj);
     if (filter) {
-      objProps = filterProps(objProps);
+      objProps = filterProps(<string []>objProps);
     }
 
     let unique = uniqueVals(objProps, tstKeys);

@@ -821,10 +821,12 @@ export function asEnumerable(obj, depth = 6) {
     return retObj;
 }
 /**
- * Returns property names from prototype tree. Even works for primitives,
+ * get property names from prototype tree. Even works for primitives,
+ * If wVal: false (default) - return all keys
+ * else - obj. with keys/values
  * but not for null - so catch the exception & return []
  */
-export function getProps(obj) {
+export function getProps(obj, wVal = false) {
     if (!obj) {
         return [];
     }
@@ -837,7 +839,17 @@ export function getProps(obj) {
                 props.push(key);
             }
         }
-        return uniqueVals(props);
+        props = uniqueVals(props);
+        if (!wVal) {
+            return props;
+        }
+        else {
+            let ret = {};
+            for (let key of props) {
+                ret[key] = tstObj[key];
+            }
+            return ret;
+        }
     }
     catch (e) {
         new PkError(`Exception in getProps-`, { obj, e });

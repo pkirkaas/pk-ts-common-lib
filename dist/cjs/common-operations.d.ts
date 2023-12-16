@@ -233,10 +233,12 @@ export declare function isParsed(arg: any): any;
  */
 export declare function asEnumerable(obj: GenObj, depth?: number): GenObj;
 /**
- * Returns property names from prototype tree. Even works for primitives,
+ * get property names from prototype tree. Even works for primitives,
+ * If wVal: false (default) - return all keys
+ * else - obj. with keys/values
  * but not for null - so catch the exception & return []
  */
-export declare function getProps(obj: any): any[];
+export declare function getProps(obj: any, wVal?: boolean): any[] | GenObj;
 /**
  * Weirdly, most built-ins have a name property, & are of type [Function:Date]
  * or whatever, but Math does NOT have a name property, and is of type "Object [Math]". So try to deal with that...
