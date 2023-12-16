@@ -940,9 +940,14 @@ export function getProps(obj, wVal = false):any[]|GenObj {
       let ret:GenObj = {};
       for (let key of props) {
         try {
-          ret[key] = obj[key];
+          let val:any = obj[key];
+          if (!isPrimitive(val)) {
+            val = typeOf(val);
+          }
+          //ret[key] = obj[key];
+          ret[key] = val;
         } catch (e) {
-          ret[key] = e;
+          ret[key] = e.getMessage();;
         }
       }
       console.error(`What's up? Have props - `, { ret, props });
