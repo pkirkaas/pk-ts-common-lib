@@ -848,7 +848,12 @@ export function getProps(obj, wVal = false) {
             console.error(`WE DO HAVE wVal!! in getProps; `, { obj, wVal, props });
             let ret = {};
             for (let key of props) {
-                ret[key] = obj[key];
+                try {
+                    ret[key] = obj[key];
+                }
+                catch (e) {
+                    ret[key] = e;
+                }
             }
             console.error(`What's up? Have props - `, { ret, props });
             return ret;
