@@ -840,13 +840,15 @@ export function getProps(obj, wVal = false) {
             }
         }
         props = uniqueVals(props);
+        console.error(`in getProps; `, { obj, wVal, props });
         if (!wVal) {
             return props;
         }
         else {
+            console.error(`WE DO HAVE wVal!! in getProps; `, { obj, wVal, props });
             let ret = {};
             for (let key of props) {
-                ret[key] = tstObj[key];
+                ret[key] = obj[key];
             }
             return ret;
         }
