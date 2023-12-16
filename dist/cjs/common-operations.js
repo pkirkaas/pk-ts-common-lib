@@ -840,12 +840,12 @@ export function getProps(obj, wVal = false) {
             }
         }
         props = uniqueVals(props);
-        console.error(`in getProps; `, { obj, wVal, props });
+        //  console.error(`in getProps; `, { obj, wVal, props });
         if (!wVal) {
             return props;
         }
         else {
-            console.error(`WE DO HAVE wVal!! in getProps; `, { obj, wVal, props });
+            //     console.error(`WE DO HAVE wVal!! in getProps; `, { obj, wVal, props });
             let ret = {};
             for (let key of props) {
                 try {
@@ -860,7 +860,7 @@ export function getProps(obj, wVal = false) {
                     ret[key] = e.message;
                 }
             }
-            console.error(`What's up? Have props - `, { ret, props });
+            //      console.error(`What's up? Have props - `, { ret, props });
             return ret;
         }
     }
