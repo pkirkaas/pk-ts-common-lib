@@ -850,12 +850,13 @@ export function getProps(obj, wVal = false) {
             for (let key of props) {
                 ret[key] = obj[key];
             }
-            console.log(`What's up? Have props - `, { ret, props });
+            console.error(`What's up? Have props - `, { ret, props });
             return ret;
         }
     }
     catch (e) {
-        new PkError(`Exception in getProps-`, { obj, e });
+        console.error(`GOSH! Exception in getProps!`, { obj, wVal, e });
+        throw new PkError(`Exception in getProps-`, { obj, wVal, e });
     }
     return [];
 }
