@@ -47,7 +47,9 @@ import * as ESP from "error-stack-parser";
 //const axios = require("axios");
 //import { axios } from "Axios";
 import axios from "axios";
-import { format, isValid } from "date-fns";
+import { formatISO, isValid } from "date-fns";
+import { format,  } from "date-fns/format";
+//import { format, isValid } from "date-fns";
 export { urlStatus, JSON5, GenericObject, GenObj };
 //const path = require("path/posix");
 //const path = require("path/posix");
@@ -254,6 +256,8 @@ export function pkToDate(arg) {
   } else {
     arg = new Date(arg);
   }
+  // TODO!! Just broke updating to latest version of date-fns - 19 Dec 2023
+  //@ts-ignore
   if ((arg instanceof Date) && isValid(arg)) {
     return arg;
   }
@@ -283,6 +287,8 @@ export function dtFmt(fmt?: any, dt?: any) {
     return "FALSE";
   }
   let fullFmt = fmts[fmt];
+  // TODO!! Just broke updating to latest version of date-fns - 19 Dec 2023
+  //@ts-ignore
   return format(dt, fullFmt);
 
 }

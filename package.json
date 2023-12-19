@@ -42,13 +42,13 @@
   },
   "devDependencies": {
     "@types/lodash": "*",
-    "@types/node": "^20.8.4",
+    "@types/node": "*",
     "@typescript-eslint/eslint-plugin": "*",
     "@typescript-eslint/parser": "*",
     "eslint": "*",
     "eslint-config-prettier": "*",
     "eslint-plugin-prettier": "*",
-    "nodemon": "^3.0.1",
+    "nodemon": "*",
     "ts-node": "*",
     "tsconfig-paths": "*",
     "typescript": "*"
