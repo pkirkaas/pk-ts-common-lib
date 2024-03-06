@@ -1,7 +1,6 @@
 # Node artifact files
 node_modules/
 # Persisist to allow regular JS app to use dist/
-package-lock.json
 
 #Symlinked common
 MongoQP-api/src/common/*
