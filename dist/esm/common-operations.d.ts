@@ -369,4 +369,11 @@ export declare function stripStray(str?: any): any;
  */
 export declare function toCamelCase(str?: any): any;
 export declare function toSnakeCase(str?: any): any;
+/**
+ * Returns the geographic distance between two points of lat/lon in meters
+ * @param point1 GenObj|Array - [lat,lon] or (preferably) {lat, lon}
+ * @param point2 GenObj|Array - [lat,lon] or {lat, lon}
+ * @return number - distance in meters
+ */
+export declare function haversine(point1: GenObj | Array<number>, point2: GenObj | Array<number>): number | null;
 //# sourceMappingURL=common-operations.d.ts.map

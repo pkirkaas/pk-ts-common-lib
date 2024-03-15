@@ -1,4 +1,4 @@
-import { getRandEls, PkError, typeOf, isEmpty, isObject, classStack, getAllBuiltInProps, objInfo, arrayToLower } from '../index.js';
+import { getRandEls, PkError, typeOf, isEmpty, isObject, classStack, getAllBuiltInProps, objInfo, haversine, arrayToLower } from '../index.js';
 import _ from 'lodash';
 import util from 'util';
 util.inspect.defaultOptions.maxArrayLength = null;
@@ -10,6 +10,10 @@ function camelCase(str) {
         return index == 0 ? word.toLowerCase() : word.toUpperCase();
     }).replace(/\s+/g, '');
 }
+const london = { lat: 51.5072, lon: 0.1275 }; // London
+const ny = { lat: 40.7128, lon: -74.0059 };
+let nylonDist = haversine(london, ny);
+console.log({ nylonDist });
 function camelize(str) {
     return str.replace(/\W+(.)/g, function (match, chr) {
         return chr.toUpperCase();

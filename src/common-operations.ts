@@ -6,13 +6,13 @@ import JSON5 from 'json5';
 //linked?
 declare global {
   interface JSON {
-      decycle(object: any): any;
-      retrocycle(object: any): any;
+    decycle(object: any): any;
+    retrocycle(object: any): any;
   }
 
   interface JSON5 {
-      decycle(object: any): any;
-      retrocycle(object: any): any;
+    decycle(object: any): any;
+    retrocycle(object: any): any;
   }
 
 }
@@ -48,7 +48,7 @@ import * as ESP from "error-stack-parser";
 //import { axios } from "Axios";
 import axios from "axios";
 import { formatISO, isValid } from "date-fns";
-import { format,  } from "date-fns/format";
+import { format, } from "date-fns/format";
 //import { format, isValid } from "date-fns";
 export { urlStatus, JSON5, GenericObject, GenObj };
 //const path = require("path/posix");
@@ -209,7 +209,7 @@ export function jsonClone(arg) {
  * 
  */
 
-export function isNumeric(arg: any, asNum = false) : number | boolean {
+export function isNumeric(arg: any, asNum = false): number | boolean {
   let num = Number(arg);
   if (num !== parseFloat(arg)) {
     return false;
@@ -223,7 +223,7 @@ export function isNumeric(arg: any, asNum = false) : number | boolean {
 /**
  * Returns the numeric value, or boolean false
  */
-export function asNumeric(arg):number | boolean {
+export function asNumeric(arg): number | boolean {
   return isNumeric(arg, true);
 }
 
@@ -337,13 +337,13 @@ export function isSubset(a, b) {
  * Takes an array and an element, returns a new array with 
  * the element inserted between each element of the original array.
  */
-export function insertBetween(arr:Array<any>, item:any) {
+export function insertBetween(arr: Array<any>, item: any) {
   let result = [];
   for (let i = 0; i < arr.length; i++) {
     result.push(arr[i]);
 
     if (i < arr.length - 1) {
-      result.push(item); 
+      result.push(item);
     }
   }
   return result;
@@ -596,7 +596,7 @@ export async function checkUrl3(url) {
 /**
  * This is a tough call & really hard to get right...
  */
-export function isEmpty(arg):boolean {
+export function isEmpty(arg): boolean {
   if (!arg || (Array.isArray(arg) && !arg.length)) {
     return true;
   }
@@ -604,7 +604,7 @@ export function isEmpty(arg):boolean {
   if (toarg === "object") {
     let props = getProps(arg);
     let keys = Object.keys(arg);
-    let aninb = inArr1NinArr2(<string []>props, builtInProps);
+    let aninb = inArr1NinArr2(<string[]>props, builtInProps);
     //console.log({ props, keys,  aninb });
     if (!keys.length && !aninb.length) {
       return true;
@@ -908,7 +908,7 @@ export function asEnumerable(obj: GenObj, depth = 6): GenObj {
       val = obj[key];
     } catch (e) {
       let toObj = typeOf(obj);
-      val = `Exception in asEnumerable for objType [${toObj}], key [${key}], depth: [${depth}]`; 
+      val = `Exception in asEnumerable for objType [${toObj}], key [${key}], depth: [${depth}]`;
     }
     if (isObject(val)) {
       val = asEnumerable(val, depth);
@@ -924,7 +924,7 @@ export function asEnumerable(obj: GenObj, depth = 6): GenObj {
  * else - obj. with keys/values
  * but not for null - so catch the exception & return []
  */
-export function getProps(obj, wVal = false):any[]|GenObj {
+export function getProps(obj, wVal = false): any[] | GenObj {
   if (!obj) {
     return [];
   }
@@ -937,16 +937,16 @@ export function getProps(obj, wVal = false):any[]|GenObj {
         props.push(key);
       }
     }
-    props = uniqueVals(props); 
-  //  console.error(`in getProps; `, { obj, wVal, props });
+    props = uniqueVals(props);
+    //  console.error(`in getProps; `, { obj, wVal, props });
     if (!wVal) {
       return props;
     } else {
- //     console.error(`WE DO HAVE wVal!! in getProps; `, { obj, wVal, props });
-      let ret:GenObj = {};
+      //     console.error(`WE DO HAVE wVal!! in getProps; `, { obj, wVal, props });
+      let ret: GenObj = {};
       for (let key of props) {
         try {
-          let val:any = obj[key];
+          let val: any = obj[key];
           if (!isPrimitive(val)) {
             val = typeOf(val);
           }
@@ -956,7 +956,7 @@ export function getProps(obj, wVal = false):any[]|GenObj {
           ret[key] = e.message;
         }
       }
-//      console.error(`What's up? Have props - `, { ret, props });
+      //      console.error(`What's up? Have props - `, { ret, props });
       return ret;
     }
 
@@ -1069,7 +1069,7 @@ export function allProps(obj: any, opt: string = 'tvp', depth = 6): GenObj | [] 
 
     let objProps = getProps(obj);
     if (filter) {
-      objProps = filterProps(<string []>objProps);
+      objProps = filterProps(<string[]>objProps);
     }
 
     let unique = uniqueVals(objProps, tstKeys);
@@ -1082,7 +1082,7 @@ export function allProps(obj: any, opt: string = 'tvp', depth = 6): GenObj | [] 
       let ret: GenObj = {};
       let val: any;
       try {
-         val = obj[prop];
+        val = obj[prop];
       } catch (e) {
         retObj[prop] = { error: `allProps`, depth, prop, opt };
         continue;
@@ -1159,11 +1159,11 @@ export function objInfo(arg: any, opt: string = 'tpv') {
  */
 
 export function mergeAndConcat(...objs) {
-  	let customizer = function (objValue, srcValue) {
-			if (_.isArray(objValue)) {
-				return objValue.concat(srcValue);
-			}
-		}
+  let customizer = function (objValue, srcValue) {
+    if (_.isArray(objValue)) {
+      return objValue.concat(srcValue);
+    }
+  }
   return _.mergeWith({}, ...objs, customizer);
 }
 
@@ -1291,7 +1291,7 @@ export function getRandElsArr(arr: any[], cnt = null) {
  * @param cnt - if null, a 
  * @returns a single element if null, else an array of of cnt unique values from collection
  */
-export function getRandEls(objorarr: GenObj | any[], cnt:number|null = null) {
+export function getRandEls(objorarr: GenObj | any[], cnt: number | null = null) {
   if ((!Array.isArray(objorarr) || !objorarr.length) && !isSimpleObject(objorarr)) {
     throw new PkError(`Invalid array arg to getRandEls:`, { objorarr });
   }
@@ -1332,7 +1332,7 @@ export function getRandEls(objorarr: GenObj | any[], cnt:number|null = null) {
  * @param numeric from default 0 - optional starting/min number
  * @return int
  */
-export function randInt(to: any, from: any = 0):Number {
+export function randInt(to: any, from: any = 0): Number {
   // Convert args to ints if possible, else throw
   //@ts-ignore
   if (isNaN((to = parseInt(to)) || isNaN((from = parseInt(from))))) {
@@ -1377,7 +1377,7 @@ export function valWithType(val: any): any {
 /**
  * Returns true if arg is string & can be JSON parsed
  */
-export function isJsonStr(arg: any):boolean {
+export function isJsonStr(arg: any): boolean {
   if (typeof arg !== 'string') {
     return false;
   }
@@ -1395,7 +1395,7 @@ export function isJsonStr(arg: any):boolean {
 /**
  * Returns true if arg is string & can be JSON parsed
  */
-export function isJson5Str(arg: any):boolean {
+export function isJson5Str(arg: any): boolean {
   if (typeof arg !== 'string') {
     return false;
   }
@@ -1419,17 +1419,17 @@ export function JSONParse(str: string) {
  */
 export function JSON5Parse(str: string) {
   //try {
-    //return JSON5.parse(str);
-    //@ts-ignore
-    return JSON5.retrocycle(str);
+  //return JSON5.parse(str);
+  //@ts-ignore
+  return JSON5.retrocycle(str);
   //} catch (e) {
- //   let eInfo = objInfo(e);
- //   return {
- //     json5ParseError: e,
- //     eInfo,
- //     origStr: str,
- //   }
- // }
+  //   let eInfo = objInfo(e);
+  //   return {
+  //     json5ParseError: e,
+  //     eInfo,
+  //     origStr: str,
+  //   }
+  // }
 }
 
 
@@ -1445,7 +1445,7 @@ export function JSON5Parse(str: string) {
  */
 
 
-export function keysToFromJson(arg:any, toJson = false):any {
+export function keysToFromJson(arg: any, toJson = false): any {
   if (Array.isArray(arg)) {
     for (let idx = 0; idx < arg.length; idx++) {
       arg[idx] = keysToFromJson(arg[idx], toJson);
@@ -1484,12 +1484,12 @@ export function keysFromJson(arg: any): any {
  */
 export function JSON5Stringify(arg) {
   //try {
-    //return JSON5.stringify(arg, null, 2);
-    //@ts-ignore
-    return JSON5.decycle(arg, null, 2);
+  //return JSON5.stringify(arg, null, 2);
+  //@ts-ignore
+  return JSON5.decycle(arg, null, 2);
   //} catch (e) {
-    //@ts-ignore
-    return JSON5.decycle(arg, null, 2);
+  //@ts-ignore
+  return JSON5.decycle(arg, null, 2);
   //}
 }
 
@@ -1501,11 +1501,11 @@ export function JSONStringify(arg) {
     return 'null';
   }
   */
-//  try {
- //   return JSON.stringify(arg, null, 2);
- // } catch (e) {
-    //@ts-ignore
-    return JSON.decycle(arg, null, 2);
+  //  try {
+  //   return JSON.stringify(arg, null, 2);
+  // } catch (e) {
+  //@ts-ignore
+  return JSON.decycle(arg, null, 2);
   //}
 }
 
@@ -1559,3 +1559,96 @@ export function toSnakeCase(str?: any) {
   str = str.replace(/([a-z]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
   return str;
 }
+
+/**
+ * Returns the geographic distance between two points of lat/lon in meters
+ * @param point1 GenObj|Array - [lat,lon] or (preferably) {lat, lon}
+ * @param point2 GenObj|Array - [lat,lon] or {lat, lon}
+ * @return number - distance in meters
+ */
+export function haversine(point1: GenObj | Array<number>, point2: GenObj | Array<number>): number | null {
+  let lat1, lat2, lon1, lon2: number;
+  if (Array.isArray(point1)) {
+    lat1 = point1[0];
+    lon1 = point1[1];
+  } else if (isObject(point1)) {
+    lat1 = point1.lat;
+    lon1 = point1.lon;
+  } else {
+    throw new PkError(`Invalid point1 arg to haversine:`, { point1 })
+  }
+  if (Array.isArray(point2)) {
+    lat2 = point2[0];
+    lon2 = point2[1];
+  } else if (isObject(point2)) {
+    lat2 = point2.lat;
+    lon2 = point2.lon;
+  } else {
+    throw new PkError(`Invalid point2 arg to haversine:`, { point2 });
+  }
+  const EARTH_RADIUS = 6371;
+  const R = EARTH_RADIUS; // km
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c * 1000; // Distance in m
+}
+
+
+// Claude 
+/*
+export function haversine(point1: GenObj | Array<number>, point2: GenObj | Array<number>): number | null {
+  let lat1, lat2, lon1, lon2: number;
+  if (Array.isArray(point1)) {
+    lat1 = point1[0];
+    lon1 = point1[1];
+  } else if (isObject(point1)) {
+    lat1 = point1.lat;
+    lon1 = point1.lon;
+  } else {
+    throw new PkError(`Invalid point1 arg to haversine:`, { point1 })
+  }
+  if (Array.isArray(point2)) {
+    lat2 = point2[0];
+    lon2 = point2[1];
+  } else if (isObject(point2)) {
+    lat2 = point2.lat;
+    lon2 = point2.lon;
+  } else {
+    throw new PkError(`Invalid point2 arg to haversine:`, { point2 });
+  }
+  const R = 6371e3; // Earth's radius in meters
+
+  const φ1 = (lat1 * Math.PI) / 180; // Convert latitude to radians
+  const φ2 = (lat2 * Math.PI) / 180;
+  const Δφ = ((lat2 - lat1) * Math.PI) / 180;
+  const Δλ = ((lon2 - lon1) * Math.PI) / 180;
+
+  const a =
+    Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+    Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  return R * c;
+
+}
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

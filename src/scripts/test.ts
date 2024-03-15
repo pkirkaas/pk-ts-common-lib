@@ -1,6 +1,6 @@
 import {
 	filterInt, getRandEls, GenObj, dtFmt, pkToDate, deepMeld, uniqueVals, PkError, TagObj, TagObjCol, typeOf, isEmpty, allProps, JSON5, isSubset, isObject,
-	classStack, getAllBuiltInProps, objInfo, toSnakeCase, toCamelCase, 
+	classStack, getAllBuiltInProps, objInfo, toSnakeCase, toCamelCase, haversine,
 	arraysEqual, getConstructorChain, getPrototypeChain, getObjDets, stripStray, arrayToLower
 } from '../index.js';
 import _ from 'lodash';
@@ -16,6 +16,15 @@ function camelCase(str) {
 		return index == 0 ? word.toLowerCase() : word.toUpperCase();
 	}).replace(/\s+/g, '');
 }
+
+
+
+
+const london = {lat:51.5072, lon: 0.1275} // London
+const ny =  {lat: 40.7128, lon : -74.0059};
+
+let nylonDist = haversine(london, ny);
+console.log({nylonDist});
 
 function camelize(str) {
       return str.replace(/\W+(.)/g, function(match, chr)
