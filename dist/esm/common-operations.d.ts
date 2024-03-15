@@ -297,7 +297,14 @@ export declare function getRand(arr: any[]): any;
  * Not the most efficient but it works
  * if cnt = 0, returns a single element, else an array of els
  */
-export declare function getRandEls(arr: any[], cnt?: any): any;
+export declare function getRandElsArr(arr: any[], cnt?: any): any;
+/**
+ * Retuns subset of object or array valuesd
+ * @param objorarr - something with key/values
+ * @param cnt - if null, a
+ * @returns a single element if null, else an array of of cnt unique values from collection
+ */
+export declare function getRandEls(objorarr: GenObj | any[], cnt?: number | null): any;
 /**
 */
 /**

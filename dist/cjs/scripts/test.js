@@ -1,4 +1,4 @@
-import { PkError, typeOf, isEmpty, isObject, classStack, getAllBuiltInProps, objInfo, arrayToLower } from '../index.js';
+import { getRandEls, PkError, typeOf, isEmpty, isObject, classStack, getAllBuiltInProps, objInfo, arrayToLower } from '../index.js';
 import _ from 'lodash';
 import util from 'util';
 util.inspect.defaultOptions.maxArrayLength = null;
@@ -18,7 +18,7 @@ function camelize(str) {
 let snakes = [" dog-cat ", ' "tiger-lion" ', " ' horse-cow '",];
 let camels = [" dogMouse ", 9, null, ' "Dinosaur King" ', " ' NeverKnown '",];
 let tll = arrayToLower(camels);
-console.log({ tll });
+//console.log({ tll });
 let strs = ['tag', 'donkey', 'animal', 'plant'];
 /*
 for (let str of strs) {
@@ -29,8 +29,15 @@ for (let str of strs) {
 };
 */
 let tstObjs = {
-    camelize, camels, empt: {}, Date, Math
+    camelize, camels, empt: {}, Date, Math,
 };
+let objForRE = { animal: "Dog", cat: "Lion", num: 5, name: "joe" };
+let arrForRE = ['forever', 'never', 55, "tiger", "JoeBlow", 89];
+let relsArr = getRandEls(arrForRE, 3);
+let rel = getRandEls(arrForRE);
+let objsArr = getRandEls(objForRE, 4);
+let objEl = getRandEls(objForRE);
+console.log({ relsArr, rel, objsArr, objEl });
 for (let key in tstObjs) {
     let val = tstObjs[key];
     let toVal = typeOf(val);
@@ -38,7 +45,7 @@ for (let key in tstObjs) {
     let objLike = _.isObjectLike(val);
     let isemp = isEmpty(val);
     let isobj = isObject(val);
-    console.log({ key, toVal, toval, objLike, isobj, isemp });
+    //console.log({ key, toVal, toval, objLike, isobj, isemp });
 }
 /*
 console.log({ snakes, camels });
@@ -135,7 +142,7 @@ function tstProps() {
         //null:allProps(null),
     }
     */
-    console.log({ bres });
+    //	console.log({ bres });
 }
 ;
 //tstProps();

@@ -1152,7 +1152,7 @@ export function getRand(arr) {
  * Not the most efficient but it works
  * if cnt = 0, returns a single element, else an array of els
  */
-export function getRandEls(arr, cnt = null) {
+export function getRandElsArr(arr, cnt = null) {
     if (!Array.isArray(arr) || !arr.length) {
         throw new PkError(`Invalid array arg to getRandEls:`, { arr });
     }
@@ -1176,6 +1176,42 @@ export function getRandEls(arr, cnt = null) {
         }
     }
     let ret = subKeys.map((key) => arr[key]);
+    let retLen = ret.length;
+    return ret;
+}
+/**
+ * Retuns subset of object or array valuesd
+ * @param objorarr - something with key/values
+ * @param cnt - if null, a
+ * @returns a single element if null, else an array of of cnt unique values from collection
+ */
+export function getRandEls(objorarr, cnt = null) {
+    if ((!Array.isArray(objorarr) || !objorarr.length) && !isSimpleObject(objorarr)) {
+        throw new PkError(`Invalid array arg to getRandEls:`, { objorarr });
+    }
+    let arrKeys = Object.keys(objorarr); //.map((el) => parseInt(el));
+    if (!cnt) {
+        let tstKey = getRand(arrKeys);
+        //return objorarr[Math.floor((Math.random() * arrKeys.length))];
+        return objorarr[tstKey];
+    }
+    cnt = Math.min(cnt, arrKeys.length);
+    //let arrKeys = Object.keys(arr).map((el) => parseInt(el));
+    let keyLen = arrKeys.length;
+    cnt = Math.min(cnt, keyLen);
+    let subKeys = [];
+    let num = 0;
+    while (true) {
+        let tstKey = getRand(arrKeys);
+        if (subKeys.includes(tstKey)) {
+            continue;
+        }
+        subKeys.push(tstKey);
+        if (subKeys.length >= cnt) {
+            break;
+        }
+    }
+    let ret = subKeys.map((key) => objorarr[key]);
     let retLen = ret.length;
     return ret;
 }

@@ -1,6 +1,6 @@
 import {
 	filterInt, getRandEls, GenObj, dtFmt, pkToDate, deepMeld, uniqueVals, PkError, TagObj, TagObjCol, typeOf, isEmpty, allProps, JSON5, isSubset, isObject,
-	classStack, getAllBuiltInProps, objInfo, toSnakeCase, toCamelCase,
+	classStack, getAllBuiltInProps, objInfo, toSnakeCase, toCamelCase, 
 	arraysEqual, getConstructorChain, getPrototypeChain, getObjDets, stripStray, arrayToLower
 } from '../index.js';
 import _ from 'lodash';
@@ -29,7 +29,7 @@ let camels = [" dogMouse ", 9, null, ' "Dinosaur King" ', " ' NeverKnown '",];
 
 let tll = arrayToLower(camels);
 
-console.log({ tll });
+//console.log({ tll });
 
 let strs = ['tag', 'donkey', 'animal', 'plant'];
 /*
@@ -42,8 +42,19 @@ for (let str of strs) {
 */
 
 let tstObjs = {
-	camelize, camels, empt: {}, Date, Math
+	camelize, camels, empt: {}, Date, Math, 
 };
+
+let objForRE = {animal:"Dog", cat:"Lion", num: 5, name:"joe"};
+let arrForRE = ['forever', 'never', 55, "tiger", "JoeBlow", 89];
+
+let relsArr = getRandEls(arrForRE, 3);
+let rel = getRandEls(arrForRE );
+
+let objsArr = getRandEls(objForRE, 4);
+let objEl = getRandEls(objForRE);
+
+console.log({relsArr, rel, objsArr, objEl});
 
 for (let key in tstObjs) {
 	let val = tstObjs[key];
@@ -52,7 +63,7 @@ for (let key in tstObjs) {
 	let objLike = _.isObjectLike(val);
 	let isemp = isEmpty(val);
 	let isobj = isObject(val);
-	console.log({ key, toVal, toval, objLike, isobj, isemp });
+	//console.log({ key, toVal, toval, objLike, isobj, isemp });
 }
 
 /*
@@ -161,7 +172,7 @@ function tstProps() {
 	}
 	*/
 
-	console.log({ bres });
+//	console.log({ bres });
 };
 
 //tstProps();
