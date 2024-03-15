@@ -22,7 +22,7 @@ extend(JSON5);
 //const axios = require("axios");
 //import { axios } from "Axios";
 import axios from "axios";
-import { isValid } from "date-fns";
+import { isValid, add, } from "date-fns";
 import { format, } from "date-fns/format";
 //import { format, isValid } from "date-fns";
 export { urlStatus, JSON5 };
@@ -74,27 +74,25 @@ export function subObj(obj, fields) {
 /** Takes a 'duration' object for date-fns/add and validate
  * it. Optionall, converts to negative (time/dates in past)
  * @param obj object - obj to test
- * @param boolean forceNegative - force to negative/past offest?
+ * //@param boolean forceNegative - force to negative/past offest?
  * @return duration
  */
-export function validateDateFnsDuration(obj, forceNegative = false) {
+export const dfnsKeys = [`years`, `months`, `weeks`, `days`, `hours`, `minutes`, `seconds`,];
+//export function validateDateFnsDuration(obj, forceNegative = false) {
+export function validateDateFnsDuration(obj) {
     if (!isSimpleObject(obj) || isEmpty(obj)) {
         return false;
     }
-    let dfnsKeys = [`years`, `months`, `weeks`, `days`, `hours`, `minutes`, `seconds`,];
-    /*
-    let objKeys = Object.keys(obj);
-    let ret: any = {};
-    */
+    let keys = Object.keys(obj);
+    if (!intersect(keys, dfnsKeys).length) {
+        return false;
+    }
     for (let key in obj) {
         if (!dfnsKeys.includes(key)) {
             return false;
         }
-        if (forceNegative) {
-            obj[key] = -Math.abs(obj[key]);
-        }
-        return obj;
     }
+    return obj;
 }
 /**
  * Returns true if arg str contains ANY of the what strings
@@ -194,6 +192,7 @@ export function asNumeric(arg) {
  * let dtN = new Date(null); //Start of epoch
  * Valid arg values:
  *    null - returns new Date() - now
+ *    date-fns add option object: {years, months, days, hours, minutes, seconds} - returns offset from now
  *    new Date("2016-01-01")
  *   "2016-01-01"
  *    1650566202871
@@ -211,6 +210,9 @@ export function pkToDate(arg) {
     }
     else if (isEmpty(arg)) {
         arg = new Date();
+    }
+    else if (validateDateFnsDuration(arg)) {
+        arg = add(new Date(), arg);
     }
     else {
         arg = new Date(arg);

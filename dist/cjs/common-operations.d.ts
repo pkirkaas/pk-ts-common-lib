@@ -31,10 +31,11 @@ export declare function subObj(obj: GenericObject, fields: string[]): GenObj;
 /** Takes a 'duration' object for date-fns/add and validate
  * it. Optionall, converts to negative (time/dates in past)
  * @param obj object - obj to test
- * @param boolean forceNegative - force to negative/past offest?
+ * //@param boolean forceNegative - force to negative/past offest?
  * @return duration
  */
-export declare function validateDateFnsDuration(obj: any, forceNegative?: boolean): any;
+export declare const dfnsKeys: string[];
+export declare function validateDateFnsDuration(obj: any): any;
 /**
  * Returns true if arg str contains ANY of the what strings
  */
@@ -75,6 +76,7 @@ export declare function asNumeric(arg: any): number | boolean;
  * let dtN = new Date(null); //Start of epoch
  * Valid arg values:
  *    null - returns new Date() - now
+ *    date-fns add option object: {years, months, days, hours, minutes, seconds} - returns offset from now
  *    new Date("2016-01-01")
  *   "2016-01-01"
  *    1650566202871
