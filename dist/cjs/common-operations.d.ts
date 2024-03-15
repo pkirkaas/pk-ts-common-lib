@@ -308,12 +308,13 @@ export declare function getRandEls(objorarr: GenObj | any[], cnt?: number | null
 /**
 */
 /**
- * Retuns a random integer
+ * Retuns a random integer or array rand ints in range
  * @param numeric to - max int to return
  * @param numeric from default 0 - optional starting/min number
- * @return int
+ * @param int?: cnt - if null/0 single int. Else, array of cnt ints.
+ * @return int|int[] - if cnt<range, unique, afterwards, reuse
  */
-export declare function randInt(to: any, from?: any): Number;
+export declare function randInt(to: any, from?: number, cnt?: number): Number | Array<number>;
 /**
  * Lazy way to get type of multiple variables at once
  * @param simple object obj - collection of properties to type

@@ -1218,12 +1218,13 @@ export function getRandEls(objorarr, cnt = null) {
 /**
 */
 /**
- * Retuns a random integer
+ * Retuns a random integer or array rand ints in range
  * @param numeric to - max int to return
  * @param numeric from default 0 - optional starting/min number
- * @return int
+ * @param int?: cnt - if null/0 single int. Else, array of cnt ints.
+ * @return int|int[] - if cnt<range, unique, afterwards, reuse
  */
-export function randInt(to, from = 0) {
+export function randInt(to, from = 0, cnt) {
     // Convert args to ints if possible, else throw
     //@ts-ignore
     if (isNaN((to = parseInt(to)) || isNaN((from = parseInt(from))))) {
@@ -1237,9 +1238,42 @@ export function randInt(to, from = 0) {
         from = to;
         to = tmp;
     }
-    let bRand = from + Math.floor((Math.random() * ((to + 1) - from)));
-    return bRand;
+    if (!cnt) {
+        let bRand = from + Math.floor((Math.random() * ((to + 1) - from)));
+        return bRand;
+    }
+    let range = to - from;
+    let ret = [];
+    while (ret.length < cnt) {
+        let tst = randInt(to, from);
+        if (ret.length < cnt) {
+            if (ret.includes(tst)) {
+                continue;
+            }
+            ret.push(tst);
+        }
+    }
+    return ret;
 }
+/*
+export function randInts(to: any, from: any = 0): Number {
+  // Convert args to ints if possible, else throw
+  //@ts-ignore
+  if (isNaN((to = parseInt(to)) || isNaN((from = parseInt(from))))) {
+    throw new PkError(`Non-numeric arg to randInt():`, { to, from });
+  }
+  if (from === to) {
+    return from;
+  }
+  if (from > to) {
+    let tmp = from;
+    from = to;
+    to = tmp;
+  }
+  let bRand = from + Math.floor((Math.random() * ((to + 1) - from)));
+  return bRand;
+}
+*/
 /**
  * Lazy way to get type of multiple variables at once
  * @param simple object obj - collection of properties to type
