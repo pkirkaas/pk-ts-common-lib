@@ -1595,7 +1595,8 @@ export function toSnakeCase(str?: any) {
 }
 
 /**
- * Returns the geographic distance between two points of lat/lon in meters
+ * IMPORTANT! Standard is [longitude, latitude]!!!
+ * Returns the geographic distance between two points of lon/lat in meters
  * @param point1 GenObj|Array - [lat,lon] or (preferably) {lat, lon}
  * @param point2 GenObj|Array - [lat,lon] or {lat, lon}
  * @return number - distance in meters
@@ -1603,8 +1604,8 @@ export function toSnakeCase(str?: any) {
 export function haversine(point1: GenObj | Array<number>, point2: GenObj | Array<number>): number | null {
   let lat1, lat2, lon1, lon2: number;
   if (Array.isArray(point1)) {
-    lat1 = point1[0];
-    lon1 = point1[1];
+    lon1 = point1[0];
+    lat1 = point1[1];
   } else if (isObject(point1)) {
     lat1 = point1.lat;
     lon1 = point1.lon;
@@ -1612,21 +1613,22 @@ export function haversine(point1: GenObj | Array<number>, point2: GenObj | Array
     throw new PkError(`Invalid point1 arg to haversine:`, { point1 })
   }
   if (Array.isArray(point2)) {
-    lat2 = point2[0];
-    lon2 = point2[1];
+    lon2 = point2[0];
+    lat2 = point2[1];
   } else if (isObject(point2)) {
     lat2 = point2.lat;
     lon2 = point2.lon;
   } else {
     throw new PkError(`Invalid point2 arg to haversine:`, { point2 });
   }
+  console.log(`in haversine`,{point1, point2, lat1, lon1, lat2, lon2});
   const EARTH_RADIUS = 6371;
   const R = EARTH_RADIUS; // km
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLon = (lon2 - lon1) * Math.PI / 180;
   const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+  Math.sin(dLon / 2) * Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c * 1000; // Distance in m
 }

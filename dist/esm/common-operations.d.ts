@@ -373,7 +373,8 @@ export declare function stripStray(str?: any): any;
 export declare function toCamelCase(str?: any): any;
 export declare function toSnakeCase(str?: any): any;
 /**
- * Returns the geographic distance between two points of lat/lon in meters
+ * IMPORTANT! Standard is [longitude, latitude]!!!
+ * Returns the geographic distance between two points of lon/lat in meters
  * @param point1 GenObj|Array - [lat,lon] or (preferably) {lat, lon}
  * @param point2 GenObj|Array - [lat,lon] or {lat, lon}
  * @return number - distance in meters
