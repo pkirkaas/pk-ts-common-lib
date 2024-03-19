@@ -1017,10 +1017,10 @@ export function allProps(obj, opt = 'tvp', depth = 6) {
         return `Exception in allProps at depth [${depth}] w. msg: [${e}]`;
     }
 }
-export function allPropsWithTypes(obj) {
-    return allProps(obj, 't');
+export function allPropsWithTypes(obj, depth = 6) {
+    return allProps(obj, 't', depth);
 }
-export function objInfo(arg, opt = 'tpv') {
+export function objInfo(arg, opt = 'tpv', depth = 6) {
     let toArg = typeOf(arg);
     let info = { type: toArg };
     if (!isObject(arg)) {
@@ -1040,7 +1040,7 @@ export function objInfo(arg, opt = 'tpv') {
                 info.inheritance = inheritance;
             }
             //objProps = allPropsWithTypes(arg);
-            objProps = allProps(arg, opt);
+            objProps = allProps(arg, opt, depth);
             if (objProps) {
                 info.props = objProps;
             }
@@ -1499,7 +1499,7 @@ export function haversine(point1, point2) {
     else {
         throw new PkError(`Invalid point2 arg to haversine:`, { point2 });
     }
-    console.log(`in haversine`, { point1, point2, lat1, lon1, lat2, lon2 });
+    //console.log(`in haversine`,{point1, point2, lat1, lon1, lat2, lon2});
     const EARTH_RADIUS = 6371;
     const R = EARTH_RADIUS; // km
     const dLat = (lat2 - lat1) * Math.PI / 180;

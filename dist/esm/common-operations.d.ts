@@ -276,8 +276,8 @@ export declare function filterProps(props: any[]): any[];
  * @param int depth - how many levels should it go?
  */
 export declare function allProps(obj: any, opt?: string, depth?: number): GenObj | [] | string | boolean;
-export declare function allPropsWithTypes(obj: any): string | boolean | GenObj | [];
-export declare function objInfo(arg: any, opt?: string): GenObj;
+export declare function allPropsWithTypes(obj: any, depth?: number): string | boolean | GenObj | [];
+export declare function objInfo(arg: any, opt?: string, depth?: number): GenObj;
 /**
  * Returns a new object as deepMerge of arg objs, BUT with arrays concatenated
  * @param objs - unlimited number of input objects
