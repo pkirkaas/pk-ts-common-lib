@@ -1,4 +1,5 @@
 # Node artifact files
+/node_modules/
 # Persisist to allow regular JS app to use dist/
 
 #Symlinked common
