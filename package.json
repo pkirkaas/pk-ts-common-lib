@@ -1,6 +1,5 @@
 {
   "name": "pk-ts-common-lib",
-  "version": "l.0.1",
   "author": "Paul Kirkaas",
   "license": "UNLICENSED",
   "description": "TS/JS Utilities for both client & node apps",
@@ -23,6 +22,7 @@
   "scripts": {
     "build": "tsc -p ./tsconfig.json && tsc -p ./tsconfig.cjs.json",
     "clean": "rm -rf ./dist ./node_modules package-lock.json && npm i",
+    "monitor": "nodemon --exec \"npm run build\" --ext js,jsx,ts,tsx,sass,css --delay 5 --watch ./src",
     "reset": "npm run clean && npm run build",
     "tstarg": "echo Something and --"
   },
