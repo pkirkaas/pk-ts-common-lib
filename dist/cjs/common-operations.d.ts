@@ -24,6 +24,10 @@ export declare function isCommonJS(): boolean;
  * @retrun array stack
  */
 export declare function getStack(offset?: number): any[];
+/** Trying move from ts-node-lib */
+export declare function stackParse(): any[];
+export declare function stamp(entry?: any, frameAfter?: any): string;
+export declare function getFrameAfterFunction(fname?: any, forceFunction?: any): any;
 /**
  * Return just the subset of the object, for keys specified in the "fields" array.
  */

@@ -1,6 +1,7 @@
 //const urlStatus = require('url-status-code');
 import urlStatus from 'url-status-code';
 import JSON5 from 'json5';
+import path from 'path';
 //const _ = require("lodash");
 import _ from "lodash";
 import { PkError } from './index.js';
@@ -19,6 +20,9 @@ import { extend } from "./lib/json-decyle-3.js";
 //decycle, retrocycle, extend
 //@ts-ignore
 extend(JSON5);
+//import { default as JSON5 } from 'json5';
+//import  JSON5  from 'json5';
+import * as ESP from "error-stack-parser";
 //const axios = require("axios");
 //import { axios } from "Axios";
 import axios from "axios";
@@ -61,6 +65,123 @@ export function getStack(offset = 0) {
     }
     return ret;
 }
+/** Trying move from ts-node-lib */
+export function stackParse() {
+    let stack = ESP.parse(new Error());
+    let ret = [];
+    for (let info of stack) {
+        let res = {
+            fileName: path.basename(info.fileName),
+            lineNumber: info.lineNumber,
+            functionName: info.functionName,
+        };
+        ret.push(res);
+    }
+    return ret;
+}
+// Move to common? Basic info for console logging 
+export function stamp(entry, frameAfter) {
+    let entId = "";
+    //console.log({ entry });
+    if (!isEmpty(entry) && typeof entry === "object") {
+        if (entry.id) {
+            entId = entry.id;
+        }
+    }
+    // Move to common? Basic info for console logging
+    let frame = getFrameAfterFunction(frameAfter, true);
+    //let frame = getFrameAfterFunction2(frameAfter, true);
+    //let frame = getFrameAfterFunction(frameAfter, true);
+    let src = "";
+    if (frame) {
+        src = `:${path.basename(frame.fileName)}:${frame.functionName}:${frame.lineNumber}:`;
+        //console.log({ frame });
+    }
+    let now = new Date();
+    let pe = process.env.PROCESS_ENV;
+    // TODO!! Just broke updating to latest version of date-fns - 19 Dec 2023
+    //@ts-ignore
+    let ds = format(now, "y-LL-dd H:m:s");
+    return `${ds}-${pe}${src}: ${entId} `;
+}
+export function getFrameAfterFunction(fname, forceFunction) {
+    if (fname && typeof fname === "string") {
+        fname = [fname];
+    }
+    if (!Array.isArray(fname)) {
+        fname = [];
+    }
+    let stack;
+    try {
+        stack = ESP.parse(new Error());
+    }
+    catch (err) {
+        //console.error("Error in ESP.parse/getFrameAfterFunction:", jsonClone(err));
+        console.error("Error in ESP.parse/getFrameAfterFunction:");
+        return;
+    }
+    let excludeFncs = [
+        "errLog", "baseLog", "getFrameAfterFunction", "getFrameAfterFunction2", "consoleLog", "consoleError",
+        "infoLog", "debugLog", "stamp", "fulfilled", "rejected", "processTicksAndRejections", "LogData.log",
+        "LogData.out", "LogData.console", "LogData.errLog", "LogData.throw",
+    ];
+    //let fnSkips = ["__awaiter", "Object.<anonymous>", "undefined", undefined];
+    let fnSkips = ["__awaiter", "undefined", undefined];
+    let allSkips = fnSkips.concat(excludeFncs);
+    let skips = excludeFncs.concat(fname);
+    //writeFile(`../tmp/stack-${uv}.json`, stack);
+    //  console.log("Rest of the Stack:", { stack });
+    let lastFrame = stack.shift();
+    let frame;
+    let nextFrame;
+    while ((frame = stack.shift())) {
+        lastFrame = frame;
+        //if (frame.functionName && !skips.includes(frame.functionName)) {
+        if (!skips.includes(frame.functionName)) {
+            //if (frame.functionName && !allSkips.includes(frame.functionName)) {
+            break;
+        }
+    }
+    //  console.log("After break - should have lastFrame!", { lastFrame, frame, stack });
+    let functionName = lastFrame.functionName;
+    let exFns = skips.concat(fnSkips);
+    //if (!functionName || (exFns.includes(functionName) && forceFunction)) {
+    if (!functionName || (exFns.includes(functionName) && forceFunction)) {
+        //console.log(`Skipping ${functionName}`, { lastFrame });
+        // Continue through frames for next function name...
+        //'Object.<anonymous>'
+        while ((nextFrame = stack.shift())) {
+            let tsFn = nextFrame.functionName;
+            if (tsFn && !exFns.includes(tsFn)) {
+                functionName = nextFrame.functionName;
+                //      console.log(`Returning? tsFn: ${tsFn}, fname: ${functionName} `);
+                lastFrame.functionName = functionName;
+                return lastFrame;
+                //break;
+            }
+        }
+    }
+    return lastFrame;
+}
+/*
+// Move to common? Basic info for console logging
+let frame = getFrameAfterFunction(frameAfter, true);
+//let frame = getFrameAfterFunction2(frameAfter, true);
+//let frame = getFrameAfterFunction(frameAfter, true);
+let src = "";
+if (frame) {
+  src = `:${path.basename(frame.fileName)}:${frame.functionName}:${frame.lineNumber}:`;
+  //console.log({ frame });
+}
+let now = new Date();
+
+let pe = process.env.PROCESS_ENV;
+  // TODO!! Just broke updating to latest version of date-fns - 19 Dec 2023
+//@ts-ignore
+let ds = format(now, "y-LL-dd H:m:s");
+return `${ds}-${pe}${src}: ${entId} `;
+}
+*/
 /**
  * Return just the subset of the object, for keys specified in the "fields" array.
  */
