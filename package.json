@@ -36,6 +36,8 @@
     "lodash": "latest",
     "prettier": "*",
     "stack-trace": "*",
+    "ts-node": "*",
+    "tsconfig-paths": "*",
     "stacktracey": "*",
     "url-join": "latest",
     "url-status-code": "*"
