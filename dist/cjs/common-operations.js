@@ -46,6 +46,7 @@ export function isCommonJS() {
     return typeof module !== 'undefined'
         && typeof module.exports === 'object';
 }
+//STaRT  Stack examination section  
 /**
  * Returns stack trace as array
  * Error().stack returns a string. Convert to array
@@ -163,6 +164,7 @@ export function getFrameAfterFunction(fname, forceFunction) {
     }
     return lastFrame;
 }
+// END Stack analasys functions
 /*
 // Move to common? Basic info for console logging
 let frame = getFrameAfterFunction(frameAfter, true);
@@ -262,22 +264,6 @@ export function eventInfo(ev) {
         eventDets[prop] = jsonClone(ev[prop]);
     }
     return eventDets;
-}
-/** Try to make simple copies of complex objects (like with cyclic references)
- * to be storable in MongoDB
- * Primitives will just be returned unchanged.
- */
-export function jsonClone(arg) {
-    if (!arg || typeof arg !== "object" || isPrimitive(arg)) {
-        return arg;
-    }
-    //@ts-ignore
-    if ((typeof Element !== 'undefined') && (arg instanceof Element)) {
-        //Not sure I want to do this - my JSON5Stringify might handle it - test in browser
-        return arg.outerHTML;
-    }
-    //return JSON5.parse(JSON5Stringify(arg));
-    return JSON5Parse(JSON5Stringify(arg));
 }
 /**
  * Checks if the arg can be converted to a number
@@ -729,6 +715,23 @@ function probeProps(obj, props?: any[],) {
   return ret;
 }
  */
+// Start Object analysis fncs
+/** Try to make simple copies of complex objects (like with cyclic references)
+ * to be storable in MongoDB
+ * Primitives will just be returned unchanged.
+ */
+export function jsonClone(arg) {
+    if (!arg || typeof arg !== "object" || isPrimitive(arg)) {
+        return arg;
+    }
+    //@ts-ignore
+    if ((typeof Element !== 'undefined') && (arg instanceof Element)) {
+        //Not sure I want to do this - my JSON5Stringify might handle it - test in browser
+        return arg.outerHTML;
+    }
+    //return JSON5.parse(JSON5Stringify(arg));
+    return JSON5Parse(JSON5Stringify(arg));
+}
 export function getConstructorChain(obj) {
     let i = 0;
     let constructorChain = [];
@@ -1176,30 +1179,6 @@ export function objInfo(arg, opt = 'tpv', depth = 6) {
     }
     return info;
 }
-/**
- * Returns a new object as deepMerge of arg objs, BUT with arrays concatenated
- * @param objs - unlimited number of input objects
- * @return object - a new object with the input objects merged,
- *   and arrays concatenated
- */
-export function mergeAndConcat(...objs) {
-    let customizer = function (objValue, srcValue) {
-        if (_.isArray(objValue)) {
-            return objValue.concat(srcValue);
-        }
-    };
-    return _.mergeWith({}, ...objs, customizer);
-}
-/**
- * Take input arrays, merge, & return single array w. unique values
- */
-export function uniqueVals(...arrs) {
-    let merged = [];
-    for (let arr of arrs) {
-        merged = [...merged, ...arr];
-    }
-    return Array.from(new Set(merged));
-}
 /* Use lodash isObject (excludes functions) or isObjectLike (includes functions)
 export function isRealObject(anobj) {
   if (!anobj || typeof anobj !== "object") {
@@ -1264,139 +1243,6 @@ export function typeOf(anObj, opts) {
         return JSON.stringify({ err, anObj }, null, 2);
     }
 }
-/**
- * Replace w. below when finished.
- */
-export function getRand(arr) {
-    return arr[Math.floor((Math.random() * arr.length))];
-}
-/**
- * Gets cnt random unique elements of an array
- * Not the most efficient but it works
- * if cnt = 0, returns a single element, else an array of els
- */
-export function getRandElsArr(arr, cnt = null) {
-    if (!Array.isArray(arr) || !arr.length) {
-        throw new PkError(`Invalid array arg to getRandEls:`, { arr });
-    }
-    cnt = Math.min(cnt, arr.length);
-    if (!cnt) {
-        return arr[Math.floor((Math.random() * arr.length))];
-    }
-    let arrKeys = Object.keys(arr).map((el) => parseInt(el));
-    let keyLen = arrKeys.length;
-    cnt = Math.min(cnt, keyLen);
-    let subKeys = [];
-    let num = 0;
-    while (true) {
-        let tstKey = getRand(arrKeys);
-        if (subKeys.includes(tstKey)) {
-            continue;
-        }
-        subKeys.push(tstKey);
-        if (subKeys.length >= cnt) {
-            break;
-        }
-    }
-    let ret = subKeys.map((key) => arr[key]);
-    let retLen = ret.length;
-    return ret;
-}
-/**
- * Retuns subset of object or array valuesd
- * @param objorarr - something with key/values
- * @param cnt - if null, a
- * @returns a single element if null, else an array of of cnt unique values from collection
- */
-export function getRandEls(objorarr, cnt = null) {
-    if ((!Array.isArray(objorarr) || !objorarr.length) && !isSimpleObject(objorarr)) {
-        throw new PkError(`Invalid array arg to getRandEls:`, { objorarr });
-    }
-    let arrKeys = Object.keys(objorarr); //.map((el) => parseInt(el));
-    if (!cnt) {
-        let tstKey = getRand(arrKeys);
-        //return objorarr[Math.floor((Math.random() * arrKeys.length))];
-        return objorarr[tstKey];
-    }
-    cnt = Math.min(cnt, arrKeys.length);
-    //let arrKeys = Object.keys(arr).map((el) => parseInt(el));
-    let keyLen = arrKeys.length;
-    cnt = Math.min(cnt, keyLen);
-    let subKeys = [];
-    let num = 0;
-    while (true) {
-        let tstKey = getRand(arrKeys);
-        if (subKeys.includes(tstKey)) {
-            continue;
-        }
-        subKeys.push(tstKey);
-        if (subKeys.length >= cnt) {
-            break;
-        }
-    }
-    let ret = subKeys.map((key) => objorarr[key]);
-    let retLen = ret.length;
-    return ret;
-}
-/**
-*/
-/**
- * Retuns a random integer or array rand ints in range
- * @param numeric to - max int to return
- * @param numeric from default 0 - optional starting/min number
- * @param int?: cnt - if null/0 single int. Else, array of cnt ints.
- * @return int|int[] - if cnt<range, unique, afterwards, reuse
- */
-export function randInt(to, from = 0, cnt) {
-    // Convert args to ints if possible, else throw
-    //@ts-ignore
-    if (isNaN((to = parseInt(to)) || isNaN((from = parseInt(from))))) {
-        throw new PkError(`Non-numeric arg to randInt():`, { to, from });
-    }
-    if (from === to) {
-        return from;
-    }
-    if (from > to) {
-        let tmp = from;
-        from = to;
-        to = tmp;
-    }
-    if (!cnt) {
-        let bRand = from + Math.floor((Math.random() * ((to + 1) - from)));
-        return bRand;
-    }
-    let range = to - from;
-    let ret = [];
-    while (ret.length < cnt) {
-        let tst = randInt(to, from);
-        if (ret.length < cnt) {
-            if (ret.includes(tst)) {
-                continue;
-            }
-            ret.push(tst);
-        }
-    }
-    return ret;
-}
-/*
-export function randInts(to: any, from: any = 0): Number {
-  // Convert args to ints if possible, else throw
-  //@ts-ignore
-  if (isNaN((to = parseInt(to)) || isNaN((from = parseInt(from))))) {
-    throw new PkError(`Non-numeric arg to randInt():`, { to, from });
-  }
-  if (from === to) {
-    return from;
-  }
-  if (from > to) {
-    let tmp = from;
-    from = to;
-    to = tmp;
-  }
-  let bRand = from + Math.floor((Math.random() * ((to + 1) - from)));
-  return bRand;
-}
-*/
 /**
  * Lazy way to get type of multiple variables at once
  * @param simple object obj - collection of properties to type
@@ -1542,6 +1388,164 @@ export function JSONStringify(arg) {
     return JSON.decycle(arg, null, 2);
     //}
 }
+//////////////////// END Object analysis functions   
+/**
+ * Returns a new object as deepMerge of arg objs, BUT with arrays concatenated
+ * @param objs - unlimited number of input objects
+ * @return object - a new object with the input objects merged,
+ *   and arrays concatenated
+ */
+export function mergeAndConcat(...objs) {
+    let customizer = function (objValue, srcValue) {
+        if (_.isArray(objValue)) {
+            return objValue.concat(srcValue);
+        }
+    };
+    return _.mergeWith({}, ...objs, customizer);
+}
+/**
+ * Take input arrays, merge, & return single array w. unique values
+ */
+export function uniqueVals(...arrs) {
+    let merged = [];
+    for (let arr of arrs) {
+        merged = [...merged, ...arr];
+    }
+    return Array.from(new Set(merged));
+}
+/**
+ * Replace w. below when finished.
+ */
+export function getRand(arr) {
+    return arr[Math.floor((Math.random() * arr.length))];
+}
+/**
+ * Gets cnt random unique elements of an array
+ * Not the most efficient but it works
+ * if cnt = 0, returns a single element, else an array of els
+ */
+export function getRandElsArr(arr, cnt = null) {
+    if (!Array.isArray(arr) || !arr.length) {
+        throw new PkError(`Invalid array arg to getRandEls:`, { arr });
+    }
+    cnt = Math.min(cnt, arr.length);
+    if (!cnt) {
+        return arr[Math.floor((Math.random() * arr.length))];
+    }
+    let arrKeys = Object.keys(arr).map((el) => parseInt(el));
+    let keyLen = arrKeys.length;
+    cnt = Math.min(cnt, keyLen);
+    let subKeys = [];
+    let num = 0;
+    while (true) {
+        let tstKey = getRand(arrKeys);
+        if (subKeys.includes(tstKey)) {
+            continue;
+        }
+        subKeys.push(tstKey);
+        if (subKeys.length >= cnt) {
+            break;
+        }
+    }
+    let ret = subKeys.map((key) => arr[key]);
+    let retLen = ret.length;
+    return ret;
+}
+/**
+ * Retuns subset of object or array valuesd
+ * @param objorarr - something with key/values
+ * @param cnt - if null, a
+ * @returns a single element if null, else an array of of cnt unique values from collection
+ */
+export function getRandEls(objorarr, cnt = null) {
+    if ((!Array.isArray(objorarr) || !objorarr.length) && !isSimpleObject(objorarr)) {
+        throw new PkError(`Invalid array arg to getRandEls:`, { objorarr });
+    }
+    let arrKeys = Object.keys(objorarr); //.map((el) => parseInt(el));
+    if (!cnt) {
+        let tstKey = getRand(arrKeys);
+        //return objorarr[Math.floor((Math.random() * arrKeys.length))];
+        return objorarr[tstKey];
+    }
+    cnt = Math.min(cnt, arrKeys.length);
+    //let arrKeys = Object.keys(arr).map((el) => parseInt(el));
+    let keyLen = arrKeys.length;
+    cnt = Math.min(cnt, keyLen);
+    let subKeys = [];
+    let num = 0;
+    while (true) {
+        let tstKey = getRand(arrKeys);
+        if (subKeys.includes(tstKey)) {
+            continue;
+        }
+        subKeys.push(tstKey);
+        if (subKeys.length >= cnt) {
+            break;
+        }
+    }
+    let ret = subKeys.map((key) => objorarr[key]);
+    let retLen = ret.length;
+    return ret;
+}
+/**
+*/
+/**
+ * Retuns a random integer or array rand ints in range
+ * @param numeric to - max int to return
+ * @param numeric from default 0 - optional starting/min number
+ * @param int?: cnt - if null/0 single int. Else, array of cnt ints.
+ * @return int|int[] - if cnt<range, unique, afterwards, reuse
+ */
+export function randInt(to, from = 0, cnt) {
+    // Convert args to ints if possible, else throw
+    //@ts-ignore
+    if (isNaN((to = parseInt(to)) || isNaN((from = parseInt(from))))) {
+        throw new PkError(`Non-numeric arg to randInt():`, { to, from });
+    }
+    if (from === to) {
+        return from;
+    }
+    if (from > to) {
+        let tmp = from;
+        from = to;
+        to = tmp;
+    }
+    if (!cnt) {
+        let bRand = from + Math.floor((Math.random() * ((to + 1) - from)));
+        return bRand;
+    }
+    let range = to - from;
+    let ret = [];
+    while (ret.length < cnt) {
+        let tst = randInt(to, from);
+        if (ret.length < cnt) {
+            if (ret.includes(tst)) {
+                continue;
+            }
+            ret.push(tst);
+        }
+    }
+    return ret;
+}
+/*
+export function randInts(to: any, from: any = 0): Number {
+  // Convert args to ints if possible, else throw
+  //@ts-ignore
+  if (isNaN((to = parseInt(to)) || isNaN((from = parseInt(from))))) {
+    throw new PkError(`Non-numeric arg to randInt():`, { to, from });
+  }
+  if (from === to) {
+    return from;
+  }
+  if (from > to) {
+    let tmp = from;
+    from = to;
+    to = tmp;
+  }
+  let bRand = from + Math.floor((Math.random() * ((to + 1) - from)));
+  return bRand;
+}
+*/
 /** Totally lifted from Axios - but they don't export it!
  * Takes an HTTP header string and objectifies it -
  * directives as keys

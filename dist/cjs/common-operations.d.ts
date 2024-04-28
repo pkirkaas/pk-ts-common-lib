@@ -52,11 +52,6 @@ export declare function filterInt(value: any): number | false;
  * Move this to browser library when the time comes
  */
 export declare function eventInfo(ev: any): {};
-/** Try to make simple copies of complex objects (like with cyclic references)
- * to be storable in MongoDB
- * Primitives will just be returned unchanged.
- */
-export declare function jsonClone(arg: any): any;
 /**
  * Checks if the arg can be converted to a number
  * If not, returns boolean false
@@ -163,6 +158,11 @@ export declare function isPrimitive(arg: any): boolean;
  */
 export declare function isSimpleObject(anobj: any): boolean;
 export declare function isObject(arg: any, alsoEmpty?: boolean, alsoFunction?: boolean): boolean;
+/** Try to make simple copies of complex objects (like with cyclic references)
+ * to be storable in MongoDB
+ * Primitives will just be returned unchanged.
+ */
+export declare function jsonClone(arg: any): any;
 export declare function getConstructorChain(obj: any): any[];
 /**
  * Checks if arg is an instance of a class.
@@ -282,45 +282,7 @@ export declare function filterProps(props: any[]): any[];
 export declare function allProps(obj: any, opt?: string, depth?: number): GenObj | [] | string | boolean;
 export declare function allPropsWithTypes(obj: any, depth?: number): string | boolean | GenObj | [];
 export declare function objInfo(arg: any, opt?: string, depth?: number): GenObj;
-/**
- * Returns a new object as deepMerge of arg objs, BUT with arrays concatenated
- * @param objs - unlimited number of input objects
- * @return object - a new object with the input objects merged,
- *   and arrays concatenated
- */
-export declare function mergeAndConcat(...objs: any[]): any;
-/**
- * Take input arrays, merge, & return single array w. unique values
- */
-export declare function uniqueVals(...arrs: any[]): any[];
 export declare function typeOf(anObj: any, opts?: any): String;
-/**
- * Replace w. below when finished.
- */
-export declare function getRand(arr: any[]): any;
-/**
- * Gets cnt random unique elements of an array
- * Not the most efficient but it works
- * if cnt = 0, returns a single element, else an array of els
- */
-export declare function getRandElsArr(arr: any[], cnt?: any): any;
-/**
- * Retuns subset of object or array valuesd
- * @param objorarr - something with key/values
- * @param cnt - if null, a
- * @returns a single element if null, else an array of of cnt unique values from collection
- */
-export declare function getRandEls(objorarr: GenObj | any[], cnt?: number | null): any;
-/**
-*/
-/**
- * Retuns a random integer or array rand ints in range
- * @param numeric to - max int to return
- * @param numeric from default 0 - optional starting/min number
- * @param int?: cnt - if null/0 single int. Else, array of cnt ints.
- * @return int|int[] - if cnt<range, unique, afterwards, reuse
- */
-export declare function randInt(to: any, from?: number, cnt?: number): Number | Array<number>;
 /**
  * Lazy way to get type of multiple variables at once
  * @param simple object obj - collection of properties to type
@@ -358,6 +320,44 @@ export declare function keysFromJson(arg: any): any;
  */
 export declare function JSON5Stringify(arg: any): any;
 export declare function JSONStringify(arg: any): any;
+/**
+ * Returns a new object as deepMerge of arg objs, BUT with arrays concatenated
+ * @param objs - unlimited number of input objects
+ * @return object - a new object with the input objects merged,
+ *   and arrays concatenated
+ */
+export declare function mergeAndConcat(...objs: any[]): any;
+/**
+ * Take input arrays, merge, & return single array w. unique values
+ */
+export declare function uniqueVals(...arrs: any[]): any[];
+/**
+ * Replace w. below when finished.
+ */
+export declare function getRand(arr: any[]): any;
+/**
+ * Gets cnt random unique elements of an array
+ * Not the most efficient but it works
+ * if cnt = 0, returns a single element, else an array of els
+ */
+export declare function getRandElsArr(arr: any[], cnt?: any): any;
+/**
+ * Retuns subset of object or array valuesd
+ * @param objorarr - something with key/values
+ * @param cnt - if null, a
+ * @returns a single element if null, else an array of of cnt unique values from collection
+ */
+export declare function getRandEls(objorarr: GenObj | any[], cnt?: number | null): any;
+/**
+*/
+/**
+ * Retuns a random integer or array rand ints in range
+ * @param numeric to - max int to return
+ * @param numeric from default 0 - optional starting/min number
+ * @param int?: cnt - if null/0 single int. Else, array of cnt ints.
+ * @return int|int[] - if cnt<range, unique, afterwards, reuse
+ */
+export declare function randInt(to: any, from?: number, cnt?: number): Number | Array<number>;
 /** Totally lifted from Axios - but they don't export it!
  * Takes an HTTP header string and objectifies it -
  * directives as keys
