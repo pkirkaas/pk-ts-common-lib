@@ -7,6 +7,8 @@
  * Initial placeholder for generic error class with more details than "Error"
  */
 export class PkError extends Error {
+    details;
+    extra;
     constructor(msg, ...params) {
         let opts = null;
         if (Array.isArray(params) && params.length) {

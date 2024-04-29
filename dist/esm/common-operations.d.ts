@@ -189,6 +189,11 @@ export declare function classStack(obj: any): any[];
  * BE WARNED!
  */
 export declare function getPrototypeChain(obj: any): any[];
+/**
+ * Uses prototype chain and returns array of ancestor class names
+ * @param obj
+ */
+export declare function getAncestorArr(obj: any): string[];
 export declare function getObjDets(obj: any): false | {
     toObj: "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function";
     pkToObj: String;

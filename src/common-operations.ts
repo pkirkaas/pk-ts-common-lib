@@ -963,6 +963,25 @@ export function getPrototypeChain(obj) {
   }
   return prototypeChain;
 }
+
+/**
+ * Uses prototype chain and returns array of ancestor class names
+ * @param obj 
+ */
+export function getAncestorArr(obj:any):string[] {
+  let ptChain = getPrototypeChain(obj);
+  let ret = [];
+  for (let pt of ptChain) {
+    let pname =  pt?.prototypeName; 
+    if (!pname) {
+      break;
+    }
+    ret.push(pname);
+  }
+  return ret;
+}
+
+
 export function getObjDets(obj) {
   if (!obj || isPrimitive(obj) || !isObject(obj)) {
     return false;

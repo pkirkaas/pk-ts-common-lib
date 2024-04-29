@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
     "outDir": "./dist/esm",
-    "lib":["es6","esnext", "es2020", "dom"],
+    //"lib":["es6","esnext", "es2020", "dom"],
+    "lib":[ "es2022", "dom", "DOM.iterable"],
     "esModuleInterop": true,
+    "moduleDetection": "force",
 
 
-    "target":"ES2020",
+    "target":"ES2022",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
 
