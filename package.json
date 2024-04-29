@@ -52,8 +52,6 @@
     "eslint-config-prettier": "*",
     "eslint-plugin-prettier": "*",
     "nodemon": "*",
-    "ts-node": "*",
-    "tsconfig-paths": "*",
     "typescript": "*"
   }
 }

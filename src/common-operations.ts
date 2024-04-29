@@ -542,6 +542,9 @@ function mkUrl(url) {
   }
 }
 
+export function firstToUpper(str:string):string {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
 
 
 //Same as above, but 
@@ -979,6 +982,30 @@ export function getAncestorArr(obj:any):string[] {
     ret.push(pname);
   }
   return ret;
+}
+
+/** Takes an object & parent class & checks if it is a subclass
+ * @param obj - a JS Class
+ * @param parent - another JS class
+ * @param alsoSelf = 0 - include if it is it's own class
+ * @return boolean
+ * 
+ */
+export function isSubclassOf(sub,parent, alsoSelf=1) {
+  let ancestors = getAncestorArr(sub);
+  if (!alsoSelf) {
+    ancestors.shift();
+  }
+  let subName  = sub?.name;
+  let parentPrototype = Object.getPrototypeOf(parent);
+  let parentPrototypeName = parentPrototype?.name;
+  let parentName = parent?.name;
+
+  console.log(`In is subclass:`, {ancestors, subName, parentName, parentPrototypeName});
+  if (ancestors.includes(parentName)) {
+    return true;
+  }
+  return false;
 }
 
 

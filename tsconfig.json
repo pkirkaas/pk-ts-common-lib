@@ -4,13 +4,12 @@
     //"lib":["es6","esnext", "es2020", "dom"],
     "lib":[ "es2022", "dom", "DOM.iterable"],
     "esModuleInterop": true,
-    "moduleDetection": "force",
+//    "moduleDetection": "force",
 
 
     "target":"ES2022",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-
     "baseUrl": "./",
     "declaration": true,
     "declarationMap": true,
@@ -19,7 +18,7 @@
     "resolvePackageJsonImports": true,
     "forceConsistentCasingInFileNames": true,
     "sourceMap": true,
-    "checkJs": true,
+    "checkJs": false,
     "skipLibCheck": true,
     "noImplicitAny": false,
     "allowSyntheticDefaultImports": true,

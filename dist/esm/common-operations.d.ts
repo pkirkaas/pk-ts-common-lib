@@ -126,6 +126,7 @@ export declare function rewriteHttpsToHttp(url: any): string;
  * SEE below checkUrl3
  */
 export declare function checkUrl(url: any): Promise<boolean | any[]>;
+export declare function firstToUpper(str: string): string;
 export declare function checkUrlAxios(tstUrl: any, full?: boolean): Promise<any>;
 /**
  * Tri-state check - to account for failed checks -
@@ -194,6 +195,14 @@ export declare function getPrototypeChain(obj: any): any[];
  * @param obj
  */
 export declare function getAncestorArr(obj: any): string[];
+/** Takes an object & parent class & checks if it is a subclass
+ * @param obj - a JS Class
+ * @param parent - another JS class
+ * @param alsoSelf = 0 - include if it is it's own class
+ * @return boolean
+ *
+ */
+export declare function isSubclassOf(sub: any, parent: any, alsoSelf?: number): boolean;
 export declare function getObjDets(obj: any): false | {
     toObj: "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function";
     pkToObj: String;
