@@ -1001,7 +1001,6 @@ export function isSubclassOf(sub,parent, alsoSelf=1) {
   let parentPrototypeName = parentPrototype?.name;
   let parentName = parent?.name;
 
-  console.log(`In is subclass:`, {ancestors, subName, parentName, parentPrototypeName});
   if (ancestors.includes(parentName)) {
     return true;
   }
