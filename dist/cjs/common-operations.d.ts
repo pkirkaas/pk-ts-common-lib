@@ -302,7 +302,7 @@ export declare function typeOf(anObj: any, opts?: any): String;
  * @param simple object obj - collection of properties to type
  * @return object - keyed by the original keys, to type
  */
-export declare function typeOfEach(obj: any): any;
+export declare function typeOfEach(obj: any, wVal?: boolean): any;
 export declare function valWithType(val: any): any;
 /**
  * Returns true if arg is string & can be JSON parsed

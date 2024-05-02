@@ -1,5 +1,5 @@
 import {
-	filterInt, getRandEls, GenObj, dtFmt, pkToDate, deepMeld, uniqueVals, PkError, TagObj, TagObjCol, typeOf, isEmpty, allProps, JSON5, isSubset, isObject,
+	filterInt, getRandEls, GenObj, dtFmt, pkToDate, deepMeld, uniqueVals, PkError, TagObj, TagObjCol, typeOf, typeOfEach, isEmpty, allProps, JSON5, isSubset, isObject,
 	classStack, getAllBuiltInProps, objInfo, toSnakeCase, toCamelCase, haversine,
 	arraysEqual, getConstructorChain, getPrototypeChain, getObjDets, stripStray, arrayToLower
 } from '../index.js';
@@ -19,7 +19,6 @@ function camelCase(str) {
 
 
 
-
 const london = {lat:51.5072, lon: 0.1275} // London
 const ny =  {lat: 40.7128, lon : -74.0059};
 
@@ -35,6 +34,8 @@ function camelize(str) {
 
 let snakes = [" dog-cat ", ' "tiger-lion" ', " ' horse-cow '",];
 let camels = [" dogMouse ", 9, null, ' "Dinosaur King" ', " ' NeverKnown '",];
+let toe = typeOfEach({london,camels,},true); 
+console.log('toe. vals:', {toe});
 
 let tll = arrayToLower(camels);
 

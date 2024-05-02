@@ -1,4 +1,4 @@
-import { getRandEls, PkError, typeOf, isEmpty, isObject, classStack, getAllBuiltInProps, objInfo, haversine, arrayToLower } from '../index.js';
+import { getRandEls, PkError, typeOf, typeOfEach, isEmpty, isObject, classStack, getAllBuiltInProps, objInfo, haversine, arrayToLower } from '../index.js';
 import _ from 'lodash';
 import util from 'util';
 util.inspect.defaultOptions.maxArrayLength = null;
@@ -21,6 +21,8 @@ function camelize(str) {
 }
 let snakes = [" dog-cat ", ' "tiger-lion" ', " ' horse-cow '",];
 let camels = [" dogMouse ", 9, null, ' "Dinosaur King" ', " ' NeverKnown '",];
+let toe = typeOfEach({ london, camels, }, true);
+console.log('toe. vals:', { toe });
 let tll = arrayToLower(camels);
 //console.log({ tll });
 let strs = ['tag', 'donkey', 'animal', 'plant'];

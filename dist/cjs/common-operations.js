@@ -1289,7 +1289,7 @@ export function typeOf(anObj, opts) {
  * @param simple object obj - collection of properties to type
  * @return object - keyed by the original keys, to type
  */
-export function typeOfEach(obj) {
+export function typeOfEach(obj, wVal = false) {
     if (!isSimpleObject(obj) || isEmpty(obj)) {
         console.error(`Bad obj param to typeOfEach - obj:`, { obj });
         return false;
@@ -1298,7 +1298,12 @@ export function typeOfEach(obj) {
     let keys = Object.keys(obj);
     for (let key of keys) {
         let val = obj[key];
-        res[key] = typeOf(val);
+        if (wVal) {
+            res[key] = { type: typeOf(val), val };
+        }
+        else {
+            res[key] = typeOf(val);
+        }
     }
     return res;
 }
