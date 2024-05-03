@@ -1228,6 +1228,13 @@ export function filterProps(props: any[]) {
  * @param int depth - how many levels should it go?
  */
 //export function allProps(obj: any, { dets = 'p', filter = true }: { dets?: string, filter?: boolean } = {}) {
+  // 
+  // Just making an easier call to allProps...
+export function allPropsP(obj:any, opts:GenObj={}) {
+  let opt = opts.opt || 'tvp';
+  let depth = opts.depth || 3;
+  return allProps(obj, opt, depth);
+}
 export function allProps(obj: any, opt: string = 'tvp', depth = 6): GenObj | [] | string | boolean {
   try {
     if (!isObject(obj)) {
@@ -1424,7 +1431,7 @@ export function typeOf(anObj: any, opts?: any): String { //level?: Number): Stri
  * @param simple object obj - collection of properties to type
  * @return object - keyed by the original keys, to type
  */
-export function typeOfEach(obj,wVal=false) {
+export function typeOfEach(obj,wVal:any=false) {
   if (!isSimpleObject(obj) || isEmpty(obj)) {
     console.error(`Bad obj param to typeOfEach - obj:`, { obj });
     return false;

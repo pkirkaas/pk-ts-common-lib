@@ -293,6 +293,7 @@ export declare function filterProps(props: any[]): any[];
  *
  * @param int depth - how many levels should it go?
  */
+export declare function allPropsP(obj: any, opts?: GenObj): string | boolean | GenObj | [];
 export declare function allProps(obj: any, opt?: string, depth?: number): GenObj | [] | string | boolean;
 export declare function allPropsWithTypes(obj: any, depth?: number): string | boolean | GenObj | [];
 export declare function objInfo(arg: any, opt?: string, depth?: number): GenObj;
@@ -302,7 +303,7 @@ export declare function typeOf(anObj: any, opts?: any): String;
  * @param simple object obj - collection of properties to type
  * @return object - keyed by the original keys, to type
  */
-export declare function typeOfEach(obj: any, wVal?: boolean): any;
+export declare function typeOfEach(obj: any, wVal?: any): any;
 export declare function valWithType(val: any): any;
 /**
  * Returns true if arg is string & can be JSON parsed

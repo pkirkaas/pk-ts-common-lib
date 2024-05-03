@@ -1101,6 +1101,13 @@ export function filterProps(props) {
  * @param int depth - how many levels should it go?
  */
 //export function allProps(obj: any, { dets = 'p', filter = true }: { dets?: string, filter?: boolean } = {}) {
+// 
+// Just making an easier call to allProps...
+export function allPropsP(obj, opts = {}) {
+    let opt = opts.opt || 'tvp';
+    let depth = opts.depth || 3;
+    return allProps(obj, opt, depth);
+}
 export function allProps(obj, opt = 'tvp', depth = 6) {
     try {
         if (!isObject(obj)) {
