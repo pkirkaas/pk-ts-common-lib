@@ -30,8 +30,12 @@ export declare function stamp(entry?: any, frameAfter?: any): string;
 export declare function getFrameAfterFunction(fname?: any, forceFunction?: any): any;
 /**
  * Return just the subset of the object, for keys specified in the "fields" array.
+ * ACTUAALLY - can be deep -
+ * @param obj - src object
+ * @param fields mixed array of string keys, or object with single key field with array of fields - called recursively
+ * @return specified subset of object
  */
-export declare function subObj(obj: GenericObject, fields: string[]): GenObj;
+export declare function subObj(obj: GenericObject, fields: any[]): GenObj;
 /** Takes a 'duration' object for date-fns/add and validate
  * it. Optionall, converts to negative (time/dates in past)
  * @param obj object - obj to test

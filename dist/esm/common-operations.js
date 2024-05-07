@@ -187,11 +187,26 @@ return `${ds}-${pe}${src}: ${entId} `;
 */
 /**
  * Return just the subset of the object, for keys specified in the "fields" array.
+ * ACTUAALLY - can be deep -
+ * @param obj - src object
+ * @param fields mixed array of string keys, or object with single key field with array of fields - called recursively
+ * @return specified subset of object
  */
 export function subObj(obj, fields) {
     let ret = {};
     for (let field of fields) {
-        ret[field] = obj[field];
+        console.log("In subObj, field:", { field });
+        if (isObject(field)) {
+            let key = Object.keys(field)[0];
+            let keyFields = field[key];
+            let objKeyVal = obj[key];
+            let retKeyVal = subObj(objKeyVal, keyFields);
+            ret[key] = subObj(objKeyVal, keyFields);
+            console.log(`in subObj w objField`, { field, retKeyVal, key, keyFields, objKeyVal, obj });
+        }
+        else {
+            ret[field] = obj[field];
+        }
     }
     return ret;
 }
