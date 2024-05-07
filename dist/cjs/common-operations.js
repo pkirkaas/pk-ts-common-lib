@@ -195,14 +195,17 @@ return `${ds}-${pe}${src}: ${entId} `;
 export function subObj(obj, fields) {
     let ret = {};
     for (let field of fields) {
-        console.log("In subObj, field:", { field });
+        //console.log("In subObj, field:",{field});
         if (isObject(field)) {
             let key = Object.keys(field)[0];
             let keyFields = field[key];
+            if (isPrimitive(keyFields)) {
+                keyFields = [keyFields];
+            }
             let objKeyVal = obj[key];
             let retKeyVal = subObj(objKeyVal, keyFields);
             ret[key] = subObj(objKeyVal, keyFields);
-            console.log(`in subObj w objField`, { field, retKeyVal, key, keyFields, objKeyVal, obj });
+            //console.log(`in subObj w objField`,{field, retKeyVal, key,keyFields, objKeyVal, obj});
         }
         else {
             ret[field] = obj[field];

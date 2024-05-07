@@ -241,14 +241,17 @@ export function stamp(entry?: any, frameAfter?: any) {
 export function subObj(obj: GenericObject, fields: any[]):GenObj {
   let ret: GenObj = {};
   for (let field of fields) {
-    console.log("In subObj, field:",{field});
+    //console.log("In subObj, field:",{field});
     if (isObject(field)) {
       let key:string = Object.keys(field)[0];
-      let keyFields = field[key];
+      let keyFields:any = field[key];
+      if (isPrimitive(keyFields)) {
+        keyFields = [keyFields];
+      }
       let objKeyVal = obj[key];
       let retKeyVal = subObj(objKeyVal, keyFields); 
       ret[key] = subObj(objKeyVal, keyFields);
-      console.log(`in subObj w objField`,{field, retKeyVal, key,keyFields, objKeyVal, obj});
+      //console.log(`in subObj w objField`,{field, retKeyVal, key,keyFields, objKeyVal, obj});
     } else {
       ret[field] = obj[field];
     }
