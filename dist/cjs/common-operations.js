@@ -309,9 +309,19 @@ export function isNumeric(arg, asNum = false) {
 export function asNumeric(arg) {
     return isNumeric(arg, true);
 }
+export const dtFnsFormats = {
+    html: "yyyy-MM-dd",
+    sqldt: "yyyy-MM-dd HH:mm:ss",
+    short: 'dd-MMM-yy',
+    dt: 'dd-MMM-yy KK:mm',
+    dts: 'dd-MMM-yy KK:mm:ss',
+    ts: 'KK:mm:ss',
+};
 /**
  * If arg can be in any way be interpreted as a date,
- * returns the JS Date object,
+ * returns the JS Date object, optionally date-fns formatted string
+ * @param arg - argument to convert to JS Date - null for now
+ * @param fmt - string - a date-fns format or key to one of standard formats
  * NOTE: Unlike regulare JS :
  *
  * let dtE = new Date(); //Now
@@ -329,8 +339,9 @@ export function asNumeric(arg) {
  * Because: new Date(1650566202871) works
  * BUT new Date("1650566202871") DOESN'T - and sometimes
  * the DB returns a timestamp as a string...
+ * @return JS Date or formatted string or false
  */
-export function pkToDate(arg) {
+export function pkToDate(arg, fmt = null) {
     if (isNumeric(arg)) {
         arg = new Date(Number(arg));
     }
@@ -346,7 +357,15 @@ export function pkToDate(arg) {
     // TODO!! Just broke updating to latest version of date-fns - 19 Dec 2023
     //@ts-ignore
     if ((arg instanceof Date) && isValid(arg)) {
-        return arg;
+        if (!fmt) {
+            return arg;
+        }
+        let fmtKeys = Object.keys(dtFnsFormats);
+        if (fmtKeys.includes(fmt)) {
+            fmt = dtFnsFormats[fmt];
+        }
+        let formatted = format(arg, fmt);
+        return formatted;
     }
     return false;
 }
@@ -356,13 +375,7 @@ export function pkToDate(arg) {
  * @param dt - datable or if null now  - but - if invalid, though returns false
  */
 export function dtFmt(fmt, dt) {
-    let fmts = {
-        short: 'dd-MMM-yy',
-        dt: 'dd-MMM-yy KK:mm',
-        dts: 'dd-MMM-yy KK:mm:ss',
-        ts: 'KK:mm:ss',
-    };
-    let keys = Object.keys(fmts);
+    let keys = Object.keys(dtFnsFormats);
     if (!keys.includes(fmt)) {
         fmt = 'short';
     }
@@ -370,7 +383,7 @@ export function dtFmt(fmt, dt) {
     if (dt === false) {
         return "FALSE";
     }
-    let fullFmt = fmts[fmt];
+    let fullFmt = dtFnsFormats[fmt];
     // TODO!! Just broke updating to latest version of date-fns - 19 Dec 2023
     //@ts-ignore
     return format(dt, fullFmt);

@@ -70,9 +70,19 @@ export declare function isNumeric(arg: any, asNum?: boolean): number | boolean;
  * Returns the numeric value, or boolean false
  */
 export declare function asNumeric(arg: any): number | boolean;
+export declare const dtFnsFormats: {
+    html: string;
+    sqldt: string;
+    short: string;
+    dt: string;
+    dts: string;
+    ts: string;
+};
 /**
  * If arg can be in any way be interpreted as a date,
- * returns the JS Date object,
+ * returns the JS Date object, optionally date-fns formatted string
+ * @param arg - argument to convert to JS Date - null for now
+ * @param fmt - string - a date-fns format or key to one of standard formats
  * NOTE: Unlike regulare JS :
  *
  * let dtE = new Date(); //Now
@@ -90,8 +100,9 @@ export declare function asNumeric(arg: any): number | boolean;
  * Because: new Date(1650566202871) works
  * BUT new Date("1650566202871") DOESN'T - and sometimes
  * the DB returns a timestamp as a string...
+ * @return JS Date or formatted string or false
  */
-export declare function pkToDate(arg: any): false | Date;
+export declare function pkToDate(arg: any, fmt?: string | null): string | false | Date;
 /**
  * Quick Format a date with single format code & date
  * @param string fmt - one of an array

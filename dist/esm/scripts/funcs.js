@@ -1,13 +1,18 @@
 /**
  * We don't have Pk-Ts-Node, so no external node packages - just native node
  */
-import { haversine, } from '../index.js';
+import { haversine, pkToDate, } from '../index.js';
 let args = [...process.argv];
 args.shift();
 args.shift();
 let cmd = args.shift();
 console.log({ cmd, args });
 let fncs = {
+    dtFmt(fmt = "html") {
+        let fmtd = pkToDate(null, fmt);
+        console.log(`The [${fmt}] formatted date: [${fmtd}]`);
+        return fmtd;
+    },
     sayHello() {
         return "sayHello says Hello!";
     },
