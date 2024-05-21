@@ -102,13 +102,14 @@ export declare const dtFnsFormats: {
  * the DB returns a timestamp as a string...
  * @return JS Date or formatted string or false
  */
-export declare function pkToDate(arg: any, fmt?: string | null): string | false | Date;
+export declare function pkToDate(arg: any): false | Date;
 /**
  * Quick Format a date with single format code & date
- * @param string fmt - one of an array
+ * @param string fmt - a key to pre-defined dtFnsFormats or dtfns format str
+ *
  * @param dt - datable or if null now  - but - if invalid, though returns false
  */
-export declare function dtFmt(fmt?: any, dt?: any): string;
+export declare function dtFmt(fmt?: string, dt?: any): string;
 /**
  * Return elements in arr1 Not In arr2
  */

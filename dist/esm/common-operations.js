@@ -341,7 +341,8 @@ export const dtFnsFormats = {
  * the DB returns a timestamp as a string...
  * @return JS Date or formatted string or false
  */
-export function pkToDate(arg, fmt = null) {
+//export function pkToDate(arg, fmt:string|null = null) {
+export function pkToDate(arg) {
     if (isNumeric(arg)) {
         arg = new Date(Number(arg));
     }
@@ -357,36 +358,41 @@ export function pkToDate(arg, fmt = null) {
     // TODO!! Just broke updating to latest version of date-fns - 19 Dec 2023
     //@ts-ignore
     if ((arg instanceof Date) && isValid(arg)) {
+        return arg;
+        /*
         if (!fmt) {
-            return arg;
+          return arg;
         }
         let fmtKeys = Object.keys(dtFnsFormats);
         if (fmtKeys.includes(fmt)) {
-            fmt = dtFnsFormats[fmt];
+          fmt = dtFnsFormats[fmt];
         }
         let formatted = format(arg, fmt);
         return formatted;
+        */
     }
     return false;
 }
 /**
  * Quick Format a date with single format code & date
- * @param string fmt - one of an array
+ * @param string fmt - a key to pre-defined dtFnsFormats or dtfns format str
+ *
  * @param dt - datable or if null now  - but - if invalid, though returns false
  */
-export function dtFmt(fmt, dt) {
+export function dtFmt(fmt = "short", dt) {
     let keys = Object.keys(dtFnsFormats);
-    if (!keys.includes(fmt)) {
-        fmt = 'short';
+    if (keys.includes(fmt)) {
+        fmt = dtFnsFormats[fmt];
+        //fmt = 'short';
     }
     dt = pkToDate(dt);
     if (dt === false) {
         return "FALSE";
     }
-    let fullFmt = dtFnsFormats[fmt];
+    //let fullFmt = dtFnsFormats[fmt];
     // TODO!! Just broke updating to latest version of date-fns - 19 Dec 2023
     //@ts-ignore
-    return format(dt, fullFmt);
+    return format(dt, fmt);
 }
 //Array utilities
 /**
