@@ -54,6 +54,8 @@
     "eslint-config-prettier": "*",
     "eslint-plugin-prettier": "*",
     "nodemon": "*",
+    "pk-ts-node-lib": "github:pkirkaas/pk-ts-node-lib#working",
+
     "typescript": "*"
   }
 }
