@@ -1662,25 +1662,64 @@ export function stripStray(str) {
     str = str.replaceAll(/['" ]/g, '');
     return str;
 }
+//TODO - These are NOT ALL CORRECT - this is improved but not fully debugged - 
 /** For attributes, etc, as valid JS variable.
  * BONUS: Strips any extraneous quotes, etc.
  * @return string - camelCased
  */
-export function toCamelCase(str) {
+export function camelCase(str) {
     if (!str || typeof str !== 'string') {
         return null;
     }
     str = stripStray(str);
+    /*
     return str.replace(/\W+(.)/g, function (match, chr) {
+      return chr.toUpperCase();
+    });
+    */
+    // Gets rid of kebab, but not '_'
+    let frK = str.replace(/\W+(.)/g, function (match, chr) {
         return chr.toUpperCase();
     });
+    let unCameled = frK.replace(/_+(.)/g, function (match, chr) {
+        return chr.toUpperCase();
+    });
+    return unCameled;
 }
+/**
+ * @deprecated - use camelCase instead
+ */
+export function toCamelCase(str) {
+    return camelCase(str);
+}
+//WRONG - actually converts to Kebab - keep because used elsewhere, but replaced by toSnake, toKebab, etc
+/**
+ * @deprecated - actually does kebab
+ */
 export function toSnakeCase(str) {
     if (!str || typeof str !== 'string') {
         return null;
     }
     str = stripStray(str);
     str = str.replace(/([a-z]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
+    return str;
+}
+export function kebabCase(str) {
+    if (!str || typeof str !== 'string') {
+        return null;
+    }
+    str = stripStray(str);
+    str = str.replace(/_/g, '-');
+    str = str.replace(/([a-z]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
+    return str;
+}
+export function snakeCase(str) {
+    if (!str || typeof str !== 'string') {
+        return null;
+    }
+    str = stripStray(str);
+    str = str.replace(/-/g, '_');
+    str = str.replace(/([a-z]|(?=[A-Z]))([A-Z])/g, '$1_$2').toLowerCase();
     return str;
 }
 /**

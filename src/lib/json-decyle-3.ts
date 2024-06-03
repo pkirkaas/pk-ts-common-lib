@@ -63,12 +63,15 @@ export function retrocycle() {
 }
 
 export const extend = (JSON: JSON) => {
+  if (JSON.decycle) {
+    return;
+  }
   return Object.defineProperties(JSON, {
     decycle: {
-      value: (object: any, space: string | number): string => JSON.stringify(object, decycle(), space)
+      value: (object: any, space: string | number): string => JSON.stringify(object, decycle(), space), configurable:true,
     },
     retrocycle: {
-      value: (s: string): any => JSON.parse(s, retrocycle())
+      value: (s: string): any => JSON.parse(s, retrocycle()), configurable:true,
     }
   })
 }

@@ -405,8 +405,17 @@ export declare function stripStray(str?: any): any;
  * BONUS: Strips any extraneous quotes, etc.
  * @return string - camelCased
  */
+export declare function camelCase(str?: any): any;
+/**
+ * @deprecated - use camelCase instead
+ */
 export declare function toCamelCase(str?: any): any;
+/**
+ * @deprecated - actually does kebab
+ */
 export declare function toSnakeCase(str?: any): any;
+export declare function kebabCase(str?: any): any;
+export declare function snakeCase(str?: any): any;
 /**
  * IMPORTANT! Standard is [longitude, latitude]!!!
  * Returns the geographic distance between two points of lon/lat in meters
