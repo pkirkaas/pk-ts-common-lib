@@ -2,7 +2,7 @@
  * Not sure this should work...
  */
 
-import {runCli} from 'pk-ts-node-lib';
+//import {runCli} from 'pk-ts-node-lib';
 import {toSnakeCase, toCamelCase, camelCase, snakeCase, kebabCase,
 }from '../index.js';
 
@@ -34,4 +34,5 @@ export let tstFncs = {
   },
 };
 
-runCli(tstFncs);
+//runCli(tstFncs);
+tstFncs.tsta();

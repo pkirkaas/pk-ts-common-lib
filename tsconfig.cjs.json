@@ -7,10 +7,12 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
   },
+  /*
   "ts-node": {
     "require": [
       "tsconfig-paths/register"
     ],
     "esm":false
   },
+  */
 }

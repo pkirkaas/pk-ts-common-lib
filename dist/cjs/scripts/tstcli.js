@@ -1,7 +1,7 @@
 /**
  * Not sure this should work...
  */
-import { runCli } from 'pk-ts-node-lib';
+//import {runCli} from 'pk-ts-node-lib';
 import { camelCase, snakeCase, kebabCase, } from '../index.js';
 export let tstFncs = {
     tsta() {
@@ -30,5 +30,6 @@ export let tstFncs = {
         console.log("In tstb");
     },
 };
-runCli(tstFncs);
+//runCli(tstFncs);
+tstFncs.tsta();
 //# sourceMappingURL=tstcli.js.map

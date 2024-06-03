@@ -5,6 +5,7 @@ module.exports = {
     jest: true,
   },
   ignorePatterns: [".eslintrc.js", "package.json"],
+  /*
   overrides: [
     {
       files: ["*.ts"],
@@ -25,4 +26,5 @@ module.exports = {
       },
     },
   ],
+  */
 };
