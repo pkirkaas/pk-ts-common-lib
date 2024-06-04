@@ -335,7 +335,7 @@ export declare function JSONParse(str: string): any;
  */
 export declare function JSON5Parse(str: string): any;
 /**
- * Takes a (possibly complex, deep) arg - primitie, object, array
+ * Takes a (possibly complex, deep) arg - primitive, object, array
  * @param any arg - Object, array or primitive
  * @param boolean toJson - false
  * Deep iterates for key names ending in '*JSON'
@@ -424,4 +424,5 @@ export declare function snakeCase(str?: any): any;
  * @return number - distance in meters
  */
 export declare function haversine(point1: GenObj | Array<number>, point2: GenObj | Array<number>): number | null;
+export declare function dotNotationToObject(obj: any): {};
 //# sourceMappingURL=common-operations.d.ts.map

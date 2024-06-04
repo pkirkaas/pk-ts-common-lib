@@ -1408,7 +1408,7 @@ export function JSON5Parse(str) {
     // }
 }
 /**
- * Takes a (possibly complex, deep) arg - primitie, object, array
+ * Takes a (possibly complex, deep) arg - primitive, object, array
  * @param any arg - Object, array or primitive
  * @param boolean toJson - false
  * Deep iterates for key names ending in '*JSON'
@@ -1763,6 +1763,22 @@ export function haversine(point1, point2) {
             Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c * 1000; // Distance in m
+}
+// Convert JS objects with . notation keys ("console.color") into object with nested keys
+//Untested - straight from hugging-face/llama-3
+export function dotNotationToObject(obj) {
+    const result = {};
+    for (const key in obj) {
+        const path = key.split('.');
+        let current = result;
+        for (let i = 0; i < path.length - 1; i++) {
+            const prop = path[i];
+            current[prop] = current[prop] || {};
+            current = current[prop];
+        }
+        current[path[path.length - 1]] = obj[key];
+    }
+    return result;
 }
 // Claude 
 /*
