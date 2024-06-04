@@ -401,9 +401,21 @@ export declare function parseHeaderString(str: any): any;
  * from a string.
  */
 export declare function stripStray(str?: any): any;
+export declare function toCamel(str: any): any;
+export declare function toSnake(str: any): any;
+export declare function toKebab(str: any): any;
+/**
+ * Straight from Llama3
+ * Returns new JS object w. all keys converted to kebab-case, or camelCase
+ */
+export declare function kebabKeys(obj: any): GenObj;
+export declare function camelKeys(obj: any): GenObj;
 /** For attributes, etc, as valid JS variable.
  * BONUS: Strips any extraneous quotes, etc.
  * @return string - camelCased
+ */
+/**
+ * @deprecated - prefer toCamel
  */
 export declare function camelCase(str?: any): any;
 /**
@@ -411,10 +423,16 @@ export declare function camelCase(str?: any): any;
  */
 export declare function toCamelCase(str?: any): any;
 /**
- * @deprecated - actually does kebab
+ * @deprecated - use toSnake
  */
 export declare function toSnakeCase(str?: any): any;
+/**
+ * @deprecated - use toKebab
+ */
 export declare function kebabCase(str?: any): any;
+/**
+ * @deprecated - use toSnake
+ */
 export declare function snakeCase(str?: any): any;
 /**
  * IMPORTANT! Standard is [longitude, latitude]!!!

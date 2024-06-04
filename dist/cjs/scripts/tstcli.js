@@ -2,17 +2,19 @@
  * Not sure this should work...
  */
 //import {runCli} from 'pk-ts-node-lib';
-import { camelCase, snakeCase, kebabCase, } from '../index.js';
+import { toCamel, toSnake, toKebab, kebabKeys, camelKeys, } from '../index.js';
 export let tstFncs = {
     tsta() {
         let tstStrs = {
-            pascal: "OrigPascalCased",
+            // pascal: "OrigPascalCased",
             snaked: "orig_snake_cased",
             kebabed: "orig-is-kebabed",
             camel: "origIsCamel",
+            weirdKey: "& : > table",
         };
         //let ops = {toSnakeCase, toCamelCase}, ;
-        let ops = { snakeCase, camelCase, kebabCase };
+        //let ops = {snakeCase, camelCase, kebabCase} ;
+        let ops = { toCamel, toSnake, toKebab, };
         let res = {};
         let resArr = [];
         for (let key in tstStrs) {
@@ -27,9 +29,31 @@ export let tstFncs = {
         console.log("In tsta", resArr);
     },
     tstb() {
-        console.log("In tstb");
+        let keyTst = {
+            kebObj: {
+                'a-k-key': "a-k-val",
+                aCamelKey: "aCamelVal",
+            },
+            camelObj: {
+                camelKeyInCamelObj: "some value",
+                "kebab-key-in-camel": "Another other val",
+                "weird > & key": "Some day soon...",
+            },
+        };
+        let ops = { kebabKeys, camelKeys };
+        let resArr = [];
+        for (let key in keyTst) {
+            let orig = keyTst[key];
+            let resObj = { orig };
+            for (let opk in ops) {
+                let op = ops[opk];
+                resObj[opk] = op(orig);
+            }
+            resArr.push(resObj);
+        }
+        console.log("In tstb", resArr);
     },
 };
 //runCli(tstFncs);
-tstFncs.tsta();
+tstFncs.tstb();
 //# sourceMappingURL=tstcli.js.map

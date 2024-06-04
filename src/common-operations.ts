@@ -1821,6 +1821,72 @@ export function stripStray(str?: any) {
   return str;
 }
 
+export function toCamel(str) {
+  if (typeof str!=='string') {
+    throw new Error('Input must be a string');
+  }
+  //str = stripStray(str);
+  str = str.trim();
+  return str.replace(/[_-](\w)/g, (_, group1) => group1.toUpperCase());
+}
+
+export function toSnake(str) {
+  if (typeof str!=='string') {
+    throw new Error('Input must be a string');
+  }
+  str = str.trim();
+  return str.replace(/([A-Z])/g, (_, group1) => `-${group1.toLowerCase()}`).replace(/-/g, '_');
+}
+
+
+
+
+
+export function toKebab(str) {
+  if (typeof str!=='string') {
+    throw new Error('Input must be a string');
+  }
+  str = str.trim();
+  return str.replace(/([A-Z])/g, (_, group1) => `-${group1.toLowerCase()}`).replace(/_/g, '-');
+}
+
+
+
+/**
+ * Straight from Llama3
+ * Returns new JS object w. all keys converted to kebab-case, or camelCase
+ */
+
+export function kebabKeys(obj):GenObj {
+  return recursiveKeyConversion(obj, toKebab);
+}
+
+export function camelKeys(obj):GenObj {
+  return recursiveKeyConversion(obj, toCamel);
+}
+
+function recursiveKeyConversion(obj, conversionFunction):GenObj {
+  if (typeof obj!== 'object') {
+    return obj;
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map(item => recursiveKeyConversion(item, conversionFunction));
+  }
+
+  const newObj:GenObj = {};
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      const newKey = conversionFunction(key);
+      newObj[newKey] = recursiveKeyConversion(obj[key], conversionFunction);
+    }
+  }
+  return newObj;
+}
+
+
+
+
 
 //TODO - These are NOT ALL CORRECT - this is improved but not fully debugged - 
 /** For attributes, etc, as valid JS variable.
@@ -1828,66 +1894,41 @@ export function stripStray(str?: any) {
  * @return string - camelCased
  */
 
+/**
+ * @deprecated - prefer toCamel
+ */
 export function camelCase(str?: any) {
-  if (!str || typeof str !== 'string') {
-    return null;
-  }
-  str = stripStray(str);
-  /*
-  return str.replace(/\W+(.)/g, function (match, chr) {
-    return chr.toUpperCase();
-  });
-  */
- // Gets rid of kebab, but not '_'
-
-  let frK = str.replace(/\W+(.)/g, function (match, chr) {
-    return chr.toUpperCase();
-  });
-  let unCameled =  frK.replace(/_+(.)/g, function (match, chr) {
-    return chr.toUpperCase();
-  });
-  return unCameled;
+  return toCamel(str);
 }
 
 /**
  * @deprecated - use camelCase instead
  */
 export function toCamelCase(str?: any) {
-  return camelCase(str);
+  return toCamel(str);
 }
 
 //WRONG - actually converts to Kebab - keep because used elsewhere, but replaced by toSnake, toKebab, etc
 /**
- * @deprecated - actually does kebab
+ * @deprecated - use toSnake
  */
 export function toSnakeCase(str?: any) {
-  if (!str || typeof str !== 'string') {
-    return null;
-  }
-  str = stripStray(str);
-  str = str.replace(/([a-z]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
-  return str;
+  return toSnake(str);
 }
 
+/**
+ * @deprecated - use toKebab
+ */
 export function kebabCase(str?: any) {
-  if (!str || typeof str !== 'string') {
-    return null;
-  }
-  str = stripStray(str);
-  str = str.replace(/_/g, '-');
-  str = str.replace(/([a-z]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
-  return str;
+  return toKebab(str);
 }
 
 
+/**
+ * @deprecated - use toSnake
+ */
 export function snakeCase(str?: any) {
-  if (!str || typeof str !== 'string') {
-    return null;
-  }
-  str = stripStray(str);
-  str = str.replace(/-/g, '_');
-  str = str.replace(/([a-z]|(?=[A-Z]))([A-Z])/g, '$1_$2').toLowerCase();
-  return str;
+  return toSnake(str);
 }
 
 
