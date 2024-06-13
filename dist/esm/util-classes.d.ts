@@ -5,10 +5,11 @@
 */
 /**
  * Initial placeholder for generic error class with more details than "Error"
+ *
  */
 export declare class PkError extends Error {
     details?: any;
     extra?: any;
-    constructor(msg: any, ...params: any[]);
+    constructor(msg: string, ...params: any[]);
 }
 //# sourceMappingURL=util-classes.d.ts.map

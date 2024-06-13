@@ -4,18 +4,24 @@
 	* Paul Kirkaas 
 */
 
-import { GenObj, GenericObject, jsonClone, isObject, isSimpleObject, isPrimitive, isEmpty, isSubset, arraysEqual, inArr1NinArr2, intersect, typeOf } from './index.js';
+import { GenObj, GenericObject, jsonClone, isObject, isSimpleObject, isPrimitive, isEmpty, isSubset, arraysEqual, inArr1NinArr2, intersect, typeOf, JSON5Stringify, } from './index.js';
 
 /**
  * Initial placeholder for generic error class with more details than "Error"
+ * 
  */
 export class PkError extends Error {
 	details?: any;
 	extra?: any;
-	constructor(msg, ...params) { //, details?: any, ...extra ) {
+	constructor(msg:string, ...params) { //, details?: any, ...extra ) {
 		let opts: any = null;
-		if (Array.isArray(params) && params.length) {
-			opts = params[0];
+		if (Array.isArray(params) && params.length) { 
+			if (isObject(params[0]) && params[0].cause) {// Assume params[0] is JS Error opts
+				opts = params.shift();
+			}
+			if (Array.isArray(params) && params.length) { // JSON Stringify remaining params & add to msg
+				msg = `${msg}\n${JSON5Stringify(params)}`;
+			}
 		}
 		// JS Error constructor only uses opts if is an object with key 'cause'
 		super(msg, opts);
