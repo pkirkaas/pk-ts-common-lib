@@ -467,4 +467,10 @@ export declare function dotNotationToObject(obj: any): {};
  * @return - the target value
  */
 export declare function dotPathVal(obj: any, ...keyPaths: any[]): any;
+/**
+ * Return array of all possible combination of input arrays
+ * @param arrays[] - input arrays
+ * @return array of all combinations
+ */
+export declare function cartesianProduct(...arrays: any[]): any;
 //# sourceMappingURL=common-operations.d.ts.map

@@ -2063,47 +2063,21 @@ export function dotPathVal(obj, ...keyPaths) {
   return tmpVal;
 }
 
-// Claude 
-/*
-export function haversine(point1: GenObj | Array<number>, point2: GenObj | Array<number>): number | null {
-  let lat1, lat2, lon1, lon2: number;
-  if (Array.isArray(point1)) {
-    lat1 = point1[0];
-    lon1 = point1[1];
-  } else if (isObject(point1)) {
-    lat1 = point1.lat;
-    lon1 = point1.lon;
-  } else {
-    throw new PkError(`Invalid point1 arg to haversine:`, { point1 })
-  }
-  if (Array.isArray(point2)) {
-    lat2 = point2[0];
-    lon2 = point2[1];
-  } else if (isObject(point2)) {
-    lat2 = point2.lat;
-    lon2 = point2.lon;
-  } else {
-    throw new PkError(`Invalid point2 arg to haversine:`, { point2 });
-  }
-  const R = 6371e3; // Earth's radius in meters
+/**
+ * Return array of all possible combination of input arrays
+ * @param arrays[] - input arrays
+ * @return array of all combinations
+ */
+export function cartesianProduct(...arrays) {
+  // Initialize with an empty array within an array
+  return arrays.reduce((acc, array) => {
+    // If array is empty, just return the accumulated results so far
+    if (array.length === 0) return acc;
 
-  const φ1 = (lat1 * Math.PI) / 180; // Convert latitude to radians
-  const φ2 = (lat2 * Math.PI) / 180;
-  const Δφ = ((lat2 - lat1) * Math.PI) / 180;
-  const Δλ = ((lon2 - lon1) * Math.PI) / 180;
-
-  const a =
-    Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-    Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-  return R * c;
-
+    // Accumulate combinations of current result and new array
+    return acc.flatMap(accElem => array.map(elem => [...accElem, elem]));
+  }, [[]]);
 }
-
-*/
-
-
 
 
 
