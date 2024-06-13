@@ -518,7 +518,7 @@ export function isCli(report = false) {
   if (!lisCli && report) {
     console.error("WARNING - calling a CLI-ONLY function in a non-cli runtime:", { runtime });
   }
-  console.log("In isCli; runtime:", { runtime, lisCli });
+  //console.log("In isCli; runtime:", { runtime, lisCli });
   return lisCli;
 }
 
@@ -2051,7 +2051,7 @@ export function dotPathVal(obj, ...keyPaths) {
     let fpArr = fPath.split('.');
     ffPaths = ffPaths.concat(fpArr);
   }
-  console.log("Testing dotPath deref:", {obj, keyPaths, fPaths, ffPaths});
+  //console.log("Testing dotPath deref:", {obj, keyPaths, fPaths, ffPaths});
   let tmpVal:any = obj;
   for (let key of ffPaths) {
     if (!tmpVal || isEmpty(tmpVal) || !isSimpleObject(tmpVal)) {
