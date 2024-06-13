@@ -1,7 +1,7 @@
 
 import {
 	filterInt, getRandEls, GenObj, dtFmt, pkToDate, deepMeld, uniqueVals, PkError, TagObj, TagObjCol, typeOf, isEmpty, allProps, JSON5, isSubset, isObject,
-	classStack, getAllBuiltInProps, objInfo, toSnakeCase, toCamelCase,
+	classStack, getAllBuiltInProps, objInfo, toSnakeCase, toCamelCase, dotPathVal,
 	arraysEqual, getConstructorChain, getPrototypeChain, getObjDets, stripStray, arrayToLower, isJsonStr, isJson5Str, JSON5Stringify, JSON5Parse,
 	//JSON5
 } from '../index.js';

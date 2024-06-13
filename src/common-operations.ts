@@ -1861,6 +1861,13 @@ export function kebabKeys(obj):GenObj {
   return recursiveKeyConversion(obj, toKebab);
 }
 
+/**
+ * Takes a flat object & returns new object w. keys either cammelCased (default) or
+ * snake cased if toCamel=false
+ * @param obj:GenObj
+ * @return new GenObj w. keys appropriately cased.
+ */
+
 export function camelKeys(obj):GenObj {
   return recursiveKeyConversion(obj, toCamel);
 }
@@ -1977,6 +1984,36 @@ export function haversine(point1: GenObj | Array<number>, point2: GenObj | Array
   return R * c * 1000; // Distance in m
 }
 
+// Also untested - two versions to test if iterable
+// Two isIterable suggestions - 
+// USE isIterableTest for a while to compare!
+/**
+ * @deprecated - Not really - just a reminder to use isIterableTest for a while to check
+ */
+export function isIterable(arg) {  
+  if (arg === null || arg === undefined) {
+    return false
+  }
+  return typeof arg[Symbol.iterator] === 'function'
+}
+
+/**
+ * @deprecated - Not really - just a reminder to use isIterableTest for a while to check
+ */
+export function is_iterable(arg) {
+  return (Reflect.has(arg, Symbol.iterator)) &&
+  (typeof (arg[Symbol.iterator]) === "function");
+}
+
+export function isIterableTest(arg) {
+  let r1 = is_iterable(arg);
+  let r2 = isIterable(arg);
+  if (r1 !== r2) {
+    throw new Error(`isIterableTest failed with different results`);
+  }
+  return r1;
+}
+
 // Convert JS objects with . notation keys ("console.color") into object with nested keys
 
 //Untested - straight from hugging-face/llama-3
@@ -1994,6 +2031,36 @@ export function dotNotationToObject(obj) {
     current[path[path.length - 1]] = obj[key];
   }
   return result;
+}
+
+/**
+ * Returns object value from array of keys - maybe '.' separated 
+ * Tolerant - if not a valid path/value, return undefined
+ * TODO: What if path component value exists, but not an object?
+ * @param obj - a JS object to navigate
+ * @param keyPaths string[] - array of key paths - nested arr, if '.' separated, decompose
+ * @return - the target value
+ */
+export function dotPathVal(obj, ...keyPaths) {
+  if (!isSimpleObject(obj)) {
+    return null;
+  }
+  let fPaths = keyPaths.flat(Infinity);
+  let ffPaths = [];
+  for (let fPath of fPaths) {
+    let fpArr = fPath.split('.');
+    ffPaths = ffPaths.concat(fpArr);
+  }
+  console.log("Testing dotPath deref:", {obj, keyPaths, fPaths, ffPaths});
+  let tmpVal:any = obj;
+  for (let key of ffPaths) {
+    if (!tmpVal || isEmpty(tmpVal) || !isSimpleObject(tmpVal)) {
+      //return null;
+      return;
+    }
+    tmpVal = tmpVal[key];
+  }
+  return tmpVal;
 }
 
 // Claude 

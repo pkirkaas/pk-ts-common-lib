@@ -4,10 +4,25 @@
 
 //import {runCli} from 'pk-ts-node-lib';
 import {toSnakeCase, toCamelCase, camelCase, snakeCase, kebabCase, toCamel,  toSnake, toKebab, 
-  kebabKeys, camelKeys,
+  kebabKeys, camelKeys, dotPathVal,
 }from '../index.js';
 
 export let tstFncs = {
+  tstDPV() {
+    let tstOb = {
+      a: {
+        b: {
+          c: ['aV','bV','cV'],
+        }
+      },
+      c: {
+      },
+    };
+
+    let tsPA = ['a','b.c'];
+    let dpV = dotPathVal(tstOb, tsPA);
+    console.log(`tstDPV`,{dpV});
+  },
   tsta() {
     let tstStrs = {
      // pascal: "OrigPascalCased",
@@ -60,4 +75,5 @@ export let tstFncs = {
 };
 
 //runCli(tstFncs);
-tstFncs.tstb();
+//tstFncs.tstb();
+tstFncs.tstDPV();

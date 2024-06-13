@@ -409,6 +409,12 @@ export declare function toKebab(str: any): any;
  * Returns new JS object w. all keys converted to kebab-case, or camelCase
  */
 export declare function kebabKeys(obj: any): GenObj;
+/**
+ * Takes a flat object & returns new object w. keys either cammelCased (default) or
+ * snake cased if toCamel=false
+ * @param obj:GenObj
+ * @return new GenObj w. keys appropriately cased.
+ */
 export declare function camelKeys(obj: any): GenObj;
 /** For attributes, etc, as valid JS variable.
  * BONUS: Strips any extraneous quotes, etc.
@@ -442,5 +448,23 @@ export declare function snakeCase(str?: any): any;
  * @return number - distance in meters
  */
 export declare function haversine(point1: GenObj | Array<number>, point2: GenObj | Array<number>): number | null;
+/**
+ * @deprecated - Not really - just a reminder to use isIterableTest for a while to check
+ */
+export declare function isIterable(arg: any): boolean;
+/**
+ * @deprecated - Not really - just a reminder to use isIterableTest for a while to check
+ */
+export declare function is_iterable(arg: any): boolean;
+export declare function isIterableTest(arg: any): boolean;
 export declare function dotNotationToObject(obj: any): {};
+/**
+ * Returns object value from array of keys - maybe '.' separated
+ * Tolerant - if not a valid path/value, return undefined
+ * TODO: What if path component value exists, but not an object?
+ * @param obj - a JS object to navigate
+ * @param keyPaths string[] - array of key paths - nested arr, if '.' separated, decompose
+ * @return - the target value
+ */
+export declare function dotPathVal(obj: any, ...keyPaths: any[]): any;
 //# sourceMappingURL=common-operations.d.ts.map
