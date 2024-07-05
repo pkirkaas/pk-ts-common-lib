@@ -51,3 +51,24 @@ export function createAxios(opts: GenObj = {}) {
 	let config = {};
 	return axios.create(config);
 }
+
+/**
+ * An axios error can have several forms/reasons (see: https://axios-http.com/docs/handling_errors)
+ * with several handling cases. This simplifies & returns
+ */
+export function parseAxiosError(error) {
+	let err:GenObj = { config:error.config,
+    message:error.message,
+	};
+	if (error.response) {
+		let resp = error.response;
+		err.data = resp.data;
+		err.status = resp.status;
+		err.headers = resp.headers;
+	} else if (error.request) {
+		err.request = error.request;
+	} else {
+		err.other = "General Axios Error";
+	}
+	return err;
+}

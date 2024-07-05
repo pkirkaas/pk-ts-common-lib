@@ -27,4 +27,9 @@ export declare const axiosSettings: {
     };
 };
 export declare function createAxios(opts?: GenObj): import("axios").AxiosInstance;
+/**
+ * An axios error can have several forms/reasons (see: https://axios-http.com/docs/handling_errors)
+ * with several handling cases. This simplifies & returns
+ */
+export declare function parseAxiosError(error: any): GenObj;
 //# sourceMappingURL=axios-init.d.ts.map
