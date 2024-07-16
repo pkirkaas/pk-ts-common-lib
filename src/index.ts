@@ -12,7 +12,7 @@ export type GenObj = { [key: string]: any };
 /**
  * Not sure this works - supposedly creates a type that can get the class type of an instance:
  * Usage:
- * class MyClass {
+class MyClass {
   instanceMethod() {
     const Class = this.constructor as ClassType<typeof this>;
     return Class.someStaticMethod();
