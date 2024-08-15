@@ -30,7 +30,7 @@
     "tstarg": "echo Something and --"
   },
   "dependencies": {
-    "axios": "*",
+    "axios": "1.7.4",
     "date-fns": "latest",
     "error-stack-parser": "*",
     "json5": "*",
