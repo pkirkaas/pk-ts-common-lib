@@ -457,7 +457,12 @@ export declare function isIterable(arg: any): boolean;
  */
 export declare function is_iterable(arg: any): boolean;
 export declare function isIterableTest(arg: any): boolean;
-export declare function dotNotationToObject(obj: any): {};
+/**
+ *  Convert JS objects with . notation keys (default) ("console.color") into object with nested keys
+ * @param obj - a JS object to navigate
+ * @param splitter - default '.' - the character to split on
+ */
+export declare function dotNotationToObject(obj: any, splitter?: string): {};
 /**
  * Returns object value from array of keys - maybe '.' separated
  * Tolerant - if not a valid path/value, return undefined

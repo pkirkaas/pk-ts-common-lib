@@ -1821,12 +1821,16 @@ export function isIterableTest(arg) {
     }
     return r1;
 }
-// Convert JS objects with . notation keys ("console.color") into object with nested keys
+/**
+ *  Convert JS objects with . notation keys (default) ("console.color") into object with nested keys
+ * @param obj - a JS object to navigate
+ * @param splitter - default '.' - the character to split on
+ */
 //Untested - straight from hugging-face/llama-3
-export function dotNotationToObject(obj) {
+export function dotNotationToObject(obj, splitter = '.') {
     const result = {};
     for (const key in obj) {
-        const path = key.split('.');
+        const path = key.split(splitter);
         let current = result;
         for (let i = 0; i < path.length - 1; i++) {
             const prop = path[i];
