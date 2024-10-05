@@ -1,13 +1,15 @@
+/**
+ * @library - pk-ts-common 
+ * @file - common-operations.ts
+ * @fileoverview - Library of `ES2022` TypeScript/JavaScript utility functions for use in both Node.js & browser environments.
+ */
 
-//const urlStatus = require('url-status-code');
 import urlStatus from 'url-status-code';
 import JSON5 from 'json5';
-/** DO THESE WORK IN BROWSERS??? */
+
 import path from 'path';
 //import util from 'util'; //Or try: https://github.com/browserify/node-util
 
-//const JSON5 = require('json5');
-//linked?
 declare global {
   interface JSON {
     decycle(object: any): any;
@@ -21,54 +23,30 @@ declare global {
 
 }
 
-//const _ = require("lodash");
 import _ from "lodash";
 import { PkError, GenericObject, GenObj } from './index.js';
-//@ts-ignore
-//import jsondecycle from "json-decycle";
-//import { jsondecycle } from "./lib/json-decycle.js";
-//import { decycle, retrocycle, extend } from "./lib/json-decycle.js";
-//import { decycle, retrocycle, extend } from "./lib/json5-decycle.js";
-//import { decycle, retrocycle, extend } from "json-decycle";
-
-//import jsonDecycle from "json-decycle";
-//const { decycle, retrocycle, extend } = jsonDecycle;
-
-//import { decycle, retrocycle, extend } from "./lib/json-decycle-3.js";
 
 import { decycle, retrocycle, extend } from "./lib/json-decyle-3.js";
-//json-decyle-3
-
-
-//export { jsondecycle };
-//decycle, retrocycle, extend
 //@ts-ignore
 extend(JSON5);
 
-//import { default as JSON5 } from 'json5';
-//import  JSON5  from 'json5';
 import * as ESP from "error-stack-parser";
-//const axios = require("axios");
-//import { axios } from "Axios";
 import axios from "axios";
 import { formatISO, isValid, add, } from "date-fns";
 import { format, } from "date-fns/format";
-//import { format, isValid } from "date-fns";
 export { urlStatus, JSON5, GenericObject, GenObj };
-//const path = require("path/posix");
-//const path = require("path/posix");
-/** NODE SPECIFIC
-*/
 
-///////////////  Check if running in commonJS or ESM Module env. TOTALLY UNTESTED - CODE FROM BARD -in 2023
-// But it finally compiles in tsc for each target - commonjs & esm - try testing !!
+/**
+ * Check if running in commonJS or ESM Module env.
+ * TOTALLY UNTESTED - CODE FROM BARD -in 2023
+ * But it finally compiles in tsc for each target - commonjs & esm - try testing !!
+ */
 
 export function isESM(): boolean {
   return typeof module === 'object'
     && module.exports
     && typeof Symbol !== 'undefined'
     && String(Symbol.toStringTag) === 'Module';
-
 }
 
 export function isCommonJS(): boolean {
@@ -77,9 +55,7 @@ export function isCommonJS(): boolean {
 }
 
 
-
-//STaRT  Stack examination section  
-
+//Start  Stack examination section  
 /**
  * Returns stack trace as array
  * Error().stack returns a string. Convert to array
@@ -91,7 +67,6 @@ export function getStack(offset = 0) {
   offset += 2;
   let stackStr = Error().stack;
   let stackArr = stackStr.split("at ");
-  //console.log({ stackArr });
   stackArr = stackArr.slice(offset);
   let ret = [];
   for (let row of stackArr) {
@@ -100,7 +75,9 @@ export function getStack(offset = 0) {
   return ret;
 }
 
-/** Trying move from ts-node-lib */
+/** 
+ * Parse the call stack
+ */
 export function stackParse() {
   let stack = ESP.parse(new Error());
   let ret = [];
@@ -115,7 +92,12 @@ export function stackParse() {
   return ret;
 }
 
-// Move to common? Basic info for console logging 
+/**
+ *	Generates a timestamp string with basic info for console logging.
+ * @param entry (any) - Optional parameter representing additional information to include in the timestamp. Default value is undefined
+ * @param frameAfter (any) - Optional parameter specifying a function name or array of function names to skip when determining the stack frame. Default value is undefined.
+ * @return String A formatted timestamp string including the specified entry, file name, function name, and line numberstring
+ */
 export function stamp(entry?: any, frameAfter?: any) {
   let entId = "";
   //console.log({ entry });
@@ -124,134 +106,98 @@ export function stamp(entry?: any, frameAfter?: any) {
       entId = entry.id;
     }
   }
-
-// Move to common? Basic info for console logging
   let frame = getFrameAfterFunction(frameAfter, true);
-  //let frame = getFrameAfterFunction2(frameAfter, true);
-  //let frame = getFrameAfterFunction(frameAfter, true);
   let src = "";
   if (frame) {
     src = `:${path.basename(frame.fileName)}:${frame.functionName}:${frame.lineNumber}:`;
-    //console.log({ frame });
   }
   let now = new Date();
 
   let pe = process.env.PROCESS_ENV;
-    // TODO!! Just broke updating to latest version of date-fns - 19 Dec 2023
   //@ts-ignore
   let ds = format(now, "y-LL-dd H:m:s");
   return `${ds}-${pe}${src}: ${entId} `;
 }
 
 
-  export function getFrameAfterFunction(fname?: any, forceFunction?: any) {
-    if (fname && typeof fname === "string") {
-      fname = [fname];
-    }
-    if (!Array.isArray(fname)) {
-      fname = [];
-    }
-    let stack: any;
-    try {
-      stack = ESP.parse(new Error());
-    } catch (err) {
-      //console.error("Error in ESP.parse/getFrameAfterFunction:", jsonClone(err));
-      console.error("Error in ESP.parse/getFrameAfterFunction:");
-      return;
-    }
-  
-    let excludeFncs = [
-      "errLog", "baseLog", "getFrameAfterFunction", "getFrameAfterFunction2", "consoleLog", "consoleError",
-      "infoLog", "debugLog", "stamp", "fulfilled", "rejected", "processTicksAndRejections", "LogData.log",
-      "LogData.out", "LogData.console", "LogData.errLog", "LogData.throw",
-    ];
-    //let fnSkips = ["__awaiter", "Object.<anonymous>", "undefined", undefined];
-    let fnSkips = ["__awaiter", "undefined", undefined];
-    let allSkips = fnSkips.concat(excludeFncs);
-  
-  
-    let skips = excludeFncs.concat(fname);
-    //writeFile(`../tmp/stack-${uv}.json`, stack);
-    //  console.log("Rest of the Stack:", { stack });
-    let lastFrame: any = stack.shift();
-    let frame: any;
-    let nextFrame: any;
-  
-    while ((frame = stack.shift())) {
-      lastFrame = frame;
-      //if (frame.functionName && !skips.includes(frame.functionName)) {
-      if (!skips.includes(frame.functionName)) {
-        //if (frame.functionName && !allSkips.includes(frame.functionName)) {
-        break;
-      }
-    }
-    //  console.log("After break - should have lastFrame!", { lastFrame, frame, stack });
-    let functionName: any = lastFrame.functionName;
-  
-    let exFns = skips.concat(fnSkips);
-    //if (!functionName || (exFns.includes(functionName) && forceFunction)) {
-    if (!functionName || (exFns.includes(functionName) && forceFunction)) {
-      //console.log(`Skipping ${functionName}`, { lastFrame });
-      // Continue through frames for next function name...
-      //'Object.<anonymous>'
-      while ((nextFrame = stack.shift())) {
-        let tsFn = nextFrame.functionName;
-        if (tsFn && !exFns.includes(tsFn)) {
-          functionName = nextFrame.functionName;
-          //      console.log(`Returning? tsFn: ${tsFn}, fname: ${functionName} `);
-          lastFrame.functionName = functionName;
-          return lastFrame;
-          //break;
-        }
-      }
-    }
-    return lastFrame;
+/**
+ *  Retrieves the stack frame after a specified function.
+ * @param fname (string|array) - The name of the function or an array of function names to skip when determining the stack frame. Default value is undefined.
+ @param   forceFunction (boolean) - Optional parameter indicating whether to force the retrieval of a function name even if it matches one in the exclude list. Default value is false.
+
+ @return Object - An object containing the file name, function name, and line number of the stack frame after the specified function.
+ */
+export function getFrameAfterFunction(fname?: any, forceFunction?: any) {
+  if (fname && typeof fname === "string") {
+    fname = [fname];
+  }
+  if (!Array.isArray(fname)) {
+    fname = [];
+  }
+  let stack: any;
+  try {
+    stack = ESP.parse(new Error());
+  } catch (err) {
+    console.error("Error in ESP.parse/getFrameAfterFunction:");
+    return;
   }
 
+  let excludeFncs = [
+    "errLog", "baseLog", "getFrameAfterFunction", "getFrameAfterFunction2", "consoleLog", "consoleError",
+    "infoLog", "debugLog", "stamp", "fulfilled", "rejected", "processTicksAndRejections", "LogData.log",
+    "LogData.out", "LogData.console", "LogData.errLog", "LogData.throw",
+  ];
+  let fnSkips = ["__awaiter", "undefined", undefined];
+  let allSkips = fnSkips.concat(excludeFncs);
+  let skips = excludeFncs.concat(fname);
+  let lastFrame: any = stack.shift();
+  let frame: any;
+  let nextFrame: any;
 
-  // END Stack analasys functions
-
-  /*
-// Move to common? Basic info for console logging
-  let frame = getFrameAfterFunction(frameAfter, true);
-  //let frame = getFrameAfterFunction2(frameAfter, true);
-  //let frame = getFrameAfterFunction(frameAfter, true);
-  let src = "";
-  if (frame) {
-    src = `:${path.basename(frame.fileName)}:${frame.functionName}:${frame.lineNumber}:`;
-    //console.log({ frame });
+  while ((frame = stack.shift())) {
+    lastFrame = frame;
+    if (!skips.includes(frame.functionName)) {
+      break;
+    }
   }
-  let now = new Date();
-
-  let pe = process.env.PROCESS_ENV;
-    // TODO!! Just broke updating to latest version of date-fns - 19 Dec 2023
-  //@ts-ignore
-  let ds = format(now, "y-LL-dd H:m:s");
-  return `${ds}-${pe}${src}: ${entId} `;
+  let functionName: any = lastFrame.functionName;
+  let exFns = skips.concat(fnSkips);
+  if (!functionName || (exFns.includes(functionName) && forceFunction)) {
+    while ((nextFrame = stack.shift())) {
+      let tsFn = nextFrame.functionName;
+      if (tsFn && !exFns.includes(tsFn)) {
+        functionName = nextFrame.functionName;
+        lastFrame.functionName = functionName;
+        return lastFrame;
+      }
+    }
+  }
+  return lastFrame;
 }
-*/
+
+
+// END Stack analasys functions
+
 
 /**
  * Return just the subset of the object, for keys specified in the "fields" array.
  * ACTUAALLY - can be deep -
  * @param obj - src object
  * @param fields mixed array of string keys, or object with single key field with array of fields - called recursively
- * @return specified subset of object
+ * @return object - specified subset of object
  */
-export function subObj(obj: GenericObject, fields: any[]):GenObj {
+export function subObj(obj: GenericObject, fields: any[]): GenObj {
   let ret: GenObj = {};
   for (let field of fields) {
-    //console.log("In subObj, field:",{field});
     if (isObject(field)) {
-      let key:string = Object.keys(field)[0];
-      let keyFields:any = field[key];
+      let key: string = Object.keys(field)[0];
+      let keyFields: any = field[key];
       if (isPrimitive(keyFields)) {
         keyFields = [keyFields];
       }
       let objKeyVal = obj[key];
-      let retKeyVal = subObj(objKeyVal, keyFields); 
+      let retKeyVal = subObj(objKeyVal, keyFields);
       ret[key] = subObj(objKeyVal, keyFields);
-      //console.log(`in subObj w objField`,{field, retKeyVal, key,keyFields, objKeyVal, obj});
     } else {
       ret[field] = obj[field];
     }
@@ -259,20 +205,21 @@ export function subObj(obj: GenericObject, fields: any[]):GenObj {
   return ret;
 }
 
+
+export const dfnsKeys = [`years`, `months`, `weeks`, `days`, `hours`, `minutes`, `seconds`,];
+
 /** Takes a 'duration' object for date-fns/add and validate
  * it. Optionall, converts to negative (time/dates in past)
  * @param obj object - obj to test
  * //@param boolean forceNegative - force to negative/past offest?
  * @return duration 
  */
-export const dfnsKeys = [`years`, `months`, `weeks`, `days`, `hours`, `minutes`, `seconds`,];
-//export function validateDateFnsDuration(obj, forceNegative = false) {
-export function validateDateFnsDuration(obj:any) {
+export function validateDateFnsDuration(obj: any) {
   if (!isSimpleObject(obj) || isEmpty(obj)) {
     return false;
   }
   let keys = Object.keys(obj);
-  if (!intersect(keys,dfnsKeys).length) {
+  if (!intersect(keys, dfnsKeys).length) {
     return false;
   }
   for (let key in obj) {
@@ -299,9 +246,15 @@ export function strIncludesAny(str: string, substrs: any) {
 }
 
 
+/**
+ * Checks if a given argument is a Promise.
+ * @param arg - The argument to check.
+ * @return - boolean true if arg is a Promise, else false
+ */
 export function isPromise(arg?) {
   return !!arg && typeof arg === "object" && typeof arg.then === "function";
 }
+
 /** From Mozilla - a stricter int parser */
 export function filterInt(value) {
   if (/^[-+]?(\d+|Infinity)$/.test(value)) {
@@ -311,12 +264,6 @@ export function filterInt(value) {
     return false;
   }
 }
-/*
-export function getEspStack() {
-  let stack = ESP.parse(new Error());
-  return stack;
-}
-*/
 
 /**
  * Takes a browser event & tries to get some info
@@ -334,13 +281,16 @@ export function eventInfo(ev) {
   }
   return eventDets;
 }
+
 /**
  * Checks if the arg can be converted to a number
  * If not, returns boolean false
  * If is numeric:
  *   returns boolean true if asNum is false
  *   else returns the numeric value (which could be 0)
- * @param asNum boolean - if true, 
+ * @param arg - argument to check
+ * @param asNum boolean - if true, returns the numeric value
+ * @return number or boolean true/false
  * 
  */
 
@@ -395,7 +345,6 @@ export const dtFnsFormats = {
  * the DB returns a timestamp as a string...
  * @return JS Date or formatted string or false
  */
-//export function pkToDate(arg, fmt:string|null = null) {
 export function pkToDate(arg) {
   if (isNumeric(arg)) {
     arg = new Date(Number(arg));
@@ -406,43 +355,27 @@ export function pkToDate(arg) {
   } else {
     arg = new Date(arg);
   }
-  // TODO!! Just broke updating to latest version of date-fns - 19 Dec 2023
   //@ts-ignore
   if ((arg instanceof Date) && isValid(arg)) {
     return arg;
-    /*
-    if (!fmt) {
-      return arg;
-    }
-    let fmtKeys = Object.keys(dtFnsFormats);
-    if (fmtKeys.includes(fmt)) {
-      fmt = dtFnsFormats[fmt];
-    }
-    let formatted = format(arg, fmt);
-    return formatted;
-    */
   }
   return false;
 }
 
 /**
  * Quick Format a date with single format code & date
- * @param string fmt - a key to pre-defined dtFnsFormats or dtfns format str
- * 
- * @param dt - datable or if null now  - but - if invalid, though returns false
+ * @param fmt string - a key to pre-defined dtFnsFormats or dtfns format str
+ * @param dt - datable or null for "now" 
+ * @return string|false - Formatted date string, or false if dt is invalid
  */
-export function dtFmt(fmt:string = "short", dt?: any) {
-  let keys = Object.keys(dtFnsFormats);
-  if (keys.includes(fmt)) {
+export function dtFmt(fmt: string = "short", dt?: any) {
+  if (fmt in dtFnsFormats) {
     fmt = dtFnsFormats[fmt];
-    //fmt = 'short';
   }
   dt = pkToDate(dt);
   if (dt === false) {
-    return "FALSE";
+    return false;
   }
-  //let fullFmt = dtFnsFormats[fmt];
-  // TODO!! Just broke updating to latest version of date-fns - 19 Dec 2023
   //@ts-ignore
   return format(dt, fmt);
 }
@@ -466,6 +399,9 @@ export function intersect(a?: any[], b?: any[]): any[] {
   return [...new Set(a)].filter(x => setB.has(x));
 }
 
+/**
+ * Returns array with all strings in array converted to lower case
+ */
 export function arrayToLower(arr: any[]) {
   return arr.map((e) => (typeof e === 'string') ? e.toLowerCase() : e);
 }
@@ -504,12 +440,6 @@ export function insertBetween(arr: Array<any>, item: any) {
 }
 
 
-
-
-
-
-
-
 //TODO - REDO! This sucks...
 export function isCli(report = false) {
   let runtime = process.env.RUNTIME;
@@ -518,10 +448,12 @@ export function isCli(report = false) {
   if (!lisCli && report) {
     console.error("WARNING - calling a CLI-ONLY function in a non-cli runtime:", { runtime });
   }
-  //console.log("In isCli; runtime:", { runtime, lisCli });
   return lisCli;
 }
 
+/**
+ * Converts an https URL to an HTTP URL.
+ */
 export function rewriteHttpsToHttp(url) {
   let parts = url.split(":");
   if (parts[0] === "https") {
@@ -532,7 +464,7 @@ export function rewriteHttpsToHttp(url) {
 }
 
 /**
- * check single url or array of urls
+ * Check single url or array of urls for status
  * if single url, return true/false
  * if array, return array of failed urls
  * TODO!! Doesn't accout for network errors, exceptions, etc!!
@@ -562,6 +494,9 @@ export async function checkUrl(url) {
 }
 
 
+/**
+ * Returns a URL object from a URL string, else error code
+ */
 function mkUrl(url) {
   try {
     let urlObj = new URL(url);
@@ -574,11 +509,6 @@ function mkUrl(url) {
     return err;
   }
 }
-
-export function firstToUpper(str:string):string {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
 
 //Same as above, but 
 function mkUrlObj(url, full = false) {
@@ -597,21 +527,13 @@ function mkUrlObj(url, full = false) {
   }
 }
 
+/**
+ * Tests a URL with Axios
+ */
 export async function checkUrlAxios(tstUrl, full = false) {
-  //let lTool = new LogTool({context: 'checkUrlStatus'});
-  //  let lTool = LogTool.getLog('chkStatA', { context: 'checkUrlAxios' });
   let failCodes = [404, 401, 403, 404]; // Return immediate false
   let retryCodes = [408, 429,]; // Try again
   let notAllowed = 405;
-  /*
-  let fOpts:GenObj = {
-    method: "HEAD",
-    cache: "no-cache",
-    headers: {
-    },
-    connection: "close",
-  };
-  */
   let fOpts: GenObj = {
     method: "HEAD",
     cache: "no-cache",
@@ -695,19 +617,12 @@ export async function checkUrlAxios(tstUrl, full = false) {
     let ret = {
       unkown: { retries, tstUrl, msg: "No error and no response?" }
     };
-    //lTool.snap(ret);
-
     return ret;
-    //console.log({ resp, respKeys });
-    //console.log({  toResp, status, respKeys });
   } catch (err) {
     console.error("WE SHOULDN'T BE HERE!!", err);
     let toErr = typeOf(err);
     let errKeys = Object.keys(err);
     let sarg = { UnexpecteException: { toErr, errKeys, err, retries, tstUrl } };
-    //lTool.snap({ err, retries, tstUrl });
-    // console.log({ sarg });
-    //lTool.snap(sarg);
     if (full) {
       return err;
     }
@@ -724,6 +639,14 @@ export async function checkUrlAxios(tstUrl, full = false) {
 
 
 
+/**
+ * Makes first character of string uppercase
+ */
+export function firstToUpper(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+
 
 /**
  * Tri-state check - to account for failed checks - 
@@ -737,8 +660,6 @@ export async function checkUrlAxios(tstUrl, full = false) {
 export async function checkUrl3(url) {
   try {
     let status = await urlStatus(url);
-    //let toS = typeOf(status);
-    //console.log(`checkUrl3 - toS: ${toS}; status:`, { status });
     if (status == 200) {
       return true;
     } else if (status > 300) {
@@ -750,8 +671,13 @@ export async function checkUrl3(url) {
 
   }
 }
+
+
 /**
+ * Checks if the argument is "Empty" - null, undefined, empty string, empty array, empty object
  * This is a tough call & really hard to get right...
+ * @param arg - argument to test
+ * @return boolean - true if empty, false if not empty
  */
 export function isEmpty(arg): boolean {
   if (!arg || (Array.isArray(arg) && !arg.length)) {
@@ -762,7 +688,6 @@ export function isEmpty(arg): boolean {
     let props = getProps(arg);
     let keys = Object.keys(arg);
     let aninb = inArr1NinArr2(<string[]>props, builtInProps);
-    //console.log({ props, keys,  aninb });
     if (!keys.length && !aninb.length) {
       return true;
     }
@@ -770,7 +695,6 @@ export function isEmpty(arg): boolean {
   if (toarg === 'function') {
     return false;
   }
-  //console.error(`in isEmpty - returning false for:`, { arg });
   return false;
 }
 
@@ -784,6 +708,7 @@ export function trueVal(arg) {
 }
 
 /**
+ * Checks if the argument has values by reference (array, object, etc)
  * Arrays & Objects passed by referrence,
  * risk of unintended changes
  */
@@ -791,12 +716,18 @@ export function isByRef(arg: any): boolean {
   return !isPrimitive(arg);
 }
 
+/**
+ * Checks if the argument is a "simple" JS type - boolean, number, string, bigint
+ */
 export function isSimpleType(arg) {
   let simpletypes = ["boolean", "number", "bigint", "string"];
   let toarg = typeof arg;
   return simpletypes.includes(toarg);
 }
 
+/**
+ * Checks if the argument is a "primitive" JS type - boolean, number, string, bigint, null, undefined, ...
+ */
 export function isPrimitive(arg: any) {
   return arg !== Object(arg);
 }
@@ -811,8 +742,10 @@ export function isSimpleObject(anobj) {
   return Object.getPrototypeOf(anobj) === Object.getPrototypeOf({});
 }
 
+/**
+ * Checks if the argument is an object - 
+ */
 export function isObject(arg, alsoEmpty = false, alsoFunction = true) {
-  //if (!arg || isPrimitive(arg) || isEmpty(arg)) {
   if (!arg || isPrimitive(arg) || (isEmpty(arg) && !alsoEmpty)) {
     return false;
   }
@@ -822,37 +755,9 @@ export function isObject(arg, alsoEmpty = false, alsoFunction = true) {
   return _.isObjectLike(arg);
 }
 
-/*
-function probeProps(obj, props?: any[],) {
-  let def = ['constructor', 'prototype','name','class', 'type','super',];
-  let ret: GenObj = {};
-  for (let prop of def) {
-    try {
-      let val = obj[prop];
-      if ( val === undefined) {
-        continue;
-      }
-      ret[prop] = { val, type: typeOf(val) };
-    } catch (e) {
-      console.error(`error in probeProps with prop [${prop}]`, e, obj);
-    }
-  }
-  return ret;
-}
- */
-
-
-
-
-
-
-
-
 
 
 // Start Object analysis fncs
-
-
 
 
 /** Try to make simple copies of complex objects (like with cyclic references)
@@ -868,11 +773,13 @@ export function jsonClone(arg) {
     //Not sure I want to do this - my JSON5Stringify might handle it - test in browser
     return arg.outerHTML;
   }
-  //return JSON5.parse(JSON5Stringify(arg));
   return JSON5Parse(JSON5Stringify(arg));
 }
 
 
+/**
+ * Return the constructor chain of an object
+ */
 export function getConstructorChain(obj) {
   let i = 0;
   let constructorChain: any[] = [];
@@ -914,16 +821,11 @@ export function isInstance(arg) {
 }
 
 /**
- * Appears to be no way to distinguish between a to-level class
+ * Checks if an arg is an extended class or a function/top-level class
+ * Appears to be no way to distinguish between a top-level class
  * and a function...
  */
 export function isClassOrFunction(arg) {
-  /*
-  if ((typeof arg !== 'function') ||
-    isPrimitive(arg) || !isObject(arg) || isEmpty(arg)) {
-    return false;
-  }
-  */
   if ((typeof arg === 'function')) {
     try {
       let prototype = Object.getPrototypeOf(arg);
@@ -937,22 +839,33 @@ export function isClassOrFunction(arg) {
 
 
 /**
- * Check whether obj is an instance or a class
+ * Check whether obj is a JS class or a class instance
+ */
+
+
+
+/*
+export function isClassOrInstance(obj) {
+  if (isInstance(obj)) {
+    return true;
+  }
+  if (isClassOrFunction(obj)) {
+    return true;
+  }
+  return false;
+}
+*/
+
+/**
+ * Returns the parent (ancestor) class stack of a class instance
  */
 export function classStack(obj) {
   let tst: any = obj;
   let stack = [];
   let deref = 'prototypeConstructorName';
-
-
   if (!isInstance(obj)) {
-    //tst = Object.getPrototypeOf(obj);
     deref = 'prototypeName';
   }
-
-
-
-
   try {
     let pchain = getPrototypeChain(tst);
     stack = uniqueVals(pchain.map((e) => e[deref]));
@@ -964,6 +877,7 @@ export function classStack(obj) {
 }
 
 /**
+ * Returns the prototype chain of an object
  * This is very hacky - but can be helpful - to get the inheritance
  * chain of classes & instances of classes - lots of bad edge cases -
  * BE WARNED!
@@ -982,9 +896,7 @@ export function getPrototypeChain(obj) {
   let prototypeChain: any[] = [{ prototype, prototypeName, prototypeConstructorName, toPrototype, prototypeConstructor, toPrototypeConstructor, }];
   try {
     while (prototype = Object.getPrototypeOf(prototype)) {
-      //if ((i++ > 20) || isEmpty(prototype)) {
       if ((i++ > 20) || _.isEqual(prototype, {})) {
-        //if ((i++ > 20) ) {
         break;
       }
       toPrototype = typeOf(prototype);
@@ -1004,11 +916,11 @@ export function getPrototypeChain(obj) {
  * Uses prototype chain and returns array of ancestor class names
  * @param obj 
  */
-export function getAncestorArr(obj:any):string[] {
+export function getAncestorArr(obj: any): string[] {
   let ptChain = getPrototypeChain(obj);
   let ret = [];
   for (let pt of ptChain) {
-    let pname =  pt?.prototypeName; 
+    let pname = pt?.prototypeName;
     if (!pname) {
       break;
     }
@@ -1024,12 +936,12 @@ export function getAncestorArr(obj:any):string[] {
  * @return boolean
  * 
  */
-export function isSubclassOf(sub,parent, alsoSelf=1) {
+export function isSubclassOf(sub, parent, alsoSelf = 1) {
   let ancestors = getAncestorArr(sub);
   if (!alsoSelf) {
     ancestors.shift();
   }
-  let subName  = sub?.name;
+  let subName = sub?.name;
   let parentPrototype = Object.getPrototypeOf(parent);
   let parentPrototypeName = parentPrototype?.name;
   let parentName = parent?.name;
@@ -1041,6 +953,9 @@ export function isSubclassOf(sub,parent, alsoSelf=1) {
 }
 
 
+/**
+ * Returns details about an object - props, prototype, etc.
+ */
 export function getObjDets(obj) {
   if (!obj || isPrimitive(obj) || !isObject(obj)) {
     return false;
@@ -1055,6 +970,7 @@ export function getObjDets(obj) {
 }
 
 /**
+ * Built-in JS Classes
  * Not complete, but want to be careful...
  * Leave Math out - because it is not a class or constructor...
  */
@@ -1065,19 +981,17 @@ export const jsBuiltInObjMap = {
 export const jsBuiltIns = Object.values(jsBuiltInObjMap);
 
 export function getAllBuiltInProps() {
-  //console.log("Debugging get all builtin props-", { jsBuiltIns });
   let props = [];
   for (let builtIn of jsBuiltIns) {
     let biProps = getProps(builtIn);
     //@ts-ignore
-    //console.log(`Loading props for builtin: [${builtIn.name}]`, { biProps });
-    props = [...props, ...getProps(builtIn)]
+    props = [...props, ...getProps(builtIn)];
   }
-  //console.log(`Props before uniqueVals:`, { props });
   props = uniqueVals(props);
-  //console.log(`Props AFTER uniqueVals:`, { props });
   return props;
 }
+
+
 
 /**
  * As an exclude list for filtering out props from specific objects, but
@@ -1100,11 +1014,11 @@ export const builtInProps = getAllBuiltInProps();
 
 
 /**
+ * Is the argument parsable?
  * Any point to decompose this with allProps?
  */
 export function isParsable(arg) {
   if (!arg || isEmpty(arg) || isPrimitive(arg) ||
-    //@ts-ignore
     (arg === Object) || (arg === Array) || (arg === Function) ||
     (!isObject(arg) && (typeof arg !== 'function'))) {
     return false;
@@ -1114,7 +1028,6 @@ export function isParsable(arg) {
 
 export function isParsed(arg) {
   if (!arg || isEmpty(arg) || isPrimitive(arg) ||
-    //@ts-ignore
     (arg === Object) || (arg === Array) || (arg === Function) ||
     (!isObject(arg) && (typeof arg !== 'function'))) {
     return arg;
@@ -1261,13 +1174,8 @@ export function filterProps(props: any[]) {
  * @param int depth - how many levels should it go?
  */
 //export function allProps(obj: any, { dets = 'p', filter = true }: { dets?: string, filter?: boolean } = {}) {
-  // 
-  // Just making an easier call to allProps...
-export function allPropsP(obj:any, opts:GenObj={}) {
-  let opt = opts.opt || 'tvp';
-  let depth = opts.depth || 3;
-  return allProps(obj, opt, depth);
-}
+// 
+// Just making an easier call to allProps...
 export function allProps(obj: any, opt: string = 'tvp', depth = 6): GenObj | [] | string | boolean {
   try {
     if (!isObject(obj)) {
@@ -1351,11 +1259,16 @@ export function allProps(obj: any, opt: string = 'tvp', depth = 6): GenObj | [] 
   }
 }
 
-export function allPropsWithTypes(obj: any, depth=6) {
-  return allProps(obj, 't',depth);
+export function allPropsP(obj: any, opts: GenObj = {}) {
+  let opt = opts.opt || 'tvp';
+  let depth = opts.depth || 3;
+  return allProps(obj, opt, depth);
+}
+export function allPropsWithTypes(obj: any, depth = 6) {
+  return allProps(obj, 't', depth);
 }
 
-export function objInfo(arg: any, opt: string = 'tpv', depth=6) {
+export function objInfo(arg: any, opt: string = 'tpv', depth = 6) {
   let toArg = typeOf(arg);
   let info: GenObj = { type: toArg };
   if (!isObject(arg)) {
@@ -1399,7 +1312,10 @@ export function isRealObject(anobj) {
   return Object.getPrototypeOf(anobj) === Object.getPrototypeOf({});
 }
 */
-//export function typeOf(anObj: any, level?: Number): String {
+
+/**
+ * Returns the type of the argument. If it's an object, it returns the name of the constructor.
+ */
 export function typeOf(anObj: any, opts?: any): String { //level?: Number): String {
   let level: any = null;
   let functionPrefix = 'function: ';
@@ -1433,7 +1349,6 @@ export function typeOf(anObj: any, opts?: any): String { //level?: Number): Stri
       return to;
     }
     if (isSimpleObject(anObj)) {
-      //let ret = "Type: Simple Object";
       let ret = `${simplePrefix}Object`;
       if (level) {
         let keys = Object.keys(anObj);
@@ -1460,11 +1375,11 @@ export function typeOf(anObj: any, opts?: any): String { //level?: Number): Stri
 
 
 /**
- * Lazy way to get type of multiple variables at once
+ * Lazy way to get type of multiple variables at once with typeOf 
  * @param simple object obj - collection of properties to type
  * @return object - keyed by the original keys, to type
  */
-export function typeOfEach(obj,wVal:any=false) {
+export function typeOfEach(obj, wVal: any = false) {
   if (!isSimpleObject(obj) || isEmpty(obj)) {
     console.error(`Bad obj param to typeOfEach - obj:`, { obj });
     return false;
@@ -1474,7 +1389,7 @@ export function typeOfEach(obj,wVal:any=false) {
   for (let key of keys) {
     let val = obj[key];
     if (wVal) {
-      res[key] = {type:typeOf(val), val};
+      res[key] = { type: typeOf(val), val };
     } else {
       res[key] = typeOf(val);
     }
@@ -1495,8 +1410,6 @@ export function isJsonStr(arg: any): boolean {
   }
   try {
     JSON.parse(arg);
-    //@ts-ignore
-    //JSON.retrocycle(arg);
     return true;
   } catch (e) {
     return false;
@@ -1505,7 +1418,7 @@ export function isJsonStr(arg: any): boolean {
 
 
 /**
- * Returns true if arg is string & can be JSON parsed
+ * Returns true if arg is string & can be JSON5 parseable
  */
 export function isJson5Str(arg: any): boolean {
   if (typeof arg !== 'string') {
@@ -1637,7 +1550,7 @@ export function mergeAndConcat(...objs) {
     if (_.isArray(objValue)) {
       return objValue.concat(srcValue);
     }
-  }
+  };
   return _.mergeWith({}, ...objs, customizer);
 }
 
@@ -1651,8 +1564,8 @@ export function uniqueVals(...arrs): any[] {
   }
   return Array.from(new Set(merged));
 }
-/**
- * Replace w. below when finished.
+/** 
+ * Return random element of array
  */
 export function getRand(arr: any[]) {
   return arr[Math.floor((Math.random() * arr.length))];
@@ -1693,7 +1606,7 @@ export function getRandElsArr(arr: any[], cnt = null) {
 }
 
 /**
- * Retuns subset of object or array valuesd 
+ * Retuns subset of object or array values 
  * @param objorarr - something with key/values
  * @param cnt - if null, a 
  * @returns a single element if null, else an array of of cnt unique values from collection
@@ -1706,7 +1619,7 @@ export function getRandEls(objorarr: GenObj | any[], cnt: number | null = null) 
   if (!cnt) {
     let tstKey = getRand(arrKeys);
     //return objorarr[Math.floor((Math.random() * arrKeys.length))];
-    return objorarr[tstKey]
+    return objorarr[tstKey];
   }
   cnt = Math.min(cnt, arrKeys.length);
   //let arrKeys = Object.keys(arr).map((el) => parseInt(el));
@@ -1740,7 +1653,7 @@ export function getRandEls(objorarr: GenObj | any[], cnt: number | null = null) 
  * @param int?: cnt - if null/0 single int. Else, array of cnt ints.
  * @return int|int[] - if cnt<range, unique, afterwards, reuse
  */
-export function randInt(to: any, from:number = 0, cnt?:number): Number|Array<number> {
+export function randInt(to: any, from: number = 0, cnt?: number): Number | Array<number> {
   // Convert args to ints if possible, else throw
   //@ts-ignore
   if (isNaN((to = parseInt(to)) || isNaN((from = parseInt(from))))) {
@@ -1758,7 +1671,7 @@ export function randInt(to: any, from:number = 0, cnt?:number): Number|Array<num
     let bRand = from + Math.floor((Math.random() * ((to + 1) - from)));
     return bRand;
   }
-  let range = to-from;
+  let range = to - from;
   let ret = [];
   while (ret.length < cnt) {
     let tst = randInt(to, from);
@@ -1773,25 +1686,6 @@ export function randInt(to: any, from:number = 0, cnt?:number): Number|Array<num
 }
 
 
-/*
-export function randInts(to: any, from: any = 0): Number {
-  // Convert args to ints if possible, else throw
-  //@ts-ignore
-  if (isNaN((to = parseInt(to)) || isNaN((from = parseInt(from))))) {
-    throw new PkError(`Non-numeric arg to randInt():`, { to, from });
-  }
-  if (from === to) {
-    return from;
-  }
-  if (from > to) {
-    let tmp = from;
-    from = to;
-    to = tmp;
-  }
-  let bRand = from + Math.floor((Math.random() * ((to + 1) - from)));
-  return bRand;
-}
-*/
 
 /** Totally lifted from Axios - but they don't export it!
  * Takes an HTTP header string and objectifies it - 
@@ -1810,6 +1704,7 @@ export function parseHeaderString(str) {
 }
 
 /**
+ * Remove all quotes, spaces, etc from a string
  * stupid name - but just removes all quotes, spaces, etc
  * from a string.
  */
@@ -1821,8 +1716,11 @@ export function stripStray(str?: any) {
   return str;
 }
 
+/**
+ * Converts a string to camelCase
+ */
 export function toCamel(str) {
-  if (typeof str!=='string') {
+  if (typeof str !== 'string') {
     throw new Error('Input must be a string');
   }
   //str = stripStray(str);
@@ -1830,8 +1728,11 @@ export function toCamel(str) {
   return str.replace(/[_-](\w)/g, (_, group1) => group1.toUpperCase());
 }
 
+/**
+ * Converts a string to snake_case
+ */
 export function toSnake(str) {
-  if (typeof str!=='string') {
+  if (typeof str !== 'string') {
     throw new Error('Input must be a string');
   }
   str = str.trim();
@@ -1842,8 +1743,11 @@ export function toSnake(str) {
 
 
 
+/**
+ * Converts a string to kebab-case
+ */
 export function toKebab(str) {
-  if (typeof str!=='string') {
+  if (typeof str !== 'string') {
     throw new Error('Input must be a string');
   }
   str = str.trim();
@@ -1853,27 +1757,28 @@ export function toKebab(str) {
 
 
 /**
- * Straight from Llama3
+ * Takes a JS object & returns new object w. keys either cammelCased (default) or
  * Returns new JS object w. all keys converted to kebab-case, or camelCase
  */
 
-export function kebabKeys(obj):GenObj {
+export function kebabKeys(obj): GenObj {
   return recursiveKeyConversion(obj, toKebab);
 }
 
 /**
- * Takes a flat object & returns new object w. keys either cammelCased (default) or
- * snake cased if toCamel=false
+ * Takes a flat object & returns new object w. keys camelCased
  * @param obj:GenObj
  * @return new GenObj w. keys appropriately cased.
  */
-
-export function camelKeys(obj):GenObj {
+export function camelKeys(obj): GenObj {
   return recursiveKeyConversion(obj, toCamel);
 }
 
-function recursiveKeyConversion(obj, conversionFunction):GenObj {
-  if (typeof obj!== 'object') {
+/**
+ * Takes a JS object & returns new object w. keys converted, as defined by converstionFunction
+ */
+function recursiveKeyConversion(obj, conversionFunction): GenObj {
+  if (typeof obj !== 'object') {
     return obj;
   }
 
@@ -1881,7 +1786,7 @@ function recursiveKeyConversion(obj, conversionFunction):GenObj {
     return obj.map(item => recursiveKeyConversion(item, conversionFunction));
   }
 
-  const newObj:GenObj = {};
+  const newObj: GenObj = {};
   for (const key in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {
       const newKey = conversionFunction(key);
@@ -1946,8 +1851,8 @@ export function snakeCase(str?: any) {
 
 
 /**
- * IMPORTANT! Standard is [longitude, latitude]!!!
  * Returns the geographic distance between two points of lon/lat in meters
+ * IMPORTANT! Standard is [longitude, latitude]!!!
  * @param point1 GenObj|Array - [lat,lon] or (preferably) {lat, lon}
  * @param point2 GenObj|Array - [lat,lon] or {lat, lon}
  * @return number - distance in meters
@@ -1961,7 +1866,7 @@ export function haversine(point1: GenObj | Array<number>, point2: GenObj | Array
     lat1 = point1.lat;
     lon1 = point1.lon;
   } else {
-    throw new PkError(`Invalid point1 arg to haversine:`, { point1 })
+    throw new PkError(`Invalid point1 arg to haversine:`, { point1 });
   }
   if (Array.isArray(point2)) {
     lon2 = point2[0];
@@ -1972,14 +1877,13 @@ export function haversine(point1: GenObj | Array<number>, point2: GenObj | Array
   } else {
     throw new PkError(`Invalid point2 arg to haversine:`, { point2 });
   }
-  //console.log(`in haversine`,{point1, point2, lat1, lon1, lat2, lon2});
   const EARTH_RADIUS = 6371;
   const R = EARTH_RADIUS; // km
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLon = (lon2 - lon1) * Math.PI / 180;
   const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-  Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c * 1000; // Distance in m
 }
@@ -1990,11 +1894,11 @@ export function haversine(point1: GenObj | Array<number>, point2: GenObj | Array
 /**
  * @deprecated - Not really - just a reminder to use isIterableTest for a while to check
  */
-export function isIterable(arg) {  
+export function isIterable(arg) {
   if (arg === null || arg === undefined) {
-    return false
+    return false;
   }
-  return typeof arg[Symbol.iterator] === 'function'
+  return typeof arg[Symbol.iterator] === 'function';
 }
 
 /**
@@ -2002,7 +1906,7 @@ export function isIterable(arg) {
  */
 export function is_iterable(arg) {
   return (Reflect.has(arg, Symbol.iterator)) &&
-  (typeof (arg[Symbol.iterator]) === "function");
+    (typeof (arg[Symbol.iterator]) === "function");
 }
 
 export function isIterableTest(arg) {
@@ -2019,8 +1923,6 @@ export function isIterableTest(arg) {
  * @param obj - a JS object to navigate
  * @param splitter - default '.' - the character to split on
  */
-
-//Untested - straight from hugging-face/llama-3
 
 export function dotNotationToObject(obj, splitter = '.') {
   const result = {};
@@ -2055,11 +1957,9 @@ export function dotPathVal(obj, ...keyPaths) {
     let fpArr = fPath.split('.');
     ffPaths = ffPaths.concat(fpArr);
   }
-  //console.log("Testing dotPath deref:", {obj, keyPaths, fPaths, ffPaths});
-  let tmpVal:any = obj;
+  let tmpVal: any = obj;
   for (let key of ffPaths) {
     if (!tmpVal || isEmpty(tmpVal) || !isSimpleObject(tmpVal)) {
-      //return null;
       return;
     }
     tmpVal = tmpVal[key];

@@ -1,3 +1,8 @@
+/**
+ * @library - pk-ts-common
+ * @file - common-operations.ts
+ * @fileoverview - Library of `ES2022` TypeScript/JavaScript utility functions for use in both Node.js & browser environments.
+ */
 import urlStatus from 'url-status-code';
 import JSON5 from 'json5';
 declare global {
@@ -12,8 +17,11 @@ declare global {
 }
 import { GenericObject, GenObj } from './index.js';
 export { urlStatus, JSON5, GenericObject, GenObj };
-/** NODE SPECIFIC
-*/
+/**
+ * Check if running in commonJS or ESM Module env.
+ * TOTALLY UNTESTED - CODE FROM BARD -in 2023
+ * But it finally compiles in tsc for each target - commonjs & esm - try testing !!
+ */
 export declare function isESM(): boolean;
 export declare function isCommonJS(): boolean;
 /**
@@ -24,30 +32,50 @@ export declare function isCommonJS(): boolean;
  * @retrun array stack
  */
 export declare function getStack(offset?: number): any[];
-/** Trying move from ts-node-lib */
+/**
+ * Parse the call stack
+ */
 export declare function stackParse(): any[];
+/**
+ *	Generates a timestamp string with basic info for console logging.
+ * @param entry (any) - Optional parameter representing additional information to include in the timestamp. Default value is undefined
+ * @param frameAfter (any) - Optional parameter specifying a function name or array of function names to skip when determining the stack frame. Default value is undefined.
+ * @return String A formatted timestamp string including the specified entry, file name, function name, and line numberstring
+ */
 export declare function stamp(entry?: any, frameAfter?: any): string;
+/**
+ *  Retrieves the stack frame after a specified function.
+ * @param fname (string|array) - The name of the function or an array of function names to skip when determining the stack frame. Default value is undefined.
+ @param   forceFunction (boolean) - Optional parameter indicating whether to force the retrieval of a function name even if it matches one in the exclude list. Default value is false.
+
+ @return Object - An object containing the file name, function name, and line number of the stack frame after the specified function.
+ */
 export declare function getFrameAfterFunction(fname?: any, forceFunction?: any): any;
 /**
  * Return just the subset of the object, for keys specified in the "fields" array.
  * ACTUAALLY - can be deep -
  * @param obj - src object
  * @param fields mixed array of string keys, or object with single key field with array of fields - called recursively
- * @return specified subset of object
+ * @return object - specified subset of object
  */
 export declare function subObj(obj: GenericObject, fields: any[]): GenObj;
+export declare const dfnsKeys: string[];
 /** Takes a 'duration' object for date-fns/add and validate
  * it. Optionall, converts to negative (time/dates in past)
  * @param obj object - obj to test
  * //@param boolean forceNegative - force to negative/past offest?
  * @return duration
  */
-export declare const dfnsKeys: string[];
 export declare function validateDateFnsDuration(obj: any): any;
 /**
  * Returns true if arg str contains ANY of the what strings
  */
 export declare function strIncludesAny(str: string, substrs: any): boolean;
+/**
+ * Checks if a given argument is a Promise.
+ * @param arg - The argument to check.
+ * @return - boolean true if arg is a Promise, else false
+ */
 export declare function isPromise(arg?: any): boolean;
 /** From Mozilla - a stricter int parser */
 export declare function filterInt(value: any): number | false;
@@ -62,7 +90,9 @@ export declare function eventInfo(ev: any): {};
  * If is numeric:
  *   returns boolean true if asNum is false
  *   else returns the numeric value (which could be 0)
- * @param asNum boolean - if true,
+ * @param arg - argument to check
+ * @param asNum boolean - if true, returns the numeric value
+ * @return number or boolean true/false
  *
  */
 export declare function isNumeric(arg: any, asNum?: boolean): number | boolean;
@@ -105,11 +135,11 @@ export declare const dtFnsFormats: {
 export declare function pkToDate(arg: any): false | Date;
 /**
  * Quick Format a date with single format code & date
- * @param string fmt - a key to pre-defined dtFnsFormats or dtfns format str
- *
- * @param dt - datable or if null now  - but - if invalid, though returns false
+ * @param fmt string - a key to pre-defined dtFnsFormats or dtfns format str
+ * @param dt - datable or null for "now"
+ * @return string|false - Formatted date string, or false if dt is invalid
  */
-export declare function dtFmt(fmt?: string, dt?: any): string;
+export declare function dtFmt(fmt?: string, dt?: any): string | false;
 /**
  * Return elements in arr1 Not In arr2
  */
@@ -118,6 +148,9 @@ export declare function inArr1NinArr2(arr1: any[], arr2: any[]): any[];
  * Uniqe intersection of two arrays
  */
 export declare function intersect(a?: any[], b?: any[]): any[];
+/**
+ * Returns array with all strings in array converted to lower case
+ */
 export declare function arrayToLower(arr: any[]): any[];
 /**
  * Compares arrays by VALUES - independant of order
@@ -133,17 +166,26 @@ export declare function isSubset(a: any, b: any): any;
  */
 export declare function insertBetween(arr: Array<any>, item: any): any[];
 export declare function isCli(report?: boolean): boolean;
+/**
+ * Converts an https URL to an HTTP URL.
+ */
 export declare function rewriteHttpsToHttp(url: any): string;
 /**
- * check single url or array of urls
+ * Check single url or array of urls for status
  * if single url, return true/false
  * if array, return array of failed urls
  * TODO!! Doesn't accout for network errors, exceptions, etc!!
  * SEE below checkUrl3
  */
 export declare function checkUrl(url: any): Promise<boolean | any[]>;
-export declare function firstToUpper(str: string): string;
+/**
+ * Tests a URL with Axios
+ */
 export declare function checkUrlAxios(tstUrl: any, full?: boolean): Promise<any>;
+/**
+ * Makes first character of string uppercase
+ */
+export declare function firstToUpper(str: string): string;
 /**
  * Tri-state check - to account for failed checks -
  * @return boolean|other
@@ -155,7 +197,10 @@ export declare function checkUrlAxios(tstUrl: any, full?: boolean): Promise<any>
  */
 export declare function checkUrl3(url: any): Promise<any>;
 /**
+ * Checks if the argument is "Empty" - null, undefined, empty string, empty array, empty object
  * This is a tough call & really hard to get right...
+ * @param arg - argument to test
+ * @return boolean - true if empty, false if not empty
  */
 export declare function isEmpty(arg: any): boolean;
 /**
@@ -163,23 +208,36 @@ export declare function isEmpty(arg: any): boolean;
  */
 export declare function trueVal(arg: any): any;
 /**
+ * Checks if the argument has values by reference (array, object, etc)
  * Arrays & Objects passed by referrence,
  * risk of unintended changes
  */
 export declare function isByRef(arg: any): boolean;
+/**
+ * Checks if the argument is a "simple" JS type - boolean, number, string, bigint
+ */
 export declare function isSimpleType(arg: any): boolean;
+/**
+ * Checks if the argument is a "primitive" JS type - boolean, number, string, bigint, null, undefined, ...
+ */
 export declare function isPrimitive(arg: any): boolean;
 /**
  * Tests if the argument is a "simple" JS object - with just keys
  * & values, not based on other types or prototypes
  */
 export declare function isSimpleObject(anobj: any): boolean;
+/**
+ * Checks if the argument is an object -
+ */
 export declare function isObject(arg: any, alsoEmpty?: boolean, alsoFunction?: boolean): boolean;
 /** Try to make simple copies of complex objects (like with cyclic references)
  * to be storable in MongoDB
  * Primitives will just be returned unchanged.
  */
 export declare function jsonClone(arg: any): any;
+/**
+ * Return the constructor chain of an object
+ */
 export declare function getConstructorChain(obj: any): any[];
 /**
  * Checks if arg is an instance of a class.
@@ -192,15 +250,20 @@ export declare function isInstance(arg: any): false | {
     className: any;
 };
 /**
- * Appears to be no way to distinguish between a to-level class
+ * Checks if an arg is an extended class or a function/top-level class
+ * Appears to be no way to distinguish between a top-level class
  * and a function...
  */
 export declare function isClassOrFunction(arg: any): any;
 /**
- * Check whether obj is an instance or a class
+ * Check whether obj is a JS class or a class instance
+ */
+/**
+ * Returns the parent (ancestor) class stack of a class instance
  */
 export declare function classStack(obj: any): any[];
 /**
+ * Returns the prototype chain of an object
  * This is very hacky - but can be helpful - to get the inheritance
  * chain of classes & instances of classes - lots of bad edge cases -
  * BE WARNED!
@@ -219,6 +282,9 @@ export declare function getAncestorArr(obj: any): string[];
  *
  */
 export declare function isSubclassOf(sub: any, parent: any, alsoSelf?: number): boolean;
+/**
+ * Returns details about an object - props, prototype, etc.
+ */
 export declare function getObjDets(obj: any): false | {
     toObj: "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function";
     pkToObj: String;
@@ -226,6 +292,7 @@ export declare function getObjDets(obj: any): false | {
     prototype: any;
 };
 /**
+ * Built-in JS Classes
  * Not complete, but want to be careful...
  * Leave Math out - because it is not a class or constructor...
  */
@@ -258,6 +325,7 @@ export declare function getAllBuiltInProps(): any[];
  */
 export declare const builtInProps: any[];
 /**
+ * Is the argument parsable?
  * Any point to decompose this with allProps?
  */
 export declare function isParsable(arg: any): boolean;
@@ -309,13 +377,16 @@ export declare function filterProps(props: any[]): any[];
  *
  * @param int depth - how many levels should it go?
  */
-export declare function allPropsP(obj: any, opts?: GenObj): string | boolean | GenObj | [];
 export declare function allProps(obj: any, opt?: string, depth?: number): GenObj | [] | string | boolean;
+export declare function allPropsP(obj: any, opts?: GenObj): string | boolean | GenObj | [];
 export declare function allPropsWithTypes(obj: any, depth?: number): string | boolean | GenObj | [];
 export declare function objInfo(arg: any, opt?: string, depth?: number): GenObj;
+/**
+ * Returns the type of the argument. If it's an object, it returns the name of the constructor.
+ */
 export declare function typeOf(anObj: any, opts?: any): String;
 /**
- * Lazy way to get type of multiple variables at once
+ * Lazy way to get type of multiple variables at once with typeOf
  * @param simple object obj - collection of properties to type
  * @return object - keyed by the original keys, to type
  */
@@ -326,7 +397,7 @@ export declare function valWithType(val: any): any;
  */
 export declare function isJsonStr(arg: any): boolean;
 /**
- * Returns true if arg is string & can be JSON parsed
+ * Returns true if arg is string & can be JSON5 parseable
  */
 export declare function isJson5Str(arg: any): boolean;
 export declare function JSONParse(str: string): any;
@@ -363,7 +434,7 @@ export declare function mergeAndConcat(...objs: any[]): any;
  */
 export declare function uniqueVals(...arrs: any[]): any[];
 /**
- * Replace w. below when finished.
+ * Return random element of array
  */
 export declare function getRand(arr: any[]): any;
 /**
@@ -373,7 +444,7 @@ export declare function getRand(arr: any[]): any;
  */
 export declare function getRandElsArr(arr: any[], cnt?: any): any;
 /**
- * Retuns subset of object or array valuesd
+ * Retuns subset of object or array values
  * @param objorarr - something with key/values
  * @param cnt - if null, a
  * @returns a single element if null, else an array of of cnt unique values from collection
@@ -397,21 +468,30 @@ export declare function randInt(to: any, from?: number, cnt?: number): Number | 
  */
 export declare function parseHeaderString(str: any): any;
 /**
+ * Remove all quotes, spaces, etc from a string
  * stupid name - but just removes all quotes, spaces, etc
  * from a string.
  */
 export declare function stripStray(str?: any): any;
+/**
+ * Converts a string to camelCase
+ */
 export declare function toCamel(str: any): any;
+/**
+ * Converts a string to snake_case
+ */
 export declare function toSnake(str: any): any;
+/**
+ * Converts a string to kebab-case
+ */
 export declare function toKebab(str: any): any;
 /**
- * Straight from Llama3
+ * Takes a JS object & returns new object w. keys either cammelCased (default) or
  * Returns new JS object w. all keys converted to kebab-case, or camelCase
  */
 export declare function kebabKeys(obj: any): GenObj;
 /**
- * Takes a flat object & returns new object w. keys either cammelCased (default) or
- * snake cased if toCamel=false
+ * Takes a flat object & returns new object w. keys camelCased
  * @param obj:GenObj
  * @return new GenObj w. keys appropriately cased.
  */
@@ -441,8 +521,8 @@ export declare function kebabCase(str?: any): any;
  */
 export declare function snakeCase(str?: any): any;
 /**
- * IMPORTANT! Standard is [longitude, latitude]!!!
  * Returns the geographic distance between two points of lon/lat in meters
+ * IMPORTANT! Standard is [longitude, latitude]!!!
  * @param point1 GenObj|Array - [lat,lon] or (preferably) {lat, lon}
  * @param point2 GenObj|Array - [lat,lon] or {lat, lon}
  * @return number - distance in meters
