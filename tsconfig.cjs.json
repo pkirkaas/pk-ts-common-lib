@@ -2,17 +2,8 @@
   "extends":"./tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist/cjs",
-    //"module": "commonjs",
     // May break for browsers??
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
   },
-  /*
-  "ts-node": {
-    "require": [
-      "tsconfig-paths/register"
-    ],
-    "esm":false
-  },
-  */
 }
