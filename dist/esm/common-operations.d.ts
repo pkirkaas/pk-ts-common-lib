@@ -100,14 +100,6 @@ export declare function isNumeric(arg: any, asNum?: boolean): number | boolean;
  * Returns the numeric value, or boolean false
  */
 export declare function asNumeric(arg: any): number | boolean;
-export declare const dtFnsFormats: {
-    html: string;
-    sqldt: string;
-    short: string;
-    dt: string;
-    dts: string;
-    ts: string;
-};
 /**
  * If arg can be in any way be interpreted as a date,
  * returns the JS Date object, optionally date-fns formatted string
@@ -133,6 +125,17 @@ export declare const dtFnsFormats: {
  * @return JS Date or formatted string or false
  */
 export declare function pkToDate(arg: any): false | Date;
+/**
+ * Object for date-fns formats, with simple keys
+ */
+export declare const dtFnsFormats: {
+    html: string;
+    sqldt: string;
+    short: string;
+    dt: string;
+    dts: string;
+    ts: string;
+};
 /**
  * Quick Format a date with single format code & date
  * @param fmt string - a key to pre-defined dtFnsFormats or dtfns format str
@@ -420,8 +423,8 @@ export declare function keysFromJson(arg: any): any;
 /** Safe stringify -
  * Experiment with just decycle for all stringify
  */
-export declare function JSON5Stringify(arg: any): any;
-export declare function JSONStringify(arg: any): any;
+export declare function JSON5Stringify(arg: any, space?: number): any;
+export declare function JSONStringify(arg: any, space?: number): any;
 /**
  * Returns a new object as deepMerge of arg objs, BUT with arrays concatenated
  * @param objs - unlimited number of input objects

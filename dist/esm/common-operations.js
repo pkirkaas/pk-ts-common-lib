@@ -267,14 +267,6 @@ export function isNumeric(arg, asNum = false) {
 export function asNumeric(arg) {
     return isNumeric(arg, true);
 }
-export const dtFnsFormats = {
-    html: "yyyy-MM-dd",
-    sqldt: "yyyy-MM-dd HH:mm:ss",
-    short: 'dd-MMM-yy',
-    dt: 'dd-MMM-yy KK:mm',
-    dts: 'dd-MMM-yy KK:mm:ss',
-    ts: 'KK:mm:ss',
-};
 /**
  * If arg can be in any way be interpreted as a date,
  * returns the JS Date object, optionally date-fns formatted string
@@ -318,6 +310,17 @@ export function pkToDate(arg) {
     }
     return false;
 }
+/**
+ * Object for date-fns formats, with simple keys
+ */
+export const dtFnsFormats = {
+    html: "yyyy-MM-dd",
+    sqldt: "yyyy-MM-dd HH:mm:ss",
+    short: 'dd-MMM-yy',
+    dt: 'dd-MMM-yy KK:mm',
+    dts: 'dd-MMM-yy KK:mm:ss',
+    ts: 'KK:mm:ss',
+};
 /**
  * Quick Format a date with single format code & date
  * @param fmt string - a key to pre-defined dtFnsFormats or dtfns format str
@@ -1073,10 +1076,8 @@ export function filterProps(props) {
  *
  * @param int depth - how many levels should it go?
  */
-//export function allProps(obj: any, { dets = 'p', filter = true }: { dets?: string, filter?: boolean } = {}) {
-// 
-// Just making an easier call to allProps...
 export function allProps(obj, opt = 'tvp', depth = 6) {
+    //export function allProps(obj: any, { dets = 'p', filter = true }: { dets?: string, filter?: boolean } = {}) {
     try {
         if (!isObject(obj)) {
             return typeOf(obj);
@@ -1157,6 +1158,7 @@ export function allProps(obj, opt = 'tvp', depth = 6) {
         return `Exception in allProps at depth [${depth}] w. msg: [${e}]`;
     }
 }
+// Just making an easier call to allProps...
 export function allPropsP(obj, opts = {}) {
     let opt = opts.opt || 'tvp';
     let depth = opts.depth || 3;
@@ -1388,17 +1390,18 @@ export function keysFromJson(arg) {
 /** Safe stringify -
  * Experiment with just decycle for all stringify
  */
-export function JSON5Stringify(arg) {
+export function JSON5Stringify(arg, space = 2) {
     //try {
     //return JSON5.stringify(arg, null, 2);
     //@ts-ignore
-    return JSON5.decycle(arg, null, 2);
+    //return JSON5.decycle(arg, null, 2);
+    return JSON5.decycle(arg, space);
     //} catch (e) {
     //@ts-ignore
-    return JSON5.decycle(arg, null, 2);
+    //return JSON5.decycle(arg, null, 2);
     //}
 }
-export function JSONStringify(arg) {
+export function JSONStringify(arg, space = 2) {
     /*
     if (arg === undefined) {
       return 'undefned';
@@ -1410,7 +1413,8 @@ export function JSONStringify(arg) {
     //   return JSON.stringify(arg, null, 2);
     // } catch (e) {
     //@ts-ignore
-    return JSON.decycle(arg, null, 2);
+    //return JSON.decycle(arg, null, 2);
+    return JSON.decycle(arg, space);
     //}
 }
 //////////////////// END Object analysis functions   
