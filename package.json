@@ -28,6 +28,7 @@
     "tstarg": "echo Something and --"
   },
   "dependencies": {
+    "ajv": "^8.17.1",
     "axios": "*",
     "date-fns": "latest",
     "error-stack-parser": "*",

@@ -4,6 +4,8 @@
  * Paul Kirkaas
  *
  */
+import { Ajv, } from 'ajv'; //JSON Schema support
+import draft7MetaSchema from 'ajv/dist/refs/json-schema-draft-07.json' with { type: 'json' };
 import { uniqueVals, PkError, isObject, isPrimitive, typeOf } from './index.js';
 export function deepMeld(...objs) {
     let melded = {};
@@ -32,5 +34,29 @@ export function deepMeld(...objs) {
         }
     }
     return melded;
+}
+/**
+ * JSON Schema validator
+ * @param schemaObj - a JSON Schema?
+ * @return ajv instance, compiled from JSON Schema object -
+ * has validate method for data, and errors property
+ * Throws exception if input JSON Schema object invalid schema
+ */
+export function ajvSchema(schemaObj, opts = {}) {
+    const ajv = new Ajv({
+        allErrors: true,
+        verbose: true,
+        strictSchema: true, // Set to true for stricter validation
+        ...opts,
+    });
+    if (!schemaObj['$schema']) {
+        ajv.addMetaSchema(draft7MetaSchema);
+    }
+    const isValidSchema = ajv.validateSchema(schemaObj);
+    if (!isValidSchema) {
+        throw new PkError(`Schema failed validation w. errors:`, ajv.errors);
+    }
+    ajv.compile(schemaObj);
+    return ajv;
 }
 //# sourceMappingURL=object-utils.js.map
