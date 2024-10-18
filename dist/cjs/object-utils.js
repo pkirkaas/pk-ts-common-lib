@@ -38,7 +38,11 @@ export function deepMeld(...objs) {
 /**
  * JSON Schema validator
  * @param schemaObj - a JSON Schema?
- * @return ajv instance, compiled from JSON Schema object -
+ * @return function validate - a function to use the schema to validate data.
+ * The `validate` function accepts data and returns true/false - if false, the
+ * errors are in `validate.errors` property
+ *
+ * // NO - ajv instance, compiled from JSON Schema object -
  * has validate method for data, and errors property
  * Throws exception if input JSON Schema object invalid schema
  */
@@ -56,7 +60,8 @@ export function ajvSchema(schemaObj, opts = {}) {
     if (!isValidSchema) {
         throw new PkError(`Schema failed validation w. errors:`, ajv.errors);
     }
-    ajv.compile(schemaObj);
-    return ajv;
+    let validate = ajv.compile(schemaObj);
+    return validate;
+    //return ajv;
 }
 //# sourceMappingURL=object-utils.js.map
