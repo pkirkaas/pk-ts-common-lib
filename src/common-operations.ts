@@ -23,18 +23,26 @@ declare global {
 
 }
 
+export type OptArrStr = string | string[];
+export type Falsy = false | 0 | "" | null | undefined;
+export type GenericObject = { [key: string]: any };
+export type GenObj = { [key: string]: any };
 import _ from "lodash";
-import { PkError, GenericObject, GenObj } from './index.js';
+//import { PkError, GenericObject, GenObj } from './index.js';
+import { PkError,  } from './index.js';
 
 import { decycle, retrocycle, extend } from "./lib/json-decyle-3.js";
 //@ts-ignore
 extend(JSON5);
+//@ts-ignore
+extend(JSON);
 
 import * as ESP from "error-stack-parser";
 import axios from "axios";
 import { formatISO, isValid, add, } from "date-fns";
 import { format, } from "date-fns/format";
-export { urlStatus, JSON5, GenericObject, GenObj };
+//export { urlStatus, JSON5, GenericObject, GenObj };
+export { urlStatus, JSON5,  };
 
 /**
  * Check if running in commonJS or ESM Module env.

@@ -1,13 +1,5 @@
 /** Init shared by MongoQP-api & MongoQP-client */
 export * from "./lib/json-decyle-3.js";
-export type OptArrStr = string | string[];
-export type Falsy = false | 0 | "" | null | undefined;
-export type GenericObject = {
-    [key: string]: any;
-};
-export type GenObj = {
-    [key: string]: any;
-};
 /**
  * Not sure this works - supposedly creates a type that can get the class type of an instance:
  * Usage:

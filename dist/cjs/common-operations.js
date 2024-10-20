@@ -7,15 +7,19 @@ import urlStatus from 'url-status-code';
 import JSON5 from 'json5';
 import path from 'path';
 import _ from "lodash";
-import { PkError } from './index.js';
+//import { PkError, GenericObject, GenObj } from './index.js';
+import { PkError, } from './index.js';
 import { extend } from "./lib/json-decyle-3.js";
 //@ts-ignore
 extend(JSON5);
+//@ts-ignore
+extend(JSON);
 import * as ESP from "error-stack-parser";
 import axios from "axios";
 import { isValid, add, } from "date-fns";
 import { format, } from "date-fns/format";
-export { urlStatus, JSON5 };
+//export { urlStatus, JSON5, GenericObject, GenObj };
+export { urlStatus, JSON5, };
 /**
  * Check if running in commonJS or ESM Module env.
  * TOTALLY UNTESTED - CODE FROM BARD -in 2023

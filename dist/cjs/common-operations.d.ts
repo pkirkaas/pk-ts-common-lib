@@ -15,8 +15,15 @@ declare global {
         retrocycle(object: any): any;
     }
 }
-import { GenericObject, GenObj } from './index.js';
-export { urlStatus, JSON5, GenericObject, GenObj };
+export type OptArrStr = string | string[];
+export type Falsy = false | 0 | "" | null | undefined;
+export type GenericObject = {
+    [key: string]: any;
+};
+export type GenObj = {
+    [key: string]: any;
+};
+export { urlStatus, JSON5, };
 /**
  * Check if running in commonJS or ESM Module env.
  * TOTALLY UNTESTED - CODE FROM BARD -in 2023
