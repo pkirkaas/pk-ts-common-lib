@@ -315,6 +315,21 @@ export function pkToDate(arg) {
     return false;
 }
 /**
+ * Converts a date to a Unix timestamp (seconds since the epoch) - NOT MILLISECONDS!
+ * @param {Dateable} dt - dateable arg for pkToDate - defaults to now
+ * @return number - unix timestamp in seconds
+ *
+ */
+export function dateToTimestamp(dt) {
+    dt = pkToDate(dt);
+    if (!dt || !(dt instanceof Date)) { // Didn't get a JS Date
+        throw new PkError(`Invalid date: ${dt}`);
+    }
+    let ms = dt.getTime();
+    let ts = Math.floor(ms / 1000);
+    return ts;
+}
+/**
  * Object for date-fns formats, with simple keys
  */
 export const dtFnsFormats = {

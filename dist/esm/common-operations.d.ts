@@ -133,6 +133,13 @@ export declare function asNumeric(arg: any): number | boolean;
  */
 export declare function pkToDate(arg: any): false | Date;
 /**
+ * Converts a date to a Unix timestamp (seconds since the epoch) - NOT MILLISECONDS!
+ * @param {Dateable} dt - dateable arg for pkToDate - defaults to now
+ * @return number - unix timestamp in seconds
+ *
+ */
+export declare function dateToTimestamp(dt: any): number;
+/**
  * Object for date-fns formats, with simple keys
  */
 export declare const dtFnsFormats: {
