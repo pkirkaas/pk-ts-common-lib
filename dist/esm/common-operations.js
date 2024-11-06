@@ -1466,10 +1466,13 @@ export function mergeAndConcat(...objs) {
  * Take input arrays, merge, & return single array w. unique values
  */
 export function uniqueVals(...arrs) {
-    let merged = [];
+    /*
+    let merged: any[] = [];
     for (let arr of arrs) {
-        merged = [...merged, ...arr];
+      merged = [...merged, ...arr];
     }
+      */
+    let merged = [].concat(...arrs);
     return Array.from(new Set(merged));
 }
 /**
