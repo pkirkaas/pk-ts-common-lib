@@ -253,6 +253,20 @@ export function strIncludesAny(str: string, substrs: any) {
   return false;
 }
 
+/** Like strIncludesAny, but returns an array of the substrings found
+ */
+export function strIncludesWhich(str: string, substrs: any) {
+  let ret = [];
+  if (!Array.isArray(substrs)) {
+    substrs = [substrs];
+  }
+  for (let substr of substrs) {
+    if (str.includes(substr)) {
+      ret.push(substr);
+    }
+  }
+  return ret;
+}
 
 /**
  * Checks if a given argument is a Promise.

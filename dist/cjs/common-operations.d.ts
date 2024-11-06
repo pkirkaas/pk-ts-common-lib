@@ -78,6 +78,9 @@ export declare function validateDateFnsDuration(obj: any): any;
  * Returns true if arg str contains ANY of the what strings
  */
 export declare function strIncludesAny(str: string, substrs: any): boolean;
+/** Like strIncludesAny, but returns an array of the substrings found
+ */
+export declare function strIncludesWhich(str: string, substrs: any): any[];
 /**
  * Checks if a given argument is a Promise.
  * @param arg - The argument to check.
