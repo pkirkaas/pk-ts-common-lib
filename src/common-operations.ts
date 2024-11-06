@@ -419,7 +419,8 @@ export function inArr1NinArr2(arr1: any[], arr2: any[]) {
 }
 
 /**
- * Uniqe intersection of two arrays
+ * Unique intersection of two arrays
+ * TODO: implement intersectAny & intersectAll for any number of arrays
  */
 export function intersect(a?: any[], b?: any[]): any[] {
   var setB = new Set(b);
@@ -438,6 +439,15 @@ export function arrayToLower(arr: any[]) {
  */
 export function arraysEqual(a, b) {
   return JSON.stringify(a.sort()) === JSON.stringify(b.sort());
+}
+
+/**
+ * Take any number of array args & returns array of all duplicates
+ */
+export function dupEntries(...args) {
+  let merged = [].concat(...args);
+  let dups = merged.filter((item, index) => merged.indexOf(item) !== index);
+  return dups;
 }
 
 /**
@@ -761,6 +771,8 @@ export function isPrimitive(arg: any) {
 /**
  * Tests if the argument is a "simple" JS object - with just keys
  * & values, not based on other types or prototypes
+ * 
+ * TODO: What about arrays?
  */
 export function isSimpleObject(anobj) {
   if (!anobj || typeof anobj !== "object") {

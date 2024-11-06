@@ -162,7 +162,8 @@ export declare function dtFmt(fmt?: string, dt?: any): string | false;
  */
 export declare function inArr1NinArr2(arr1: any[], arr2: any[]): any[];
 /**
- * Uniqe intersection of two arrays
+ * Unique intersection of two arrays
+ * TODO: implement intersectAny & intersectAll for any number of arrays
  */
 export declare function intersect(a?: any[], b?: any[]): any[];
 /**
@@ -173,6 +174,10 @@ export declare function arrayToLower(arr: any[]): any[];
  * Compares arrays by VALUES - independant of order
  */
 export declare function arraysEqual(a: any, b: any): boolean;
+/**
+ * Take any number of array args & returns array of all duplicates
+ */
+export declare function dupEntries(...args: any[]): any[];
 /**
  * Is 'a' a subset of 'b' ?
  */
@@ -241,6 +246,8 @@ export declare function isPrimitive(arg: any): boolean;
 /**
  * Tests if the argument is a "simple" JS object - with just keys
  * & values, not based on other types or prototypes
+ *
+ * TODO: What about arrays?
  */
 export declare function isSimpleObject(anobj: any): boolean;
 /**
