@@ -151,7 +151,7 @@ export function getFrameAfterFunction(fname, forceFunction) {
 // END Stack analasys functions
 /**
  * Return just the subset of the object, for keys specified in the "fields" array.
- * ACTUAALLY - can be deep -
+ * ACTUAALY - can be deep - BUT - consider using lodash `pick` & `omit` instead.
  * @param obj - src object
  * @param fields mixed array of string keys, or object with single key field with array of fields - called recursively
  * @return object - specified subset of object
@@ -174,6 +174,20 @@ export function subObj(obj, fields) {
         }
     }
     return ret;
+}
+/**
+ * Partitions GenObj by keys array - included & excluded
+ * @param obj - src object
+ * @param keys - string|string[] - keys to filter by in picked/omitted
+ * Returns 2 objs - {picked, omitted}
+ */
+export function partitionObj(obj, keys) {
+    if (typeof keys === "string") {
+        keys = [keys];
+    }
+    let picked = _.pick(obj, keys);
+    let omitted = _.omit(obj, keys);
+    return { picked, omitted };
 }
 export const dfnsKeys = [`years`, `months`, `weeks`, `days`, `hours`, `minutes`, `seconds`,];
 /** Takes a 'duration' object for date-fns/add and validate
@@ -374,8 +388,13 @@ export function dtFmt(fmt = "short", dt) {
 //Array utilities
 /**
  * Return elements in arr1 Not In arr2
+ * @param arr1 - array of elements
+ * @param arr2 - single element or array of elements
  */
 export function inArr1NinArr2(arr1, arr2) {
+    if (!Array.isArray(arr2)) {
+        arr2 = [arr2];
+    }
     return arr1.filter((el) => !arr2.includes(el));
 }
 /**

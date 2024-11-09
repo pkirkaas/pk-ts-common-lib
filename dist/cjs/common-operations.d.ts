@@ -60,12 +60,22 @@ export declare function stamp(entry?: any, frameAfter?: any): string;
 export declare function getFrameAfterFunction(fname?: any, forceFunction?: any): any;
 /**
  * Return just the subset of the object, for keys specified in the "fields" array.
- * ACTUAALLY - can be deep -
+ * ACTUAALY - can be deep - BUT - consider using lodash `pick` & `omit` instead.
  * @param obj - src object
  * @param fields mixed array of string keys, or object with single key field with array of fields - called recursively
  * @return object - specified subset of object
  */
 export declare function subObj(obj: GenericObject, fields: any[]): GenObj;
+/**
+ * Partitions GenObj by keys array - included & excluded
+ * @param obj - src object
+ * @param keys - string|string[] - keys to filter by in picked/omitted
+ * Returns 2 objs - {picked, omitted}
+ */
+export declare function partitionObj(obj: GenObj, keys?: string | string[]): {
+    picked: GenObj;
+    omitted: GenObj;
+};
 export declare const dfnsKeys: string[];
 /** Takes a 'duration' object for date-fns/add and validate
  * it. Optionall, converts to negative (time/dates in past)
@@ -162,8 +172,10 @@ export declare const dtFnsFormats: {
 export declare function dtFmt(fmt?: string, dt?: any): string | false;
 /**
  * Return elements in arr1 Not In arr2
+ * @param arr1 - array of elements
+ * @param arr2 - single element or array of elements
  */
-export declare function inArr1NinArr2(arr1: any[], arr2: any[]): any[];
+export declare function inArr1NinArr2(arr1: any[], arr2: any): any[];
 /**
  * Unique intersection of two arrays
  * TODO: implement intersectAny & intersectAll for any number of arrays
