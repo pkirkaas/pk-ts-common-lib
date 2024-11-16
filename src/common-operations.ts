@@ -230,24 +230,25 @@ export function partitionObj(obj: GenObj, keys?: string|string[]): { picked: Gen
 }
 
 /**
- * Returns a new object w. specified keys, based on input objs
+ * Returns a new merged object, optionally filtered by keylist 
  * Useful for merging default options with user-supplied options
- * First arg should be defaults, or array of keys
+ * If first arg is array, then it is assumed to be the keys to pick
  * @param args - src keys & objects
- * If first arg is array, then it is assumed to be the keys, and the rest are objects
- * If first arg is object, then it contains the keys, and the rest are objects
+ * If first arg is array, then it is assumed to be the keys to pick
+ * 
  * @return object - specified subset of merged objects
  */
 export function extractOpts(...args) {
-  let keys = [];
+  let keys:any = null;
   if (Array.isArray(args[0])) {
     keys = args.shift();
-  } else {
-    keys = Object.keys(args[0]);
-  }
+  } 
+  
   let merged = _.merge({}, ...args);
-  let sub = _.pick(merged, keys);
-  return sub;
+  if (keys) {
+    merged = _.pick(merged, keys);
+  }
+  return merged;
 }
 
 export const dfnsKeys = [`years`, `months`, `weeks`, `days`, `hours`, `minutes`, `seconds`,];
