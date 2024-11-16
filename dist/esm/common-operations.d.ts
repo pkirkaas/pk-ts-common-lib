@@ -76,6 +76,16 @@ export declare function partitionObj(obj: GenObj, keys?: string | string[]): {
     picked: GenObj;
     omitted: GenObj;
 };
+/**
+ * Returns a new object w. specified keys, based on input objs
+ * Useful for merging default options with user-supplied options
+ * First arg should be defaults, or array of keys
+ * @param args - src keys & objects
+ * If first arg is array, then it is assumed to be the keys, and the rest are objects
+ * If first arg is object, then it contains the keys, and the rest are objects
+ * @return object - specified subset of merged objects
+ */
+export declare function extractOpts(...args: any[]): Pick<any, any>;
 export declare const dfnsKeys: string[];
 /** Takes a 'duration' object for date-fns/add and validate
  * it. Optionall, converts to negative (time/dates in past)
