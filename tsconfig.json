@@ -26,7 +26,10 @@
     "experimentalDecorators": true,
     "allowUmdGlobalAccess": true,
     "allowJs": true,
-    "newLine": "lf"
+    "newLine": "lf",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": [
     "./src/**/*"
