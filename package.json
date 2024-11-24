@@ -34,6 +34,7 @@
     "error-stack-parser": "*",
     "json5": "*",
     "lodash": "latest",
+    "slugify": "^1.6.6",
     "url-join": "latest",
     "url-status-code": "*"
   },
