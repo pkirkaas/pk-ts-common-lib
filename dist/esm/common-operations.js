@@ -830,6 +830,17 @@ export function isInstance(arg) {
     return false;
 }
 /**
+ * Hack for TypeScript - get the class of a class instance from its constructor,
+ * but cast it to GenObj, so static references work.
+ * Work in progress...
+ */
+export function getClass(instance) {
+    let res = isInstance(instance);
+    if (res) {
+        return res.constructor;
+    }
+}
+/**
  * Checks if an arg is an extended class or a function/top-level class
  * Appears to be no way to distinguish between a top-level class
  * and a function...

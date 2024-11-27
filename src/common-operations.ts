@@ -899,7 +899,7 @@ export function getConstructorChain(obj) {
  * verify test conditions...
  * @return - false, or {constructor, className}
  */
-export function isInstance(arg) {
+export function isInstance(arg):GenObj|false {
   if (isPrimitive(arg) || !isObject(arg) || isEmpty(arg)) {
     return false;
   }
@@ -913,6 +913,19 @@ export function isInstance(arg) {
     new PkError(`Exception:`, { e, arg });
   }
   return false;
+}
+
+/**
+ * Hack for TypeScript - get the class of a class instance from its constructor,
+ * but cast it to GenObj, so static references work. 
+ * Work in progress...
+ */
+export function getClass(instance:GenObj):GenObj {
+  let res = isInstance(instance);
+  if (res) {
+    return (res.constructor as GenObj);
+  }
+  
 }
 
 /**
@@ -931,6 +944,7 @@ export function isClassOrFunction(arg) {
   }
   return false;
 }
+
 
 
 /**

@@ -294,10 +294,13 @@ export declare function getConstructorChain(obj: any): any[];
  * verify test conditions...
  * @return - false, or {constructor, className}
  */
-export declare function isInstance(arg: any): false | {
-    constructor: any;
-    className: any;
-};
+export declare function isInstance(arg: any): GenObj | false;
+/**
+ * Hack for TypeScript - get the class of a class instance from its constructor,
+ * but cast it to GenObj, so static references work.
+ * Work in progress...
+ */
+export declare function getClass(instance: GenObj): GenObj;
 /**
  * Checks if an arg is an extended class or a function/top-level class
  * Appears to be no way to distinguish between a top-level class
