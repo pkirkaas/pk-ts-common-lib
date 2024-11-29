@@ -1,3 +1,7 @@
+/**
+ * Create new Axios instance, configured
+ */
+import axios from 'axios';
 import { GenObj } from './index.js';
 export declare const axiosDefaults: {
     headers: {};
@@ -26,7 +30,7 @@ export declare const axiosSettings: {
         };
     };
 };
-export declare function createAxios(opts?: GenObj): import("axios").AxiosInstance;
+export declare function createAxios(opts?: GenObj): axios.AxiosInstance;
 /**
  * An axios error can have several forms/reasons (see: https://axios-http.com/docs/handling_errors)
  * with several handling cases. This simplifies & returns

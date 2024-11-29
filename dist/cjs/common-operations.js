@@ -833,6 +833,7 @@ export function isInstance(arg) {
  * Hack for TypeScript - get the class of a class instance from its constructor,
  * but cast it to GenObj, so static references work.
  * Work in progress...
+ * But also better to add a "class" getter property to the Base class
  */
 export function getClass(instance) {
     let res = isInstance(instance);
