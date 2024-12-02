@@ -6,6 +6,19 @@
 import urlStatus from 'url-status-code';
 import JSON5 from 'json5';
 import path from 'path';
+/**
+ * EXPERIMENTAL - takes all args, returns array of scalars
+ */
+export function mkScalarArr(...args) {
+    let ret = [];
+    for (let arg of args) {
+        if (!Array.isArray(arg)) {
+            arg = [arg];
+        }
+        ret = ret.concat(arg);
+    }
+    return ret.flat(99);
+}
 import _ from "lodash";
 //import { PkError, GenericObject, GenObj } from './index.js';
 import { PkError, } from './index.js';

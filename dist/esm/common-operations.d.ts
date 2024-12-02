@@ -23,6 +23,12 @@ export type GenericObject = {
 export type GenObj = {
     [key: string]: any;
 };
+export type Scalar = string | number;
+export type Scalars = Scalar | Scalar[];
+/**
+ * EXPERIMENTAL - takes all args, returns array of scalars
+ */
+export declare function mkScalarArr(...args: any): Scalar[];
 export { urlStatus, JSON5, };
 /**
  * Check if running in commonJS or ESM Module env.

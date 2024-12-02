@@ -27,6 +27,24 @@ export type OptArrStr = string | string[];
 export type Falsy = false | 0 | "" | null | undefined;
 export type GenericObject = { [key: string]: any };
 export type GenObj = { [key: string]: any };
+export type Scalar = string | number; //Type for scalar values
+export type Scalars = Scalar | Scalar[]; // Type for scalar values or arrays of scalars - to mkArray
+
+/**
+ * EXPERIMENTAL - takes all args, returns array of scalars
+ */
+export function mkScalarArr(...args:any): Scalar[] {
+  let ret = [];
+  for (let arg of args) {
+    if (!Array.isArray(arg)) {
+      arg = [arg];
+    }
+    ret = ret.concat(arg);
+  }
+  return ret.flat(99) as Scalar[];
+}
+
+
 import _ from "lodash";
 //import { PkError, GenericObject, GenObj } from './index.js';
 import { PkError,  } from './index.js';
