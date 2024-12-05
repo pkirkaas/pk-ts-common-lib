@@ -1553,22 +1553,22 @@ export function typeOfEach(obj, wVal: any = false) {
 export function dbgReport(...args):string {
   let retArr=[];
   let idx=0;
-  for (let arg of args) {
+  for (let repArg of args) {
     idx++;
-    if (isPrimitive(arg)) {
-      retArr.push(arg);
+    if (isPrimitive(repArg)) {
+      retArr.push(repArg);
       continue;
     } 
     //let ret:GenObj = {};
     let ret:GenObj = {
-      arg,
+      repArg,
       idx,
-      toArg: typeOf(arg),
+      toArg: typeOf(repArg),
     }
-    if (isSimpleObject(arg)) {
-      ret.toEach = typeOfEach(arg);
+    if (isSimpleObject(repArg)) {
+      ret.toEach = typeOfEach(repArg);
     }
-    retArr.push(JSON5Stringify(ret));
+    retArr.push(`\n${JSON5Stringify(ret)}\n`);
   }
   return retArr.join(':\n');
 }
