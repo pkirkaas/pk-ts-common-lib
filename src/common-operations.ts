@@ -1547,6 +1547,32 @@ export function typeOfEach(obj, wVal: any = false) {
   return res;
 }
 
+/**
+ * Takes any args & tries to analyze them
+ */
+export function dbgReport(...args):string {
+  let retArr=[];
+  let idx=0;
+  for (let arg of args) {
+    idx++;
+    if (isPrimitive(arg)) {
+      retArr.push(arg);
+      continue;
+    } 
+    //let ret:GenObj = {};
+    let ret:GenObj = {
+      arg,
+      idx,
+      toArg: typeOf(arg),
+    }
+    if (isSimpleObject(arg)) {
+      ret.toEach = typeOfEach(arg);
+    }
+    retArr.push(JSON5Stringify(ret));
+  }
+  return retArr.join(':\n');
+}
+
 export function valWithType(val: any): any {
   return { type: typeOf(val), val };
 }
