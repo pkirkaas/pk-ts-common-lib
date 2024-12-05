@@ -210,6 +210,11 @@ export declare function arraysEqual(a: any, b: any): boolean;
  */
 export declare function dupEntries(...args: any[]): any[];
 /**
+ * Inserts an element between each element of an array - like join() but for arrays
+ *
+ */
+export declare function arrayJoin(arr: any[], sep: any): any[];
+/**
  * Is 'a' a subset of 'b' ?
  */
 export declare function isSubset(a: any, b: any): any;

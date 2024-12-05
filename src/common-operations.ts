@@ -525,6 +525,29 @@ export function dupEntries(...args) {
 }
 
 /**
+ * Inserts an element between each element of an array - like join() but for arrays
+ * 
+ */
+export function arrayJoin(arr: any[], sep: any):any[] {
+  // These both seem to work, but switch if problem discovered
+  const magicArrayJoin = (array, el) =>
+  array.length ?
+    array.slice(1).reduce((acc, cur) => acc.concat([el, cur]), [array[0]]) :
+    []
+
+
+function interleave(array, item) {
+  return array
+    .map(element => [element, item])
+    .flat()
+    .slice(0, -1);
+}
+return interleave(arr, sep);
+
+
+}
+
+/**
  * Is 'a' a subset of 'b' ?
  */
 export function isSubset(a, b) {
