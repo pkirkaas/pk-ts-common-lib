@@ -5,7 +5,8 @@
  *
  */
 import { Ajv, } from 'ajv'; //JSON Schema support
-import draft7MetaSchema from 'ajv/dist/refs/json-schema-draft-07.json' with { type: 'json' };
+//import draft7MetaSchema from 'ajv/dist/refs/json-schema-draft-07.json'  with { type: 'json' };
+import draft7MetaSchema from 'ajv/lib/refs/json-schema-draft-07.json' with { type: 'json' };
 import { uniqueVals, PkError, isObject, isPrimitive, typeOf } from './index.js';
 export function deepMeld(...objs) {
     let melded = {};
