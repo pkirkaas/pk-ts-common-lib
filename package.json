@@ -28,40 +28,20 @@
     "tstarg": "echo Something and --"
   },
   "dependencies": {
-    "ajv": "^8.17.1",
+    "ajv": "*",
     "axios": "*",
-    "console-title": "^1.1.0",
+    "console-title": "*",
     "date-fns": "latest",
     "error-stack-parser": "*",
     "json5": "*",
     "lodash": "latest",
-    "slugify": "^1.6.6",
+    "slugify": "*",
     "url-join": "latest",
     "url-status-code": "*"
   },
   "devDependencies": {
     "@types/lodash": "*",
     "@types/node": "*",
-    "ts-node": "^10.9.2",
     "typescript": "*"
-  },
-  "deprecatedDeps": {
-    "pk-ts-node-lib": "github:pkirkaas/pk-ts-node-lib#working",
-    "eslint": "*",
-    "@typescript-eslint/eslint-plugin": "*",
-    "nodemon": "*",
-    "@typescript-eslint/parser": "*",
-    "stack-trace": "*",
-    "xlinkdev": "echo NOOP to avoid errotr",
-    "devlink": "npm link",
-    "prettier": "*",
-    "file-type": "latest",
-    "json-decycle": "^3.0.0",
-    "tsconfig-paths": "*",
-    "ts-node": "*",
-    "eslint-config-prettier": "*",
-    "eslint-plugin-prettier": "*",
-    "stacktracey": "*",
-    "none": "end"
   }
 }

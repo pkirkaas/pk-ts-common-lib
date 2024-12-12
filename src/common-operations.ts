@@ -1723,7 +1723,7 @@ export function JSONStringify(arg, space=2) {
  *   and arrays concatenated
  */
 
-export function mergeAndConcat(...objs) {
+export function mergeAndConcat(...objs):GenObj {
   let customizer = function (objValue, srcValue) {
     if (_.isArray(objValue)) {
       return objValue.concat(srcValue);

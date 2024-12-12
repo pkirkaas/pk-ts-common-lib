@@ -496,7 +496,7 @@ export declare function JSONStringify(arg: any, space?: number): any;
  * @return object - a new object with the input objects merged,
  *   and arrays concatenated
  */
-export declare function mergeAndConcat(...objs: any[]): any;
+export declare function mergeAndConcat(...objs: any[]): GenObj;
 /**
  * Take input arrays, merge, & return single array w. unique values
  */
