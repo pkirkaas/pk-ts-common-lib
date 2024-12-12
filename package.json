@@ -32,7 +32,6 @@
     "axios": "*",
     "console-title": "*",
     "date-fns": "latest",
-    "error-stack-parser": "*",
     "json5": "*",
     "lodash": "latest",
     "slugify": "*",
