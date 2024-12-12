@@ -33,6 +33,7 @@
     "console-title": "*",
     "date-fns": "latest",
     "json5": "*",
+    "error-stack-parser": "*",
     "lodash": "latest",
     "slugify": "*",
     "url-join": "latest",
