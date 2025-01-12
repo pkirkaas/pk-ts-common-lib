@@ -25,6 +25,26 @@ export type GenObj = {
 };
 export type Scalar = string | number;
 export type Scalars = Scalar | Scalar[];
+/** Object inspection functions - exported below, but summarized here:*/
+/**
+ * getProps(obj, wVal = false): any[] | GenObj
+  array of all property names, or object { prop => value} (if wVal)
+ *
+ * allProps(obj: any, opt: string = 'tvp', depth = 6): GenObj | [] | string | boolean {
+ *  info about obj props, as per opts & depth:
+ * 'v' - the raw value
+ * 'p' - a parsed, readable value
+ * 't' - the value type
+ *
+ * allPropsP(obj: any, opts: GenObj = {}) - same as allProps, with different signature
+ * allPropsWithTypes(obj: any, depth = 6) {
+ * objInfo(arg: any, opt: string = 'tpv', depth = 6) - like allProps, but w. type of object itself.
+ *
+ * getObjDets(obj): { toObj, pkToObj, props, prototype, } - like allProps plus w. type, prototype, etc
+ *
+ * Exported from node-lib:
+ * objInspect(obj)
+ */
 /**
  * EXPERIMENTAL - takes all args, returns array of scalars
  */
@@ -262,6 +282,15 @@ export declare function checkUrl3(url: any): Promise<any>;
  */
 export declare function isEmpty(arg: any): boolean;
 /**
+ * Trickier than isEmpty - tests only for null or undefined - 0, '', {}, [] should return true
+ * IMPORTANT if testing if a param is not passed (null/undefined) or passed as 0
+ */
+export declare function isVoid(arg: any): boolean;
+/**
+ * For TS Type Guards
+ */
+export declare function isString(value: unknown): value is string;
+/**
  * returns arg, unless it is an empty object or array
  */
 export declare function trueVal(arg: any): any;
@@ -417,6 +446,26 @@ export declare function builtInName(bi: any): string;
  * OR - the built-in Name as string.
  */
 export declare function isBuiltIn(arg: any): string | false;
+/**
+ * Early version of analyzing functions
+ */
+export declare function inspectFunction(afnc: any): {
+    fncType: String;
+    jsToAfnc: "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object";
+    err: string;
+    name?: undefined;
+    body?: undefined;
+    length?: undefined;
+    props?: undefined;
+} | {
+    fncType: String;
+    jsToAfnc: "function";
+    name: any;
+    body: any;
+    length: any;
+    props: GenObj;
+    err?: undefined;
+};
 export declare const keepProps: string[];
 export declare function filterProps(props: any[]): any[];
 /**
@@ -430,8 +479,9 @@ export declare function filterProps(props: any[]): any[];
  * //2: object of keys => {type, value}
  * @param string opt any or all of: v|t|p|f
  * If 'v' - the raw value
- * If 'p' - a parsed, readable value
+ * If 'p' - a parsed, readable value //Not happy with implementation of parsable
  * If 't' - the value type
+ * TODO - add some kind of `function` inspection
 
  * If none of t,v, or p  just array of props
 
@@ -441,10 +491,22 @@ export declare function filterProps(props: any[]): any[];
  *
  * @param int depth - how many levels should it go?
  */
-export declare function allProps(obj: any, opt?: string, depth?: number): GenObj | [] | string | boolean;
-export declare function allPropsP(obj: any, opts?: GenObj): string | boolean | GenObj | [];
+/**
+ * Default props/opts for all obj prop inspection utils
+ */
+export declare let defaultAllPropsOpts: {
+    opt: string;
+    filter: boolean;
+    depth: number;
+};
+/**
+ * Experimenting with function overloading
+ * changed defaults - opt from "tvp" to "tv", depth from 6 to 1
+ */
+export declare function allProps(obj: any, optArg?: string, depth?: number): GenObj | [] | string | boolean;
+export declare function allProps(obj: any, optArg?: GenObj, depth?: number): GenObj | [] | string | boolean;
 export declare function allPropsWithTypes(obj: any, depth?: number): string | boolean | GenObj | [];
-export declare function objInfo(arg: any, opt?: string, depth?: number): GenObj;
+export declare function objInfo(arg: any, opt?: unknown, depth?: number): GenObj;
 /**
  * Returns the type of the argument. If it's an object, it returns the name of the constructor.
  */

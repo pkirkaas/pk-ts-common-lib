@@ -2,12 +2,44 @@
  * Not sure this should work...
  */
 
-//import {runCli} from 'pk-ts-node-lib';
+import {runCli} from 'pk-ts-node-lib';
 import {toSnakeCase, toCamelCase, camelCase, snakeCase, kebabCase, toCamel,  toSnake, toKebab, 
-  kebabKeys, camelKeys, dotPathVal,
+  kebabKeys, camelKeys, dotPathVal, allProps, allPropsWithTypes, objInfo, getObjDets, getProps,
+  typeOf, inspectFunction,
 }from '../index.js';
 
+/**
+ * Introspect a function
+ */
+export function intFnc(afnc){
+  let jsToAfnc = typeof afnc;
+  let toAfnc = typeOf(afnc); 
+  if (jsToAfnc !== 'function') {
+    return {
+      toAfnc, jsToAfnc,
+      err: `Not a function: ${afnc}`,
+    }
+  }
+  let afncName = afnc?.name;
+  let afncStr = afnc?.toString();
+  let afncLen = afnc?.length;
+  let afnDescs = Object.getOwnPropertyDescriptors(afnc);
+  //console.log(`Fnc Introspection:`, {toAfnc, jsToAfnc, afncName, afncStr, afncLen, afnDescs});
+  return {toAfnc, jsToAfnc, afncName,
+     afncStr,
+      afncLen, afnDescs};
+}
+
 export let tstFncs = {
+  tstIntFnc() {
+    let tstFnc = allProps;
+    //let tstFnc = "A dog";
+    //let tstFnc = {me:"A dog", days:7};
+
+    //let intRes = intFnc(tstFnc);
+    let intRes = inspectFunction(tstFnc);
+    console.log(`tstIntFnc`, {intRes});
+  },
   tstDPV() {
     let tstOb = {
       a: {
@@ -47,6 +79,11 @@ export let tstFncs = {
     }
     console.log("In tsta", resArr);
   },
+  tstProps() {
+    console.log("Testing new allProps");
+    let pr = allProps(tstFncs,"tvp",4);
+    console.log("In tstProps", pr);
+  },
   tstb() {
     let keyTst = {
       kebObj: { 
@@ -70,10 +107,10 @@ export let tstFncs = {
       }
       resArr.push(resObj);
     }
-    console.log("In tstb", resArr);
+    console.log("In tstb w. runCLI", resArr);
   },
 };
 
-//runCli(tstFncs);
+runCli(tstFncs);
 //tstFncs.tstb();
-tstFncs.tstDPV();
+//tstFncs.tstDPV();

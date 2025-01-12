@@ -6,6 +6,26 @@
 import urlStatus from 'url-status-code';
 import JSON5 from 'json5';
 import path from 'path';
+/** Object inspection functions - exported below, but summarized here:*/
+/**
+ * getProps(obj, wVal = false): any[] | GenObj
+  array of all property names, or object { prop => value} (if wVal)
+ *
+ * allProps(obj: any, opt: string = 'tvp', depth = 6): GenObj | [] | string | boolean {
+ *  info about obj props, as per opts & depth:
+ * 'v' - the raw value
+ * 'p' - a parsed, readable value
+ * 't' - the value type
+ *
+ * allPropsP(obj: any, opts: GenObj = {}) - same as allProps, with different signature
+ * allPropsWithTypes(obj: any, depth = 6) {
+ * objInfo(arg: any, opt: string = 'tpv', depth = 6) - like allProps, but w. type of object itself.
+ *
+ * getObjDets(obj): { toObj, pkToObj, props, prototype, } - like allProps plus w. type, prototype, etc
+ *
+ * Exported from node-lib:
+ * objInspect(obj)
+ */
 /**
  * EXPERIMENTAL - takes all args, returns array of scalars
  */
@@ -747,6 +767,19 @@ export function isEmpty(arg) {
     return false;
 }
 /**
+ * Trickier than isEmpty - tests only for null or undefined - 0, '', {}, [] should return true
+ * IMPORTANT if testing if a param is not passed (null/undefined) or passed as 0
+ */
+export function isVoid(arg) {
+    return arg === undefined || arg === null;
+}
+/**
+ * For TS Type Guards
+ */
+export function isString(value) {
+    return typeof value === "string";
+}
+/**
  * returns arg, unless it is an empty object or array
  */
 export function trueVal(arg) {
@@ -1171,6 +1204,31 @@ export function isBuiltIn(arg) {
     }
     return false;
 }
+/**
+ * Early version of analyzing functions
+ */
+export function inspectFunction(afnc) {
+    let jsToAfnc = typeof afnc;
+    let fncType = typeOf(afnc);
+    if (jsToAfnc !== 'function') {
+        return {
+            fncType, jsToAfnc,
+            err: `Not a function: ${afnc}`,
+        };
+    }
+    let name = afnc?.name;
+    let body = afnc?.toString();
+    let length = afnc?.length;
+    let afnDescs = Object.getOwnPropertyDescriptors(afnc);
+    let props = {};
+    for (let key of Object.keys(afnDescs)) {
+        props[key] = afnDescs[key]?.value;
+    }
+    //console.log(`Fnc Introspection:`, {toAfnc, jsToAfnc, afncName, afncStr, afncLen, afnDescs});
+    return { fncType, jsToAfnc, name,
+        body,
+        length, props };
+}
 //skipProps - maybe stuff like 'caller', 'callee', 'arguments'?
 export const keepProps = ['constructor', 'prototype', 'name', 'class',
     'type', 'super', 'length',];
@@ -1190,8 +1248,9 @@ export function filterProps(props) {
  * //2: object of keys => {type, value}
  * @param string opt any or all of: v|t|p|f
  * If 'v' - the raw value
- * If 'p' - a parsed, readable value
+ * If 'p' - a parsed, readable value //Not happy with implementation of parsable
  * If 't' - the value type
+ * TODO - add some kind of `function` inspection
 
  * If none of t,v, or p  just array of props
 
@@ -1201,8 +1260,28 @@ export function filterProps(props) {
  *
  * @param int depth - how many levels should it go?
  */
-export function allProps(obj, opt = 'tvp', depth = 6) {
-    //export function allProps(obj: any, { dets = 'p', filter = true }: { dets?: string, filter?: boolean } = {}) {
+/**
+ * Default props/opts for all obj prop inspection utils
+ */
+export let defaultAllPropsOpts = {
+    opt: 'tv',
+    filter: true,
+    depth: 1,
+};
+export function allProps(obj, optArg, depth) {
+    let allPropsOpts = { ...defaultAllPropsOpts, };
+    if (isString(optArg)) {
+        allPropsOpts.opt = optArg;
+        //} else if (isObject(optArg)) {
+    }
+    else if (typeof optArg === 'object') {
+        allPropsOpts = { ...allPropsOpts, ...optArg };
+    }
+    if (isVoid(depth)) {
+        depth = allPropsOpts.depth;
+    }
+    let opt = allPropsOpts.opt;
+    //export function allProps(obj: any, { opt = 'p', filter = true }: { opt?: string, filter?: boolean } = {}) {
     try {
         if (!isObject(obj)) {
             return typeOf(obj);
@@ -1284,15 +1363,18 @@ export function allProps(obj, opt = 'tvp', depth = 6) {
     }
 }
 // Just making an easier call to allProps...
-export function allPropsP(obj, opts = {}) {
-    let opt = opts.opt || 'tvp';
-    let depth = opts.depth || 3;
-    return allProps(obj, opt, depth);
+/*
+export function allPropsP(obj: any, opts: GenObj = {}) {
+  //let opt = opts.opt || 'tvp';
+  //let depth = opts.depth || 3;
+  return allProps(obj, opts,);
 }
-export function allPropsWithTypes(obj, depth = 6) {
+  */
+export function allPropsWithTypes(obj, depth = 1) {
     return allProps(obj, 't', depth);
 }
-export function objInfo(arg, opt = 'tpv', depth = 6) {
+//export function objInfo(arg: any, opt: string = 'tpv', depth = 6) {
+export function objInfo(arg, opt, depth) {
     let toArg = typeOf(arg);
     let info = { type: toArg };
     if (!isObject(arg)) {
