@@ -1,30 +1,25 @@
 /**
  * Not sure this should work...
  */
-import { runCli } from 'pk-ts-node-lib';
-import { toCamel, toSnake, toKebab, kebabKeys, camelKeys, dotPathVal, allProps, typeOf, inspectFunction, } from '../index.js';
-/**
- * Introspect a function
- */
-export function intFnc(afnc) {
-    let jsToAfnc = typeof afnc;
-    let toAfnc = typeOf(afnc);
-    if (jsToAfnc !== 'function') {
-        return {
-            toAfnc, jsToAfnc,
-            err: `Not a function: ${afnc}`,
-        };
-    }
-    let afncName = afnc?.name;
-    let afncStr = afnc?.toString();
-    let afncLen = afnc?.length;
-    let afnDescs = Object.getOwnPropertyDescriptors(afnc);
-    //console.log(`Fnc Introspection:`, {toAfnc, jsToAfnc, afncName, afncStr, afncLen, afnDescs});
-    return { toAfnc, jsToAfnc, afncName,
-        afncStr,
-        afncLen, afnDescs };
-}
+import { runCli, stdOut, } from 'pk-ts-node-lib';
+import { JSON5Stringify, toCamel, toSnake, toKebab, kebabKeys, camelKeys, dotPathVal, allProps, inspectFunction, } from '../index.js';
+let tstObj = {
+    a: {
+        b: { c: ['aV', 'bV', 'cV'], }
+    },
+    ameth(arg) {
+        return arg;
+    },
+    c: {},
+    y: "A dog",
+};
 export let tstFncs = {
+    tstAllProps() {
+        //let res = allProps(tstObj,"tvp",3);
+        let res = allProps(tstObj, "tv", 3);
+        console.log(`tstAllProps`, { res });
+        stdOut(JSON5Stringify(res));
+    },
     tstIntFnc() {
         let tstFnc = allProps;
         //let tstFnc = "A dog";

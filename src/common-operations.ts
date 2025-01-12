@@ -30,7 +30,7 @@ export type GenObj = { [key: string]: any };
 export type Scalar = string | number; //Type for scalar values
 export type Scalars = Scalar | Scalar[]; // Type for scalar values or arrays of scalars - to mkArray
 
-/** Object inspection functions - exported below, but summarized here:*/
+/** Object/function inspection functions - exported below, but summarized here:*/
 /**
  * getProps(obj, wVal = false): any[] | GenObj
   array of all property names, or object { prop => value} (if wVal)
@@ -41,10 +41,10 @@ export type Scalars = Scalar | Scalar[]; // Type for scalar values or arrays of 
  * 'p' - a parsed, readable value
  * 't' - the value type
  * 
- * allPropsP(obj: any, opts: GenObj = {}) - same as allProps, with different signature
  * allPropsWithTypes(obj: any, depth = 6) {
  * objInfo(arg: any, opt: string = 'tpv', depth = 6) - like allProps, but w. type of object itself.
  *
+ * inspectFunction(afunc) - function details
  * getObjDets(obj): { toObj, pkToObj, props, prototype, } - like allProps plus w. type, prototype, etc 
  * 
  * Exported from node-lib:
@@ -1429,7 +1429,7 @@ export function allProps(obj: any, optArg?:unknown, depth?:number): GenObj | [] 
     */
     //let opts = opt.split('');
     let opts = [...opt];
-    let filter = !opts.includes('f');
+    let filter = !opts.includes('f'); //TODO: Incompatible with optArg as obj w. filter prop
     let res = isParsed(obj);
     if (res) {
       return {
@@ -1463,6 +1463,7 @@ export function allProps(obj: any, optArg?:unknown, depth?:number): GenObj | [] 
     } //We want more...
 
     let retObj: GenObj = {};
+    //TODO: Weird - if we have a prop that is a function, we don't get its value - not even empty?
     for (let prop of unique) {
       let ret: GenObj = {};
       let val: any;

@@ -6,7 +6,7 @@
 import urlStatus from 'url-status-code';
 import JSON5 from 'json5';
 import path from 'path';
-/** Object inspection functions - exported below, but summarized here:*/
+/** Object/function inspection functions - exported below, but summarized here:*/
 /**
  * getProps(obj, wVal = false): any[] | GenObj
   array of all property names, or object { prop => value} (if wVal)
@@ -17,10 +17,10 @@ import path from 'path';
  * 'p' - a parsed, readable value
  * 't' - the value type
  *
- * allPropsP(obj: any, opts: GenObj = {}) - same as allProps, with different signature
  * allPropsWithTypes(obj: any, depth = 6) {
  * objInfo(arg: any, opt: string = 'tpv', depth = 6) - like allProps, but w. type of object itself.
  *
+ * inspectFunction(afunc) - function details
  * getObjDets(obj): { toObj, pkToObj, props, prototype, } - like allProps plus w. type, prototype, etc
  *
  * Exported from node-lib:
@@ -1296,7 +1296,7 @@ export function allProps(obj, optArg, depth) {
         */
         //let opts = opt.split('');
         let opts = [...opt];
-        let filter = !opts.includes('f');
+        let filter = !opts.includes('f'); //TODO: Incompatible with optArg as obj w. filter prop
         let res = isParsed(obj);
         if (res) {
             return {
@@ -1327,6 +1327,7 @@ export function allProps(obj, optArg, depth) {
             return unique;
         } //We want more...
         let retObj = {};
+        //TODO: Weird - if we have a prop that is a function, we don't get its value - not even empty?
         for (let prop of unique) {
             let ret = {};
             let val;

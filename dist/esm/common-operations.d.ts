@@ -25,7 +25,7 @@ export type GenObj = {
 };
 export type Scalar = string | number;
 export type Scalars = Scalar | Scalar[];
-/** Object inspection functions - exported below, but summarized here:*/
+/** Object/function inspection functions - exported below, but summarized here:*/
 /**
  * getProps(obj, wVal = false): any[] | GenObj
   array of all property names, or object { prop => value} (if wVal)
@@ -36,10 +36,10 @@ export type Scalars = Scalar | Scalar[];
  * 'p' - a parsed, readable value
  * 't' - the value type
  *
- * allPropsP(obj: any, opts: GenObj = {}) - same as allProps, with different signature
  * allPropsWithTypes(obj: any, depth = 6) {
  * objInfo(arg: any, opt: string = 'tpv', depth = 6) - like allProps, but w. type of object itself.
  *
+ * inspectFunction(afunc) - function details
  * getObjDets(obj): { toObj, pkToObj, props, prototype, } - like allProps plus w. type, prototype, etc
  *
  * Exported from node-lib:
