@@ -33,8 +33,8 @@ export type Scalars = Scalar | Scalar[]; // Type for scalar values or arrays of 
 // Testing new Type definitions from AI
 
 export type Void = null | undefined;
-export type ObjKey = number | string | boolean |  symbol;
-export type SimpleValue = bigint | ObjKey;
+export type ObjKey = number | string |  symbol;
+export type SimpleValue = bigint | ObjKey | boolean ;
 export type Primitive = SimpleValue | Void;
 export type AnyObject = Record<PropertyKey, unknown>;
 
