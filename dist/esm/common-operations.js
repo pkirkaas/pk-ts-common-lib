@@ -6,6 +6,42 @@
 import urlStatus from 'url-status-code';
 import JSON5 from 'json5';
 import path from 'path';
+/**
+ * Represents a plain JavaScript object (not an array, Map, Set, etc)
+ * Must satisfy these conditions:
+ * 1. Is a non-null object
+ * 2. Has the same prototype as an empty object literal {}
+ *
+ * This type excludes:
+ * - Arrays (different prototype)
+ * - Date objects (different prototype)
+ * - Map/Set (different prototype)
+ * - Class instances (different prototype)
+ */
+/*
+// Alternative type definition using a type predicate in a type alias from Claude
+export type SimpleObject = {
+  [key: string]: unknown;
+} & {
+  // This intersection ensures the object has Object.prototype as its prototype
+  // by checking that it doesn't have Array.prototype or other prototypes
+  [K in keyof any[]]: never;
+} & {
+  [K in keyof Date]: never;
+} & {
+  [K in keyof Map<any, any>]: never;
+} & {
+  [K in keyof Set<any>]: never;
+};
+*/
+/*
+// SimpleObject from openAI: Only objects that satisfy the `isSimpleObject` test
+export type SimpleObject = {
+  [key: string]: any;
+} & {
+  __proto__: {}; // Ensures the object's prototype matches that of a plain object
+};
+*/
 /** Object/function inspection functions - exported below, but summarized here:*/
 /**
  * getProps(obj, wVal = false): any[] | GenObj
@@ -757,6 +793,9 @@ export async function checkUrl3(url) {
     }
 }
 /**
+ * For TS Type Guards - predicate `is<Type>` functions
+ */
+/**
  * Checks if the argument is "Empty" - null, undefined, empty string, empty array, empty object
  * This is a tough call & really hard to get right...
  * @param arg - argument to test
@@ -787,19 +826,8 @@ export function isEmpty(arg) {
 export function isVoid(arg) {
     return arg === undefined || arg === null;
 }
-/**
- * For TS Type Guards
- */
 export function isString(value) {
     return typeof value === "string";
-}
-/**
- * returns arg, unless it is an empty object or array
- */
-export function trueVal(arg) {
-    if (!isEmpty(arg)) {
-        return arg;
-    }
 }
 /**
  * Checks if the argument has values by reference (array, object, etc)
@@ -816,6 +844,9 @@ export function isSimpleType(arg) {
     let simpletypes = ["boolean", "number", "bigint", "string"];
     let toarg = typeof arg;
     return simpletypes.includes(toarg);
+}
+export function isFunction(arg) {
+    return typeof arg === "function";
 }
 /**
  * Checks if the argument is a "primitive" JS type - boolean, number, string, bigint, null, undefined, ...
@@ -846,6 +877,14 @@ export function isObject(arg, alsoEmpty = false, alsoFunction = true) {
         return true;
     }
     return _.isObjectLike(arg);
+}
+/**
+ * returns arg, unless it is an empty object or array
+ */
+export function trueVal(arg) {
+    if (!isEmpty(arg)) {
+        return arg;
+    }
 }
 // Start Object analysis fncs
 /** Try to make simple copies of complex objects (like with cyclic references)
@@ -1543,6 +1582,7 @@ export function valWithType(val) {
 /**
  * Returns true if arg is string & can be JSON parsed
  */
+//export function isJsonStr(arg: any): boolean {
 export function isJsonStr(arg) {
     if (typeof arg !== 'string') {
         return false;

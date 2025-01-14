@@ -25,6 +25,29 @@ export type GenObj = {
 };
 export type Scalar = string | number;
 export type Scalars = Scalar | Scalar[];
+export type Void = null | undefined;
+export type SimpleValue = number | string | boolean | bigint | symbol;
+export type Primitive = SimpleValue | Void;
+export type AnyObject = Record<PropertyKey, unknown>;
+export type SimpleObject = {
+    [K in PropertyKey]: unknown;
+} & {
+    [Symbol.toStringTag]: 'Object';
+} extends infer O ? {
+    [K in keyof O]: O[K];
+} : never;
+/**
+ * Represents a plain JavaScript object (not an array, Map, Set, etc)
+ * Must satisfy these conditions:
+ * 1. Is a non-null object
+ * 2. Has the same prototype as an empty object literal {}
+ *
+ * This type excludes:
+ * - Arrays (different prototype)
+ * - Date objects (different prototype)
+ * - Map/Set (different prototype)
+ * - Class instances (different prototype)
+ */
 /** Object/function inspection functions - exported below, but summarized here:*/
 /**
  * getProps(obj, wVal = false): any[] | GenObj
@@ -119,7 +142,12 @@ export declare const dfnsKeys: string[];
  * //@param boolean forceNegative - force to negative/past offest?
  * @return duration
  */
-export declare function validateDateFnsDuration(obj: any): any;
+export declare function validateDateFnsDuration(obj: any): false | {
+    [x: string]: unknown;
+    [x: number]: unknown;
+    [x: symbol]: unknown;
+    [Symbol.toStringTag]: "Object";
+};
 /**
  * Returns true if arg str contains ANY of the what strings
  */
@@ -290,6 +318,9 @@ export declare function firstToUpper(str: string): string;
  */
 export declare function checkUrl3(url: any): Promise<any>;
 /**
+ * For TS Type Guards - predicate `is<Type>` functions
+ */
+/**
  * Checks if the argument is "Empty" - null, undefined, empty string, empty array, empty object
  * This is a tough call & really hard to get right...
  * @param arg - argument to test
@@ -300,15 +331,8 @@ export declare function isEmpty(arg: any): boolean;
  * Trickier than isEmpty - tests only for null or undefined - 0, '', {}, [] should return true
  * IMPORTANT if testing if a param is not passed (null/undefined) or passed as 0
  */
-export declare function isVoid(arg: any): boolean;
-/**
- * For TS Type Guards
- */
+export declare function isVoid(arg: unknown): arg is Void;
 export declare function isString(value: unknown): value is string;
-/**
- * returns arg, unless it is an empty object or array
- */
-export declare function trueVal(arg: any): any;
 /**
  * Checks if the argument has values by reference (array, object, etc)
  * Arrays & Objects passed by referrence,
@@ -318,22 +342,27 @@ export declare function isByRef(arg: any): boolean;
 /**
  * Checks if the argument is a "simple" JS type - boolean, number, string, bigint
  */
-export declare function isSimpleType(arg: any): boolean;
+export declare function isSimpleType(arg: unknown): boolean;
+export declare function isFunction(arg: unknown): arg is Function;
 /**
  * Checks if the argument is a "primitive" JS type - boolean, number, string, bigint, null, undefined, ...
  */
-export declare function isPrimitive(arg: any): boolean;
+export declare function isPrimitive(arg: unknown): arg is Primitive;
 /**
  * Tests if the argument is a "simple" JS object - with just keys
  * & values, not based on other types or prototypes
  *
  * TODO: What about arrays?
  */
-export declare function isSimpleObject(anobj: any): boolean;
+export declare function isSimpleObject(anobj: unknown): anobj is SimpleObject;
 /**
  * Checks if the argument is an object -
  */
 export declare function isObject(arg: any, alsoEmpty?: boolean, alsoFunction?: boolean): boolean;
+/**
+ * returns arg, unless it is an empty object or array
+ */
+export declare function trueVal(arg: any): any;
 /** Try to make simple copies of complex objects (like with cyclic references)
  * to be storable in MongoDB
  * Primitives will just be returned unchanged.
@@ -540,11 +569,11 @@ export declare function valWithType(val: any): any;
 /**
  * Returns true if arg is string & can be JSON parsed
  */
-export declare function isJsonStr(arg: any): boolean;
+export declare function isJsonStr(arg: any): arg is string;
 /**
  * Returns true if arg is string & can be JSON5 parseable
  */
-export declare function isJson5Str(arg: any): boolean;
+export declare function isJson5Str(arg: any): arg is string;
 export declare function JSONParse(str: string): any;
 /**
  * Experiment with Use retrocycle to parse

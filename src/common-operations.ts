@@ -30,6 +30,58 @@ export type GenObj = { [key: string]: any };
 export type Scalar = string | number; //Type for scalar values
 export type Scalars = Scalar | Scalar[]; // Type for scalar values or arrays of scalars - to mkArray
 
+// Testing new Type definitions from AI
+
+export type Void = null | undefined;
+export type SimpleValue = number | string | boolean | bigint | symbol;
+export type Primitive = SimpleValue | Void;
+export type AnyObject = Record<PropertyKey, unknown>;
+
+// SimpleObject type using a type predicate in a type alias.
+// This is the most type-safe and idiomatic way.
+export type SimpleObject = { [K in PropertyKey]: unknown } & {
+    [Symbol.toStringTag]: 'Object' // Ensures it's a plain object
+} extends infer O ? { [K in keyof O]: O[K] } : never
+
+/**
+ * Represents a plain JavaScript object (not an array, Map, Set, etc)
+ * Must satisfy these conditions:
+ * 1. Is a non-null object
+ * 2. Has the same prototype as an empty object literal {}
+ * 
+ * This type excludes:
+ * - Arrays (different prototype)
+ * - Date objects (different prototype)
+ * - Map/Set (different prototype)
+ * - Class instances (different prototype)
+ */
+/*
+// Alternative type definition using a type predicate in a type alias from Claude
+export type SimpleObject = {
+  [key: string]: unknown;
+} & {
+  // This intersection ensures the object has Object.prototype as its prototype
+  // by checking that it doesn't have Array.prototype or other prototypes
+  [K in keyof any[]]: never;
+} & {
+  [K in keyof Date]: never;
+} & {
+  [K in keyof Map<any, any>]: never;
+} & {
+  [K in keyof Set<any>]: never;
+};
+*/
+
+
+/*
+// SimpleObject from openAI: Only objects that satisfy the `isSimpleObject` test
+export type SimpleObject = {
+  [key: string]: any;
+} & {
+  __proto__: {}; // Ensures the object's prototype matches that of a plain object
+};
+*/
+
 /** Object/function inspection functions - exported below, but summarized here:*/
 /**
  * getProps(obj, wVal = false): any[] | GenObj
@@ -841,6 +893,9 @@ export async function checkUrl3(url) {
   }
 }
 
+/**
+ * For TS Type Guards - predicate `is<Type>` functions
+ */
 
 /**
  * Checks if the argument is "Empty" - null, undefined, empty string, empty array, empty object
@@ -871,22 +926,11 @@ export function isEmpty(arg): boolean {
  * Trickier than isEmpty - tests only for null or undefined - 0, '', {}, [] should return true
  * IMPORTANT if testing if a param is not passed (null/undefined) or passed as 0
  */
-export function isVoid(arg): boolean {
+export function isVoid(arg:unknown): arg is Void {
   return arg === undefined || arg === null;
 }
-/**
- * For TS Type Guards
- */
 export function isString(value: unknown): value is string {
   return typeof value === "string";
-}
-/**
- * returns arg, unless it is an empty object or array
- */
-export function trueVal(arg) {
-  if (!isEmpty(arg)) {
-    return arg;
-  }
 }
 
 /**
@@ -901,16 +945,20 @@ export function isByRef(arg: any): boolean {
 /**
  * Checks if the argument is a "simple" JS type - boolean, number, string, bigint
  */
-export function isSimpleType(arg) {
+export function isSimpleType(arg:unknown): boolean {
   let simpletypes = ["boolean", "number", "bigint", "string"];
   let toarg = typeof arg;
   return simpletypes.includes(toarg);
 }
 
+export function isFunction(arg: unknown): arg is Function {
+  return typeof arg === "function";
+}
+
 /**
  * Checks if the argument is a "primitive" JS type - boolean, number, string, bigint, null, undefined, ...
  */
-export function isPrimitive(arg: any) {
+export function isPrimitive(arg: unknown): arg is Primitive {
   return arg !== Object(arg);
 }
 /**
@@ -919,7 +967,7 @@ export function isPrimitive(arg: any) {
  * 
  * TODO: What about arrays?
  */
-export function isSimpleObject(anobj) {
+export function isSimpleObject(anobj:unknown): anobj is SimpleObject {
   if (!anobj || typeof anobj !== "object") {
     return false;
   }
@@ -937,6 +985,16 @@ export function isObject(arg, alsoEmpty = false, alsoFunction = true):boolean {
     return true;
   }
   return _.isObjectLike(arg);
+}
+
+
+/**
+ * returns arg, unless it is an empty object or array
+ */
+export function trueVal(arg) {
+  if (!isEmpty(arg)) {
+    return arg;
+  }
 }
 
 
@@ -1687,7 +1745,8 @@ export function valWithType(val: any): any {
 /**
  * Returns true if arg is string & can be JSON parsed
  */
-export function isJsonStr(arg: any): boolean {
+//export function isJsonStr(arg: any): boolean {
+export function isJsonStr(arg: any): arg is string {
   if (typeof arg !== 'string') {
     return false;
   }
@@ -1703,7 +1762,7 @@ export function isJsonStr(arg: any): boolean {
 /**
  * Returns true if arg is string & can be JSON5 parseable
  */
-export function isJson5Str(arg: any): boolean {
+export function isJson5Str(arg: any): arg is string {
   if (typeof arg !== 'string') {
     return false;
   }
