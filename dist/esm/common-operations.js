@@ -60,9 +60,14 @@ export function isEmpty(arg) {
     }
     return false;
 }
-export function isObjKey(arg) {
-    return typeof arg === 'number' || typeof arg === 'string' || typeof arg === 'boolean' || typeof arg === 'symbol';
+export function isPropertyKey(key) {
+    return typeof key === 'string' || typeof key === 'symbol' || typeof key === 'number';
 }
+/*
+export function isObjKey(arg: any): arg is ObjKey {
+  return typeof arg === 'number' || typeof arg === 'string' || typeof arg === 'symbol';
+}
+  */
 /**
  * Trickier than isEmpty - tests only for null or undefined - 0, '', {}, [] should return true
  * IMPORTANT if testing if a param is not passed (null/undefined) or passed as 0

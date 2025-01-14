@@ -24,8 +24,7 @@ export type GenObj = GenericObject;
 export type Scalar = string | number;
 export type Scalars = Scalar | Scalar[];
 export type Void = null | undefined;
-export type ObjKey = number | string | symbol;
-export type SimpleValue = bigint | ObjKey | boolean;
+export type SimpleValue = bigint | PropertyKey | boolean;
 export type Primitive = SimpleValue | Void;
 export type AnyObject = Record<PropertyKey, unknown>;
 /**
@@ -71,7 +70,7 @@ export declare function asNumeric(arg: any): number | boolean;
  * @return boolean - true if empty, false if not empty
  */
 export declare function isEmpty(arg: any): boolean;
-export declare function isObjKey(arg: any): arg is ObjKey;
+export declare function isPropertyKey(key: unknown): key is PropertyKey;
 /**
  * Trickier than isEmpty - tests only for null or undefined - 0, '', {}, [] should return true
  * IMPORTANT if testing if a param is not passed (null/undefined) or passed as 0

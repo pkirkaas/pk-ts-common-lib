@@ -35,8 +35,8 @@ export type Scalars = Scalar | Scalar[]; // Type for scalar values or arrays of 
 // Testing new Type definitions from AI
 
 export type Void = null | undefined;
-export type ObjKey = number | string |  symbol;
-export type SimpleValue = bigint | ObjKey | boolean ;
+//export type ObjKey = number | string |  symbol;
+export type SimpleValue = bigint | PropertyKey | boolean ;
 export type Primitive = SimpleValue | Void;
 export type AnyObject = Record<PropertyKey, unknown>;
 
@@ -145,9 +145,15 @@ export function isEmpty(arg): boolean {
   return false;
 }
 
-export function isObjKey(arg: any): arg is ObjKey {
-  return typeof arg === 'number' || typeof arg === 'string' || typeof arg === 'boolean' || typeof arg === 'symbol';
+export function isPropertyKey(key: unknown): key is PropertyKey {
+  return typeof key === 'string' || typeof key === 'symbol' || typeof key === 'number';
 }
+
+/*
+export function isObjKey(arg: any): arg is ObjKey {
+  return typeof arg === 'number' || typeof arg === 'string' || typeof arg === 'symbol';
+}
+  */
 /**
  * Trickier than isEmpty - tests only for null or undefined - 0, '', {}, [] should return true
  * IMPORTANT if testing if a param is not passed (null/undefined) or passed as 0
