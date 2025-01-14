@@ -26,7 +26,8 @@ export type GenObj = {
 export type Scalar = string | number;
 export type Scalars = Scalar | Scalar[];
 export type Void = null | undefined;
-export type SimpleValue = number | string | boolean | bigint | symbol;
+export type ObjKey = number | string | boolean | symbol;
+export type SimpleValue = bigint | ObjKey;
 export type Primitive = SimpleValue | Void;
 export type AnyObject = Record<PropertyKey, unknown>;
 export type SimpleObject = {
@@ -48,6 +49,65 @@ export type SimpleObject = {
  * - Map/Set (different prototype)
  * - Class instances (different prototype)
  */
+/**
+ * Checks if the arg can be converted to a number
+ * If not, returns boolean false
+ * If is numeric:
+ *   returns boolean true if asNum is false
+ *   else returns the numeric value (which could be 0)
+ * @param arg - argument to check
+ * @param asNum boolean - if true, returns the numeric value
+ * @return number or boolean true/false
+ *
+ */
+export declare function isNumeric(arg: any, asNum?: boolean): number | boolean;
+/**
+ * Returns the numeric value, or boolean false
+ */
+export declare function asNumeric(arg: any): number | boolean;
+/**
+ * For TS Type Guards - predicate `is<Type>` functions
+ */
+/**
+ * Checks if the argument is "Empty" - null, undefined, empty string, empty array, empty object
+ * This is a tough call & really hard to get right...
+ * @param arg - argument to test
+ * @return boolean - true if empty, false if not empty
+ */
+export declare function isEmpty(arg: any): boolean;
+export declare function isObjKey(arg: any): arg is ObjKey;
+/**
+ * Trickier than isEmpty - tests only for null or undefined - 0, '', {}, [] should return true
+ * IMPORTANT if testing if a param is not passed (null/undefined) or passed as 0
+ */
+export declare function isVoid(arg: unknown): arg is Void;
+export declare function isString(value: unknown): value is string;
+/**
+ * Checks if the argument has values by reference (array, object, etc)
+ * Arrays & Objects passed by referrence,
+ * risk of unintended changes
+ */
+export declare function isByRef(arg: any): boolean;
+/**
+ * Checks if the argument is a "simple" JS type - boolean, number, string, bigint
+ */
+export declare function isSimpleType(arg: unknown): boolean;
+export declare function isFunction(arg: unknown): arg is Function;
+/**
+ * Checks if the argument is a "primitive" JS type - boolean, number, string, bigint, null, undefined, ...
+ */
+export declare function isPrimitive(arg: unknown): arg is Primitive;
+/**
+ * Tests if the argument is a "simple" JS object - with just keys
+ * & values, not based on other types or prototypes
+ *
+ * TODO: What about arrays?
+ */
+export declare function isSimpleObject(anobj: unknown): anobj is SimpleObject;
+/**
+ * Checks if the argument is an object -
+ */
+export declare function isObject(arg: any, alsoEmpty?: boolean, alsoFunction?: boolean): boolean;
 /** Object/function inspection functions - exported below, but summarized here:*/
 /**
  * getProps(obj, wVal = false): any[] | GenObj
@@ -168,22 +228,6 @@ export declare function filterInt(value: any): number | false;
  * Move this to browser library when the time comes
  */
 export declare function eventInfo(ev: any): {};
-/**
- * Checks if the arg can be converted to a number
- * If not, returns boolean false
- * If is numeric:
- *   returns boolean true if asNum is false
- *   else returns the numeric value (which could be 0)
- * @param arg - argument to check
- * @param asNum boolean - if true, returns the numeric value
- * @return number or boolean true/false
- *
- */
-export declare function isNumeric(arg: any, asNum?: boolean): number | boolean;
-/**
- * Returns the numeric value, or boolean false
- */
-export declare function asNumeric(arg: any): number | boolean;
 /**
  * If arg can be in any way be interpreted as a date,
  * returns the JS Date object, optionally date-fns formatted string
@@ -317,48 +361,6 @@ export declare function firstToUpper(str: string): string;
  *
  */
 export declare function checkUrl3(url: any): Promise<any>;
-/**
- * For TS Type Guards - predicate `is<Type>` functions
- */
-/**
- * Checks if the argument is "Empty" - null, undefined, empty string, empty array, empty object
- * This is a tough call & really hard to get right...
- * @param arg - argument to test
- * @return boolean - true if empty, false if not empty
- */
-export declare function isEmpty(arg: any): boolean;
-/**
- * Trickier than isEmpty - tests only for null or undefined - 0, '', {}, [] should return true
- * IMPORTANT if testing if a param is not passed (null/undefined) or passed as 0
- */
-export declare function isVoid(arg: unknown): arg is Void;
-export declare function isString(value: unknown): value is string;
-/**
- * Checks if the argument has values by reference (array, object, etc)
- * Arrays & Objects passed by referrence,
- * risk of unintended changes
- */
-export declare function isByRef(arg: any): boolean;
-/**
- * Checks if the argument is a "simple" JS type - boolean, number, string, bigint
- */
-export declare function isSimpleType(arg: unknown): boolean;
-export declare function isFunction(arg: unknown): arg is Function;
-/**
- * Checks if the argument is a "primitive" JS type - boolean, number, string, bigint, null, undefined, ...
- */
-export declare function isPrimitive(arg: unknown): arg is Primitive;
-/**
- * Tests if the argument is a "simple" JS object - with just keys
- * & values, not based on other types or prototypes
- *
- * TODO: What about arrays?
- */
-export declare function isSimpleObject(anobj: unknown): anobj is SimpleObject;
-/**
- * Checks if the argument is an object -
- */
-export declare function isObject(arg: any, alsoEmpty?: boolean, alsoFunction?: boolean): boolean;
 /**
  * returns arg, unless it is an empty object or array
  */

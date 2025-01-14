@@ -42,6 +42,122 @@ export type SimpleObject = {
   __proto__: {}; // Ensures the object's prototype matches that of a plain object
 };
 */
+/**
+ * Checks if the arg can be converted to a number
+ * If not, returns boolean false
+ * If is numeric:
+ *   returns boolean true if asNum is false
+ *   else returns the numeric value (which could be 0)
+ * @param arg - argument to check
+ * @param asNum boolean - if true, returns the numeric value
+ * @return number or boolean true/false
+ *
+ */
+export function isNumeric(arg, asNum = false) {
+    let num = Number(arg);
+    if (num !== parseFloat(arg)) {
+        return false;
+    }
+    if (asNum) {
+        return num;
+    }
+    return true;
+}
+/**
+ * Returns the numeric value, or boolean false
+ */
+export function asNumeric(arg) {
+    return isNumeric(arg, true);
+}
+/**
+ * For TS Type Guards - predicate `is<Type>` functions
+ */
+/**
+ * Checks if the argument is "Empty" - null, undefined, empty string, empty array, empty object
+ * This is a tough call & really hard to get right...
+ * @param arg - argument to test
+ * @return boolean - true if empty, false if not empty
+ */
+export function isEmpty(arg) {
+    if (!arg || (Array.isArray(arg) && !arg.length)) {
+        return true;
+    }
+    let toarg = typeof arg;
+    if (toarg === "object") {
+        let props = getProps(arg);
+        let keys = Object.keys(arg);
+        let aninb = inArr1NinArr2(props, builtInProps);
+        if (!keys.length && !aninb.length) {
+            return true;
+        }
+    }
+    if (toarg === 'function') {
+        return false;
+    }
+    return false;
+}
+export function isObjKey(arg) {
+    return typeof arg === 'number' || typeof arg === 'string' || typeof arg === 'boolean' || typeof arg === 'symbol';
+}
+/**
+ * Trickier than isEmpty - tests only for null or undefined - 0, '', {}, [] should return true
+ * IMPORTANT if testing if a param is not passed (null/undefined) or passed as 0
+ */
+export function isVoid(arg) {
+    return arg === undefined || arg === null;
+}
+export function isString(value) {
+    return typeof value === "string";
+}
+/**
+ * Checks if the argument has values by reference (array, object, etc)
+ * Arrays & Objects passed by referrence,
+ * risk of unintended changes
+ */
+export function isByRef(arg) {
+    return !isPrimitive(arg);
+}
+/**
+ * Checks if the argument is a "simple" JS type - boolean, number, string, bigint
+ */
+export function isSimpleType(arg) {
+    let simpletypes = ["boolean", "number", "bigint", "string"];
+    let toarg = typeof arg;
+    return simpletypes.includes(toarg);
+}
+export function isFunction(arg) {
+    return typeof arg === "function";
+}
+/**
+ * Checks if the argument is a "primitive" JS type - boolean, number, string, bigint, null, undefined, ...
+ */
+export function isPrimitive(arg) {
+    return arg !== Object(arg);
+}
+/**
+ * Tests if the argument is a "simple" JS object - with just keys
+ * & values, not based on other types or prototypes
+ *
+ * TODO: What about arrays?
+ */
+export function isSimpleObject(anobj) {
+    if (!anobj || typeof anobj !== "object") {
+        return false;
+    }
+    return Object.getPrototypeOf(anobj) === Object.getPrototypeOf({});
+}
+/**
+ * Checks if the argument is an object -
+ */
+export function isObject(arg, alsoEmpty = false, alsoFunction = true) {
+    if (!arg || isPrimitive(arg) || (isEmpty(arg) && !alsoEmpty)) {
+        return false;
+    }
+    if (alsoFunction && (typeof arg === 'function')) {
+        return true;
+    }
+    return _.isObjectLike(arg);
+}
 /** Object/function inspection functions - exported below, but summarized here:*/
 /**
  * getProps(obj, wVal = false): any[] | GenObj
@@ -360,33 +476,6 @@ export function eventInfo(ev) {
         eventDets[prop] = jsonClone(ev[prop]);
     }
     return eventDets;
-}
-/**
- * Checks if the arg can be converted to a number
- * If not, returns boolean false
- * If is numeric:
- *   returns boolean true if asNum is false
- *   else returns the numeric value (which could be 0)
- * @param arg - argument to check
- * @param asNum boolean - if true, returns the numeric value
- * @return number or boolean true/false
- *
- */
-export function isNumeric(arg, asNum = false) {
-    let num = Number(arg);
-    if (num !== parseFloat(arg)) {
-        return false;
-    }
-    if (asNum) {
-        return num;
-    }
-    return true;
-}
-/**
- * Returns the numeric value, or boolean false
- */
-export function asNumeric(arg) {
-    return isNumeric(arg, true);
 }
 /**
  * If arg can be in any way be interpreted as a date,
@@ -791,92 +880,6 @@ export async function checkUrl3(url) {
     catch (err) {
         return { msg: `Exception for URL:`, url, err };
     }
-}
-/**
- * For TS Type Guards - predicate `is<Type>` functions
- */
-/**
- * Checks if the argument is "Empty" - null, undefined, empty string, empty array, empty object
- * This is a tough call & really hard to get right...
- * @param arg - argument to test
- * @return boolean - true if empty, false if not empty
- */
-export function isEmpty(arg) {
-    if (!arg || (Array.isArray(arg) && !arg.length)) {
-        return true;
-    }
-    let toarg = typeof arg;
-    if (toarg === "object") {
-        let props = getProps(arg);
-        let keys = Object.keys(arg);
-        let aninb = inArr1NinArr2(props, builtInProps);
-        if (!keys.length && !aninb.length) {
-            return true;
-        }
-    }
-    if (toarg === 'function') {
-        return false;
-    }
-    return false;
-}
-/**
- * Trickier than isEmpty - tests only for null or undefined - 0, '', {}, [] should return true
- * IMPORTANT if testing if a param is not passed (null/undefined) or passed as 0
- */
-export function isVoid(arg) {
-    return arg === undefined || arg === null;
-}
-export function isString(value) {
-    return typeof value === "string";
-}
-/**
- * Checks if the argument has values by reference (array, object, etc)
- * Arrays & Objects passed by referrence,
- * risk of unintended changes
- */
-export function isByRef(arg) {
-    return !isPrimitive(arg);
-}
-/**
- * Checks if the argument is a "simple" JS type - boolean, number, string, bigint
- */
-export function isSimpleType(arg) {
-    let simpletypes = ["boolean", "number", "bigint", "string"];
-    let toarg = typeof arg;
-    return simpletypes.includes(toarg);
-}
-export function isFunction(arg) {
-    return typeof arg === "function";
-}
-/**
- * Checks if the argument is a "primitive" JS type - boolean, number, string, bigint, null, undefined, ...
- */
-export function isPrimitive(arg) {
-    return arg !== Object(arg);
-}
-/**
- * Tests if the argument is a "simple" JS object - with just keys
- * & values, not based on other types or prototypes
- *
- * TODO: What about arrays?
- */
-export function isSimpleObject(anobj) {
-    if (!anobj || typeof anobj !== "object") {
-        return false;
-    }
-    return Object.getPrototypeOf(anobj) === Object.getPrototypeOf({});
-}
-/**
- * Checks if the argument is an object -
- */
-export function isObject(arg, alsoEmpty = false, alsoFunction = true) {
-    if (!arg || isPrimitive(arg) || (isEmpty(arg) && !alsoEmpty)) {
-        return false;
-    }
-    if (alsoFunction && (typeof arg === 'function')) {
-        return true;
-    }
-    return _.isObjectLike(arg);
 }
 /**
  * returns arg, unless it is an empty object or array
