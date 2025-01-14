@@ -451,6 +451,20 @@ export function inArr1NinArr2(arr1, arr2) {
     return arr1.filter((el) => !arr2.includes(el));
 }
 /**
+ * Compare two arrays returning an object with counts of shared, only in arr1, only in arr2, etc
+ */
+export function compareArrays(arr1, arr2) {
+    let shared = intersect(arr1, arr2);
+    let sharedCnt = shared.length;
+    let onlyArr1 = inArr1NinArr2(arr1, arr2);
+    let onlyArr1Cnt = onlyArr1.length;
+    let onlyArr2 = inArr1NinArr2(arr2, arr1);
+    let onlyArr2Cnt = onlyArr2.length;
+    let arr1Cnt = arr1.length;
+    let arr2Cnt = arr2.length;
+    return { arr1, arr2, arr1Cnt, arr2Cnt, shared, sharedCnt, onlyArr1, onlyArr1Cnt, onlyArr2, onlyArr2Cnt };
+}
+/**
  * Unique intersection of two arrays
  * TODO: implement intersectAny & intersectAll for any number of arrays
  */

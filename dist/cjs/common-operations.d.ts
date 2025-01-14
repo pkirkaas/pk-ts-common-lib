@@ -213,6 +213,21 @@ export declare function dtFmt(fmt?: string, dt?: any): string | false;
  */
 export declare function inArr1NinArr2(arr1: any[], arr2: any): any[];
 /**
+ * Compare two arrays returning an object with counts of shared, only in arr1, only in arr2, etc
+ */
+export declare function compareArrays(arr1: [], arr2: []): {
+    arr1: [];
+    arr2: [];
+    arr1Cnt: 0;
+    arr2Cnt: 0;
+    shared: any[];
+    sharedCnt: number;
+    onlyArr1: any[];
+    onlyArr1Cnt: number;
+    onlyArr2: any[];
+    onlyArr2Cnt: number;
+};
+/**
  * Unique intersection of two arrays
  * TODO: implement intersectAny & intersectAll for any number of arrays
  */
