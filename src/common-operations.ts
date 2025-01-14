@@ -200,6 +200,13 @@ export function isSimpleObject(anobj:unknown): anobj is SimpleObject {
   return Object.getPrototypeOf(anobj) === Object.getPrototypeOf({});
 }
 
+export function isGenObj(anobj:unknown): anobj is GenObj {
+  if (!anobj || typeof anobj !== "object") {
+    return false;
+  }
+  return Object.getPrototypeOf(anobj) === Object.getPrototypeOf({});
+}
+
 /**
  * Checks if the argument is an object - 
  */

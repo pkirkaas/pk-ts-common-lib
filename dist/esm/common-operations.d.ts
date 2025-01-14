@@ -100,6 +100,7 @@ export declare function isPrimitive(arg: unknown): arg is Primitive;
  * TODO: What about arrays?
  */
 export declare function isSimpleObject(anobj: unknown): anobj is SimpleObject;
+export declare function isGenObj(anobj: unknown): anobj is GenObj;
 /**
  * Checks if the argument is an object -
  */

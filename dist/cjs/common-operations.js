@@ -110,6 +110,12 @@ export function isSimpleObject(anobj) {
     }
     return Object.getPrototypeOf(anobj) === Object.getPrototypeOf({});
 }
+export function isGenObj(anobj) {
+    if (!anobj || typeof anobj !== "object") {
+        return false;
+    }
+    return Object.getPrototypeOf(anobj) === Object.getPrototypeOf({});
+}
 /**
  * Checks if the argument is an object -
  */
