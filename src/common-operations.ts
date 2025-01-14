@@ -25,8 +25,10 @@ declare global {
 
 export type OptArrStr = string | string[];
 export type Falsy = false | 0 | "" | null | undefined;
-export type GenericObject = { [key: string]: any };
-export type GenObj = { [key: string]: any };
+//export type GenericObject = { [key: string]: any };
+export type GenericObject = { [key: PropertyKey]: any };
+//export type GenObj = { [key: string]: any };
+export type GenObj = GenericObject;
 export type Scalar = string | number; //Type for scalar values
 export type Scalars = Scalar | Scalar[]; // Type for scalar values or arrays of scalars - to mkArray
 
@@ -40,9 +42,11 @@ export type AnyObject = Record<PropertyKey, unknown>;
 
 // SimpleObject type using a type predicate in a type alias.
 // This is the most type-safe and idiomatic way.
+/*
 export type SimpleObject = { [K in PropertyKey]: unknown } & {
     [Symbol.toStringTag]: 'Object' // Ensures it's a plain object
 } extends infer O ? { [K in keyof O]: O[K] } : never
+ */
 
 /**
  * Represents a plain JavaScript object (not an array, Map, Set, etc)
@@ -74,14 +78,12 @@ export type SimpleObject = {
 */
 
 
-/*
 // SimpleObject from openAI: Only objects that satisfy the `isSimpleObject` test
 export type SimpleObject = {
-  [key: string]: any;
+  [key: PropertyKey]: any;
 } & {
   __proto__: {}; // Ensures the object's prototype matches that of a plain object
 };
-*/
 
 /**
  * Checks if the arg can be converted to a number

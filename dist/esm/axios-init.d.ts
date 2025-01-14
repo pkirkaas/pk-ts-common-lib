@@ -31,5 +31,5 @@ export declare function createAxios(opts?: GenObj): import("axios").AxiosInstanc
  * An axios error can have several forms/reasons (see: https://axios-http.com/docs/handling_errors)
  * with several handling cases. This simplifies & returns
  */
-export declare function parseAxiosError(error: any): GenObj;
+export declare function parseAxiosError(error: any): import("./common-operations.js").GenericObject;
 //# sourceMappingURL=axios-init.d.ts.map

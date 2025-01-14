@@ -18,11 +18,9 @@ declare global {
 export type OptArrStr = string | string[];
 export type Falsy = false | 0 | "" | null | undefined;
 export type GenericObject = {
-    [key: string]: any;
+    [key: PropertyKey]: any;
 };
-export type GenObj = {
-    [key: string]: any;
-};
+export type GenObj = GenericObject;
 export type Scalar = string | number;
 export type Scalars = Scalar | Scalar[];
 export type Void = null | undefined;
@@ -30,13 +28,6 @@ export type ObjKey = number | string | symbol;
 export type SimpleValue = bigint | ObjKey | boolean;
 export type Primitive = SimpleValue | Void;
 export type AnyObject = Record<PropertyKey, unknown>;
-export type SimpleObject = {
-    [K in PropertyKey]: unknown;
-} & {
-    [Symbol.toStringTag]: 'Object';
-} extends infer O ? {
-    [K in keyof O]: O[K];
-} : never;
 /**
  * Represents a plain JavaScript object (not an array, Map, Set, etc)
  * Must satisfy these conditions:
@@ -49,6 +40,11 @@ export type SimpleObject = {
  * - Map/Set (different prototype)
  * - Class instances (different prototype)
  */
+export type SimpleObject = {
+    [key: PropertyKey]: any;
+} & {
+    __proto__: {};
+};
 /**
  * Checks if the arg can be converted to a number
  * If not, returns boolean false
@@ -202,12 +198,7 @@ export declare const dfnsKeys: string[];
  * //@param boolean forceNegative - force to negative/past offest?
  * @return duration
  */
-export declare function validateDateFnsDuration(obj: any): false | {
-    [x: string]: unknown;
-    [x: number]: unknown;
-    [x: symbol]: unknown;
-    [Symbol.toStringTag]: "Object";
-};
+export declare function validateDateFnsDuration(obj: any): false | SimpleObject;
 /**
  * Returns true if arg str contains ANY of the what strings
  */
@@ -427,7 +418,7 @@ export declare function isSubclassOf(sub: any, parent: any, alsoSelf?: number): 
 export declare function getObjDets(obj: any): false | {
     toObj: "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function";
     pkToObj: String;
-    props: string | boolean | GenObj | [];
+    props: string | boolean | GenericObject | [];
     prototype: any;
 };
 /**
@@ -509,7 +500,7 @@ export declare function inspectFunction(afnc: any): {
     name: any;
     body: any;
     length: any;
-    props: GenObj;
+    props: GenericObject;
     err?: undefined;
 };
 export declare const keepProps: string[];
@@ -551,8 +542,8 @@ export declare let defaultAllPropsOpts: {
  */
 export declare function allProps(obj: any, optArg?: string, depth?: number): GenObj | [] | string | boolean;
 export declare function allProps(obj: any, optArg?: GenObj, depth?: number): GenObj | [] | string | boolean;
-export declare function allPropsWithTypes(obj: any, depth?: number): string | boolean | GenObj | [];
-export declare function objInfo(arg: any, opt?: unknown, depth?: number): GenObj;
+export declare function allPropsWithTypes(obj: any, depth?: number): string | boolean | GenericObject | [];
+export declare function objInfo(arg: any, opt?: unknown, depth?: number): GenericObject;
 /**
  * Returns the type of the argument. If it's an object, it returns the name of the constructor.
  */

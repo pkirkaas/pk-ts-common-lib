@@ -7,42 +7,6 @@ import urlStatus from 'url-status-code';
 import JSON5 from 'json5';
 import path from 'path';
 /**
- * Represents a plain JavaScript object (not an array, Map, Set, etc)
- * Must satisfy these conditions:
- * 1. Is a non-null object
- * 2. Has the same prototype as an empty object literal {}
- *
- * This type excludes:
- * - Arrays (different prototype)
- * - Date objects (different prototype)
- * - Map/Set (different prototype)
- * - Class instances (different prototype)
- */
-/*
-// Alternative type definition using a type predicate in a type alias from Claude
-export type SimpleObject = {
-  [key: string]: unknown;
-} & {
-  // This intersection ensures the object has Object.prototype as its prototype
-  // by checking that it doesn't have Array.prototype or other prototypes
-  [K in keyof any[]]: never;
-} & {
-  [K in keyof Date]: never;
-} & {
-  [K in keyof Map<any, any>]: never;
-} & {
-  [K in keyof Set<any>]: never;
-};
-*/
-/*
-// SimpleObject from openAI: Only objects that satisfy the `isSimpleObject` test
-export type SimpleObject = {
-  [key: string]: any;
-} & {
-  __proto__: {}; // Ensures the object's prototype matches that of a plain object
-};
-*/
-/**
  * Checks if the arg can be converted to a number
  * If not, returns boolean false
  * If is numeric:
