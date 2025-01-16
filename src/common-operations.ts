@@ -22,16 +22,22 @@ declare global {
   }
 
 }
+export type TypeArr<T> = T | T[];
 
-export type OptArrStr = string | string[];
+//export type OptArrStr = string | string[];
+export type OptArrStr = TypeArr<string>;
+export type Strings = TypeArr<string>;
 export type Falsy = false | 0 | "" | null | undefined;
 //export type GenericObject = { [key: string]: any };
 export type GenericObject = { [key: PropertyKey]: any };
 //export type GenObj = { [key: string]: any };
 export type GenObj = GenericObject;
 export type Scalar = string | number; //Type for scalar values
-export type Scalars = Scalar | Scalar[]; // Type for scalar values or arrays of scalars - to mkArray
-
+//export type Scalars = Scalar | Scalar[]; // Type for scalar values or arrays of scalars - to mkArray
+export type Scalars = TypeArr<Scalar>; // Type for scalar values or arrays of scalars - to mkArray
+export function mkArray<T>(arg: T | T[]): T[] {
+    return Array.isArray(arg) ? arg : [arg];
+}
 // Testing new Type definitions from AI
 
 export type Void = null | undefined;

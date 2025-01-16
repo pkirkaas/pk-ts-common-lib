@@ -15,14 +15,17 @@ declare global {
         retrocycle(object: any): any;
     }
 }
-export type OptArrStr = string | string[];
+export type TypeArr<T> = T | T[];
+export type OptArrStr = TypeArr<string>;
+export type Strings = TypeArr<string>;
 export type Falsy = false | 0 | "" | null | undefined;
 export type GenericObject = {
     [key: PropertyKey]: any;
 };
 export type GenObj = GenericObject;
 export type Scalar = string | number;
-export type Scalars = Scalar | Scalar[];
+export type Scalars = TypeArr<Scalar>;
+export declare function mkArray<T>(arg: T | T[]): T[];
 export type Void = null | undefined;
 export type SimpleValue = bigint | PropertyKey | boolean;
 export type Primitive = SimpleValue | Void;
