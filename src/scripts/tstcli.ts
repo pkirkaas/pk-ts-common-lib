@@ -5,7 +5,7 @@
 import {runCli, stdOut,} from 'pk-ts-node-lib';
 import {toSnakeCase, JSON5Stringify, toCamelCase, camelCase, snakeCase, kebabCase, toCamel,  toSnake, toKebab, 
   kebabKeys, camelKeys, dotPathVal, allProps, allPropsWithTypes, objInfo, getObjDets, getProps,
-  typeOf, inspectFunction,
+  typeOf, inspectFunction, JSON5Parse,  JSON5, GenObj,
 }from '../index.js';
 
 let tstObj = {
@@ -19,6 +19,21 @@ let tstObj = {
   y: "A dog",
 };
 export let tstFncs = {
+  tstCycle() {
+    console.log('tstCycle');
+    let tstObj: GenObj = {
+      a:"A dog",
+      b: {
+        c: ['aV','bV','cV'],
+      }
+    };
+    tstObj.cycle = tstObj;
+    let j5Str = JSON5Stringify(tstObj);
+    let j5Obj = JSON5Parse(j5Str);
+    //let parsed = j5Obj.cycle.a;
+    let parsed = j5Obj.cycle.cycle.a;
+    console.log(`tstCycle`, {tstObj, j5Str, j5Obj, parsed,});
+  },
 
   tstAllProps() {
     //let res = allProps(tstObj,"tvp",3);

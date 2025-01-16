@@ -2,6 +2,7 @@
  * Not sure this should work...
  */
 export declare let tstFncs: {
+    tstCycle(): void;
     tstAllProps(): void;
     tstIntFnc(): void;
     tstDPV(): void;
