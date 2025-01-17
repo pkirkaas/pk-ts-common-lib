@@ -6,8 +6,11 @@
 import urlStatus from 'url-status-code';
 import JSON5 from 'json5';
 import path from 'path';
+/**
+ * Makes an array from arg, or returns empty array if arg is undefined/null
+ */
 export function mkArray(arg) {
-    return Array.isArray(arg) ? arg : [arg];
+    return isVoid(arg) ? [] : (Array.isArray(arg) ? arg : [arg]);
 }
 /**
  * Checks if the arg can be converted to a number

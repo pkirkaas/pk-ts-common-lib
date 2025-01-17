@@ -35,8 +35,11 @@ export type GenObj = GenericObject;
 export type Scalar = string | number; //Type for scalar values
 //export type Scalars = Scalar | Scalar[]; // Type for scalar values or arrays of scalars - to mkArray
 export type Scalars = TypeArr<Scalar>; // Type for scalar values or arrays of scalars - to mkArray
+/**
+ * Makes an array from arg, or returns empty array if arg is undefined/null
+ */
 export function mkArray<T>(arg: T | T[]): T[] {
-    return Array.isArray(arg) ? arg : [arg];
+    return isVoid(arg) ? [] : (Array.isArray(arg) ? arg : [arg]);
 }
 // Testing new Type definitions from AI
 

@@ -25,6 +25,9 @@ export type GenericObject = {
 export type GenObj = GenericObject;
 export type Scalar = string | number;
 export type Scalars = TypeArr<Scalar>;
+/**
+ * Makes an array from arg, or returns empty array if arg is undefined/null
+ */
 export declare function mkArray<T>(arg: T | T[]): T[];
 export type Void = null | undefined;
 export type SimpleValue = bigint | PropertyKey | boolean;
