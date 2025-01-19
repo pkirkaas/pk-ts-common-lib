@@ -398,13 +398,22 @@ export function validateDateFnsDuration(obj) {
     return obj;
 }
 /**
- * Returns true if arg str contains ANY of the what strings
+ * Returns true if arg str contains ANY of the substrings
+ * @param str string - string to test
+ * @param substrs string|string[] - substrings to test
+ * @param tolower boolean - convert to lowercase?
+ * @return boolean - true if str contains any of substrs
  */
-export function strIncludesAny(str, substrs) {
+export function strIncludesAny(str, substrx, tolower) {
+    let substrs = mkArray(substrx);
+    str = (tolower ? str.toLowerCase() : str).trim();
+    /*
     if (!Array.isArray(substrs)) {
-        substrs = [substrs];
+      substrs = [substrs];
     }
+      */
     for (let substr of substrs) {
+        substr = (tolower ? substr.toLowerCase() : substr).trim();
         if (str.includes(substr)) {
             return true;
         }

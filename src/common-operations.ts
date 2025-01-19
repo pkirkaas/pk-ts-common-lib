@@ -521,13 +521,22 @@ export function validateDateFnsDuration(obj: any) {
 }
 
 /**
- * Returns true if arg str contains ANY of the what strings
+ * Returns true if arg str contains ANY of the substrings
+ * @param str string - string to test
+ * @param substrs string|string[] - substrings to test
+ * @param tolower boolean - convert to lowercase?
+ * @return boolean - true if str contains any of substrs
  */
-export function strIncludesAny(str: string, substrs: any) {
+export function strIncludesAny(str: string, substrx: Strings, tolower?:any):boolean {
+  let substrs = mkArray(substrx);
+  str = (tolower ? str.toLowerCase() : str).trim();
+  /*
   if (!Array.isArray(substrs)) {
     substrs = [substrs];
   }
+    */
   for (let substr of substrs) {
+    substr = (tolower ? substr.toLowerCase() : substr).trim();
     if (str.includes(substr)) {
       return true;
     }

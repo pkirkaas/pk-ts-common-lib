@@ -206,9 +206,13 @@ export declare const dfnsKeys: string[];
  */
 export declare function validateDateFnsDuration(obj: any): false | SimpleObject;
 /**
- * Returns true if arg str contains ANY of the what strings
+ * Returns true if arg str contains ANY of the substrings
+ * @param str string - string to test
+ * @param substrs string|string[] - substrings to test
+ * @param tolower boolean - convert to lowercase?
+ * @return boolean - true if str contains any of substrs
  */
-export declare function strIncludesAny(str: string, substrs: any): boolean;
+export declare function strIncludesAny(str: string, substrx: Strings, tolower?: any): boolean;
 /** Like strIncludesAny, but returns an array of the substrings found
  */
 export declare function strIncludesWhich(str: string, substrs: any): any[];
