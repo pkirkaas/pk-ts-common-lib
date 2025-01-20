@@ -2125,6 +2125,20 @@ export function escapeRegExp(astr:string):string {
   return astr.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
 
+export function taggedMatchRegex(str: string, openTag: string, closeTag?:string, multiline?:any) {
+  closeTag = closeTag || openTag;
+  let escOpenTag = escapeRegExp(openTag);
+  let escCloseTag = escapeRegExp(closeTag);
+  let opts = multiline ? 'gs' : 'g';
+  // Conflicting non-greedy regexes - test both
+  // Seems to work - but try 2 if problems
+  let regexPattern = `${escOpenTag}(.*?)${escCloseTag}`;
+  // This is to allow nested tags
+  //let regexPattern = `${escOpenTag}((?:(?!${escOpenTag}|${escCloseTag}).)*?)${escCloseTag}`;  
+  let regex = new RegExp(regexPattern, opts);
+  return regex;
+}
+
 /**
  * Returns array of strings between openTag and closeTag - non-greedy
  * Escapes open & close tags
@@ -2136,16 +2150,7 @@ export function escapeRegExp(astr:string):string {
  */
 export function taggedMatches(str: string, openTag: string, closeTag?:string, multiline?:any) //: string[]
 {
-  closeTag = closeTag || openTag;
-  let escOpenTag = escapeRegExp(openTag);
-  let escCloseTag = escapeRegExp(closeTag);
-  let opts = multiline ? 'gs' : 'g';
-  // Conflicting non-greedy regexes - test both
-  // Seems to work - but try 2 if problems
-  let regexPattern = `${escOpenTag}(.*?)${escCloseTag}`;
-  // This is to allow nested tags
-  //let regexPattern = `${escOpenTag}((?:(?!${escOpenTag}|${escCloseTag}).)*?)${escCloseTag}`;  
-  let regex = new RegExp(regexPattern, opts);
+  let regex = taggedMatchRegex(str,openTag,closeTag, multiline);
   //let regex2 = new RegExp(regexPattern2, opts);
 
   let matches = [...str.matchAll(regex)].map(match => match[1]);

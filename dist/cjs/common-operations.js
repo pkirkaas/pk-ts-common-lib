@@ -1889,16 +1889,7 @@ export function stripStray(str) {
 export function escapeRegExp(astr) {
     return astr.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
-/**
- * Returns array of strings between openTag and closeTag - non-greedy
- * Escapes open & close tags
- * TODO: Add multiline match option
- * @param str - string to search
- * @param openTag:string - openTag
- * @param closeTag?:string - optional closeTag - if absent, just use openTag
- * @param multiline?:any - optional - if true, multiline match
- */
-export function taggedMatches(str, openTag, closeTag, multiline) {
+export function taggedMatchRegex(str, openTag, closeTag, multiline) {
     closeTag = closeTag || openTag;
     let escOpenTag = escapeRegExp(openTag);
     let escCloseTag = escapeRegExp(closeTag);
@@ -1909,6 +1900,19 @@ export function taggedMatches(str, openTag, closeTag, multiline) {
     // This is to allow nested tags
     //let regexPattern = `${escOpenTag}((?:(?!${escOpenTag}|${escCloseTag}).)*?)${escCloseTag}`;  
     let regex = new RegExp(regexPattern, opts);
+    return regex;
+}
+/**
+ * Returns array of strings between openTag and closeTag - non-greedy
+ * Escapes open & close tags
+ * TODO: Add multiline match option
+ * @param str - string to search
+ * @param openTag:string - openTag
+ * @param closeTag?:string - optional closeTag - if absent, just use openTag
+ * @param multiline?:any - optional - if true, multiline match
+ */
+export function taggedMatches(str, openTag, closeTag, multiline) {
+    let regex = taggedMatchRegex(str, openTag, closeTag, multiline);
     //let regex2 = new RegExp(regexPattern2, opts);
     let matches = [...str.matchAll(regex)].map(match => match[1]);
     //  let matches2 = [...str.matchAll(regex2)].map(match => match[1]);
