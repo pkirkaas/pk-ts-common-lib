@@ -5,7 +5,7 @@
 import {runCli, stdOut,} from 'pk-ts-node-lib';
 import {toSnakeCase, JSON5Stringify, toCamelCase, camelCase, snakeCase, kebabCase, toCamel,  toSnake, toKebab, 
   kebabKeys, camelKeys, dotPathVal, allProps, allPropsWithTypes, objInfo, getObjDets, getProps,
-  typeOf, inspectFunction, JSON5Parse,  JSON5, GenObj,
+  typeOf, inspectFunction, JSON5Parse,  JSON5, GenObj, taggedMatches,
 }from '../index.js';
 
 let tstObj = {
@@ -19,6 +19,30 @@ let tstObj = {
   y: "A dog",
 };
 export let tstFncs = {
+  tstMatches() {
+    let tagSets = {
+      comment: { open: '{|', close: '|}',},
+      umsg: { open: '{<', close: '>}',},
+      smsg: { open: '[[', close: ']]',},
+      code: { open: '{{', close: '}}',},
+    };
+    let tstStr = `[[sysmsg1]] [[sysmsg2]] {<umsg1>} [[sysmsg3]] {{code1}} [[sysmsg4]] {<usg2>}}
+    {|comment1|}
+    {| multi-line
+    comment2
+    |}
+    `;
+
+    console.log(`tstMatches`, {tstStr, tagSets,});
+    for (let key in tagSets) {
+      let tagSet = tagSets[key];
+      let open = tagSet.open;
+      let close = tagSet.close;
+      let matches = taggedMatches(tstStr, open, close, true);
+      //console.log(`tstMatches`, {key, open, close, matches,});
+      console.log( matches,'\n\n');
+    }
+  },
   tstCycle() {
     console.log('tstCycle');
     let tstObj: GenObj = {

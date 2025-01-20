@@ -2119,6 +2119,42 @@ export function stripStray(str?: any) {
 }
 
 /**
+ * Escapes special regex characters from string for literal use in a regular expression
+ */
+export function escapeRegExp(astr:string):string {
+  return astr.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
+
+/**
+ * Returns array of strings between openTag and closeTag - non-greedy
+ * Escapes open & close tags
+ * TODO: Add multiline match option
+ * @param str - string to search
+ * @param openTag:string - openTag 
+ * @param closeTag?:string - optional closeTag - if absent, just use openTag
+ * @param multiline?:any - optional - if true, multiline match
+ */
+export function taggedMatches(str: string, openTag: string, closeTag?:string, multiline?:any) //: string[]
+{
+  closeTag = closeTag || openTag;
+  let escOpenTag = escapeRegExp(openTag);
+  let escCloseTag = escapeRegExp(closeTag);
+  let opts = multiline ? 'gs' : 'g';
+  // Conflicting non-greedy regexes - test both
+  // Seems to work - but try 2 if problems
+  let regexPattern = `${escOpenTag}(.*?)${escCloseTag}`;
+  // This is to allow nested tags
+  //let regexPattern = `${escOpenTag}((?:(?!${escOpenTag}|${escCloseTag}).)*?)${escCloseTag}`;  
+  let regex = new RegExp(regexPattern, opts);
+  //let regex2 = new RegExp(regexPattern2, opts);
+
+  let matches = [...str.matchAll(regex)].map(match => match[1]);
+//  let matches2 = [...str.matchAll(regex2)].map(match => match[1]);
+ // return {matches1, matches2};
+  return matches;
+}
+
+/**
  * Converts a string to camelCase
  */
 export function toCamel(str) {

@@ -2,7 +2,7 @@
  * Not sure this should work...
  */
 import { runCli, stdOut, } from 'pk-ts-node-lib';
-import { JSON5Stringify, toCamel, toSnake, toKebab, kebabKeys, camelKeys, dotPathVal, allProps, inspectFunction, JSON5Parse, } from '../index.js';
+import { JSON5Stringify, toCamel, toSnake, toKebab, kebabKeys, camelKeys, dotPathVal, allProps, inspectFunction, JSON5Parse, taggedMatches, } from '../index.js';
 let tstObj = {
     a: {
         b: { c: ['aV', 'bV', 'cV'], }
@@ -14,6 +14,29 @@ let tstObj = {
     y: "A dog",
 };
 export let tstFncs = {
+    tstMatches() {
+        let tagSets = {
+            comment: { open: '{|', close: '|}', },
+            umsg: { open: '{<', close: '>}', },
+            smsg: { open: '[[', close: ']]', },
+            code: { open: '{{', close: '}}', },
+        };
+        let tstStr = `[[sysmsg1]] [[sysmsg2]] {<umsg1>} [[sysmsg3]] {{code1}} [[sysmsg4]] {<usg2>}}
+    {|comment1|}
+    {| multi-line
+    comment2
+    |}
+    `;
+        console.log(`tstMatches`, { tstStr, tagSets, });
+        for (let key in tagSets) {
+            let tagSet = tagSets[key];
+            let open = tagSet.open;
+            let close = tagSet.close;
+            let matches = taggedMatches(tstStr, open, close, true);
+            //console.log(`tstMatches`, {key, open, close, matches,});
+            console.log(matches, '\n\n');
+        }
+    },
     tstCycle() {
         console.log('tstCycle');
         let tstObj = {

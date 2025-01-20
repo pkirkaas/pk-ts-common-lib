@@ -657,6 +657,20 @@ export declare function parseHeaderString(str: any): any;
  */
 export declare function stripStray(str?: any): any;
 /**
+ * Escapes special regex characters from string for literal use in a regular expression
+ */
+export declare function escapeRegExp(astr: string): string;
+/**
+ * Returns array of strings between openTag and closeTag - non-greedy
+ * Escapes open & close tags
+ * TODO: Add multiline match option
+ * @param str - string to search
+ * @param openTag:string - openTag
+ * @param closeTag?:string - optional closeTag - if absent, just use openTag
+ * @param multiline?:any - optional - if true, multiline match
+ */
+export declare function taggedMatches(str: string, openTag: string, closeTag?: string, multiline?: any): string[];
+/**
  * Converts a string to camelCase
  */
 export declare function toCamel(str: any): any;
