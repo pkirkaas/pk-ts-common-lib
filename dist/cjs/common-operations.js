@@ -1889,7 +1889,7 @@ export function stripStray(str) {
 export function escapeRegExp(astr) {
     return astr.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
-export function taggedMatchRegex(str, openTag, closeTag, multiline) {
+export function taggedMatchRegex(openTag, closeTag, multiline) {
     closeTag = closeTag || openTag;
     let escOpenTag = escapeRegExp(openTag);
     let escCloseTag = escapeRegExp(closeTag);
@@ -1912,7 +1912,7 @@ export function taggedMatchRegex(str, openTag, closeTag, multiline) {
  * @param multiline?:any - optional - if true, multiline match
  */
 export function taggedMatches(str, openTag, closeTag, multiline) {
-    let regex = taggedMatchRegex(str, openTag, closeTag, multiline);
+    let regex = taggedMatchRegex(openTag, closeTag, multiline);
     //let regex2 = new RegExp(regexPattern2, opts);
     let matches = [...str.matchAll(regex)].map(match => match[1]);
     //  let matches2 = [...str.matchAll(regex2)].map(match => match[1]);

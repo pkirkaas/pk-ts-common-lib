@@ -2125,7 +2125,7 @@ export function escapeRegExp(astr:string):string {
   return astr.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
 
-export function taggedMatchRegex(str: string, openTag: string, closeTag?:string, multiline?:any) {
+export function taggedMatchRegex( openTag: string, closeTag?:string, multiline?:any) {
   closeTag = closeTag || openTag;
   let escOpenTag = escapeRegExp(openTag);
   let escCloseTag = escapeRegExp(closeTag);
@@ -2150,7 +2150,7 @@ export function taggedMatchRegex(str: string, openTag: string, closeTag?:string,
  */
 export function taggedMatches(str: string, openTag: string, closeTag?:string, multiline?:any) //: string[]
 {
-  let regex = taggedMatchRegex(str,openTag,closeTag, multiline);
+  let regex = taggedMatchRegex(openTag,closeTag, multiline);
   //let regex2 = new RegExp(regexPattern2, opts);
 
   let matches = [...str.matchAll(regex)].map(match => match[1]);

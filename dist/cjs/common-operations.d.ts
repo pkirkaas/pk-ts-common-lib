@@ -660,7 +660,7 @@ export declare function stripStray(str?: any): any;
  * Escapes special regex characters from string for literal use in a regular expression
  */
 export declare function escapeRegExp(astr: string): string;
-export declare function taggedMatchRegex(str: string, openTag: string, closeTag?: string, multiline?: any): RegExp;
+export declare function taggedMatchRegex(openTag: string, closeTag?: string, multiline?: any): RegExp;
 /**
  * Returns array of strings between openTag and closeTag - non-greedy
  * Escapes open & close tags
