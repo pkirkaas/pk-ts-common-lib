@@ -110,6 +110,12 @@ export declare function isGenObj(anobj: unknown): anobj is GenObj;
  * Checks if the argument is an object -
  */
 export declare function isObject(arg: any, alsoEmpty?: boolean, alsoFunction?: boolean): boolean;
+/**
+ * Checks if the keys of all objects in the argument are unique
+ * @param ...args:object - objects to test
+ * @return boolean - true if all objects have unique property names
+ */
+export declare function uniqueKeys(...args: object[]): boolean;
 /** Object/function inspection functions - exported below, but summarized here:*/
 /**
  * getProps(obj, wVal = false): any[] | GenObj

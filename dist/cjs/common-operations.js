@@ -139,6 +139,23 @@ export function isObject(arg, alsoEmpty = false, alsoFunction = true) {
     }
     return _.isObjectLike(arg);
 }
+/**
+ * Checks if the keys of all objects in the argument are unique
+ * @param ...args:object - objects to test
+ * @return boolean - true if all objects have unique property names
+ */
+export function uniqueKeys(...args) {
+    let allProps = [];
+    for (let arg of args) {
+        let props = Object.keys(arg);
+        let inb = intersect(props, allProps);
+        if (inb.length) {
+            return false;
+        }
+        allProps = allProps.concat(props);
+    }
+    return true;
+}
 /** Object/function inspection functions - exported below, but summarized here:*/
 /**
  * getProps(obj, wVal = false): any[] | GenObj
