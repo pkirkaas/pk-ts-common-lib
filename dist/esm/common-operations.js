@@ -333,6 +333,7 @@ export function getFrameAfterFunction(fname, forceFunction) {
 }
 // END Stack analasys functions
 /**
+ * @deprecated - use _.pick instead
  * Return just the subset of the object, for keys specified in the "fields" array.
  * ACTUAALY - can be deep - BUT - consider using lodash `pick` & `omit` instead.
  * @param obj - src object
@@ -1915,6 +1916,7 @@ export function taggedMatches(str, openTag, closeTag, multiline) {
     let regex = taggedMatchRegex(openTag, closeTag, multiline);
     //let regex2 = new RegExp(regexPattern2, opts);
     let matches = [...str.matchAll(regex)].map(match => match[1]);
+    matches = matches.map((match) => match.trim()); // Trim whitespace
     //  let matches2 = [...str.matchAll(regex2)].map(match => match[1]);
     // return {matches1, matches2};
     return matches;

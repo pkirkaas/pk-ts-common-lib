@@ -176,6 +176,7 @@ export declare function stamp(entry?: any, frameAfter?: any): string;
  */
 export declare function getFrameAfterFunction(fname?: any, forceFunction?: any): any;
 /**
+ * @deprecated - use _.pick instead
  * Return just the subset of the object, for keys specified in the "fields" array.
  * ACTUAALY - can be deep - BUT - consider using lodash `pick` & `omit` instead.
  * @param obj - src object
