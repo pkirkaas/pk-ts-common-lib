@@ -22,13 +22,15 @@
   "scripts": {
     "build": "tsc -p ./tsconfig.json && tsc -p ./tsconfig.cjs.json",
     "clean": "rm -rf ./dist ./node_modules package-lock.json",
-    "cleani": "rm -rf ./dist ./node_modules package-lock.json && npm i",
+    "cleani": "rm -rf ./dist ./node_modules package-lock.json && nice npm i --verbose",
     "monitor": "nodemon --exec \"npm run build\" --ext js,jsx,ts,tsx,sass,css --delay 5 --watch ./src",
     "reset": "npm run clean && npm run build",
     "tstarg": "echo Something and --"
   },
   "dependencies": {
     "ajv": "*",
+    "zod": "*",
+    "zod-to-json-schema": "*",
     "axios": "*",
     "console-title": "*",
     "date-fns": "latest",
