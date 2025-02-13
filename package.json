@@ -42,9 +42,11 @@
     "url-status-code": "*"
   },
   "devDependencies": {
-    "pk-ts-node-lib": "github:pkirkaas/pk-ts-node-lib#working",
     "@types/lodash": "*",
     "@types/node": "*",
     "typescript": "*"
+  },
+  "deprecatedDependencies": {
+    "pk-ts-node-lib": "github:pkirkaas/pk-ts-node-lib#working"
   }
 }
