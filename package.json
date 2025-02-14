@@ -29,17 +29,18 @@
   },
   "dependencies": {
     "ajv": "*",
-    "zod": "*",
-    "zod-to-json-schema": "*",
     "axios": "*",
     "console-title": "*",
     "date-fns": "latest",
-    "json5": "*",
     "error-stack-parser": "*",
+    "json5": "*",
     "lodash": "latest",
     "slugify": "*",
     "url-join": "latest",
-    "url-status-code": "*"
+    "url-status-code": "*",
+    "zod": "*",
+    "zod-metadata": "^1.1.1",
+    "zod-to-json-schema": "*"
   },
   "devDependencies": {
     "@types/lodash": "*",

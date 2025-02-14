@@ -5,6 +5,7 @@
  */
 import urlStatus from 'url-status-code';
 import JSON5 from 'json5';
+import 'zod-metadata/register';
 declare global {
     interface JSON {
         decycle(object: any): any;
