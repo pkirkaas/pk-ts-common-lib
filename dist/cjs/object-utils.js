@@ -6,7 +6,7 @@
  */
 import { Ajv, } from 'ajv'; //JSON Schema support
 //import draft7MetaSchema from 'ajv/dist/refs/json-schema-draft-07.json'  with { type: 'json' };
-import draft7MetaSchema from 'ajv/lib/refs/json-schema-draft-07.json' with { type: 'json' };
+//import draft7MetaSchema from 'ajv/lib/refs/json-schema-draft-07.json'  with { type: 'json' };
 import { uniqueVals, PkError, isObject, isPrimitive, typeOf } from './index.js';
 export function deepMeld(...objs) {
     let melded = {};
@@ -54,9 +54,11 @@ export function ajvSchema(schemaObj, opts = {}) {
         strictSchema: true, // Set to true for stricter validation
         ...opts,
     });
-    if (!schemaObj['$schema']) {
-        ajv.addMetaSchema(draft7MetaSchema);
-    }
+    /*
+  if (!schemaObj['$schema']) {
+    ajv.addMetaSchema(draft7MetaSchema);
+  }
+        */
     const isValidSchema = ajv.validateSchema(schemaObj);
     if (!isValidSchema) {
         throw new PkError(`Schema failed validation w. errors:`, ajv.errors);

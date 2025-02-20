@@ -6,7 +6,7 @@
  */
 import {Ajv,} from 'ajv'; //JSON Schema support
 //import draft7MetaSchema from 'ajv/dist/refs/json-schema-draft-07.json'  with { type: 'json' };
-import draft7MetaSchema from 'ajv/lib/refs/json-schema-draft-07.json'  with { type: 'json' };
+//import draft7MetaSchema from 'ajv/lib/refs/json-schema-draft-07.json'  with { type: 'json' };
 
 import { GenObj, uniqueVals, PkError, GenericObject, jsonClone, isObject, isSimpleObject, isPrimitive,  isEmpty, isSubset, arraysEqual, inArr1NinArr2, intersect, typeOf } from './index.js';
 
@@ -58,9 +58,12 @@ export function ajvSchema(schemaObj:object,opts={}) { //use compile
     strictSchema: true, // Set to true for stricter validation
     ...opts,
   });
+	/*
   if (!schemaObj['$schema']) {
     ajv.addMetaSchema(draft7MetaSchema);
   }
+		*/
+
   const isValidSchema = ajv.validateSchema(schemaObj);
   if (!isValidSchema) {
     throw new PkError(`Schema failed validation w. errors:`,ajv.errors);

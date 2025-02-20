@@ -39,7 +39,7 @@
     "url-join": "latest",
     "url-status-code": "*",
     "zod": "*",
-    "zod-metadata": "^1.1.1",
+    "zod-metadata": "*",
     "zod-to-json-schema": "*"
   },
   "devDependencies": {
