@@ -5,6 +5,7 @@
  * 
  */
 import {Ajv,} from 'ajv'; //JSON Schema support
+import { z } from 'zod';
 //import draft7MetaSchema from 'ajv/dist/refs/json-schema-draft-07.json'  with { type: 'json' };
 //import draft7MetaSchema from 'ajv/lib/refs/json-schema-draft-07.json'  with { type: 'json' };
 

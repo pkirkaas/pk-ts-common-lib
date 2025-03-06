@@ -14,6 +14,7 @@
     "declaration": true,
     "declarationMap": true,
     "strict": false,
+    // TODO!! Make strict work: "strict": true,
     "resolveJsonModule" : true,
     "resolvePackageJsonImports": true,
     "forceConsistentCasingInFileNames": true,
