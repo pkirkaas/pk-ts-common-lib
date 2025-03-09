@@ -975,10 +975,31 @@ export function partitionObj(obj: GenObj, keys?: string|string[]): { picked: Gen
  * Returns a new merged object, optionally filtered by keylist 
  * Useful for merging default options with user-supplied options
  * If first arg is array, then it is assumed to be the keys to pick
- * @param args - src keys & objects
- * If first arg is array, then it is assumed to be the keys to pick
  * 
- * @return object - specified subset of merged objects
+ * @aider
+ * @param {...any} args - First argument can be an array of keys to pick, remaining arguments are objects to merge
+ * @returns {object} A new merged object, optionally filtered to only include specified keys
+ * @description
+ * Creates a new object by deeply merging multiple source objects, with an optional filtering step.
+ * 
+ * This function is particularly useful for handling options objects where you want to:
+ * 1. Merge default options with user-supplied options
+ * 2. Optionally filter the result to only include a specific set of keys
+ * 
+ * If the first argument is an array, it's treated as a list of keys to pick from the final merged object.
+ * Otherwise, all arguments are treated as objects to be merged.
+ * 
+ * The function uses lodash's merge for deep merging and pick for filtering.
+ * 
+ * @example
+ * // Simple merge of objects
+ * extractOpts({a: 1}, {b: 2}, {c: 3})  // Returns {a: 1, b: 2, c: 3}
+ * 
+ * // Merge with overriding properties
+ * extractOpts({a: 1, b: 2}, {b: 3, c: 4})  // Returns {a: 1, b: 3, c: 4}
+ * 
+ * // Merge and filter by keys
+ * extractOpts(['a', 'c'], {a: 1, b: 2}, {c: 3, d: 4})  // Returns {a: 1, c: 3}
  */
 export function extractOpts(...args) {
   let keys:any = null;
