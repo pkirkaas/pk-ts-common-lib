@@ -1542,9 +1542,10 @@ export function typeOf(anObj, opts) {
     }
 }
 /**
- * Lazy way to get type of multiple variables at once with typeOf
- * @param simple object obj - collection of properties to type
- * @return object - keyed by the original keys, to type
+ * Lazy way to get type (and vals) of multiple variables at once with typeOf
+ * @param obj: GenObj  - collection of properties to type
+ * @param wVal:boolean - also return value?
+ * @return object - keyed by the original keys, to type (and val)
  */
 export function typeOfEach(obj, wVal = false) {
     if (!isSimpleObject(obj) || isEmpty(obj)) {
