@@ -1412,8 +1412,23 @@ export function dtFmt(fmt: string = "short", dt?: any) {
 
 /**
  * Return elements in arr1 Not In arr2
- * @param arr1 - array of elements
- * @param arr2 - single element or array of elements  
+ * 
+ * @aider
+ * @param {any[]} arr1 - Array of elements to check
+ * @param {any|any[]} arr2 - Single element or array of elements to exclude
+ * @returns {any[]} Array containing elements from arr1 that are not in arr2
+ * @description
+ * Creates a new array containing all elements from arr1 that do not exist in arr2.
+ * 
+ * If arr2 is not an array, it's converted to a single-element array.
+ * The function uses Array.filter() and Array.includes() for the comparison.
+ * 
+ * @example
+ * // Returns [1, 3]
+ * inArr1NinArr2([1, 2, 3], [2, 4])
+ * 
+ * // Returns [1, 3]
+ * inArr1NinArr2([1, 2, 3], 2)
  */
 export function inArr1NinArr2(arr1: any[], arr2: any): any[] {
   if (!Array.isArray(arr2)) {
@@ -1424,6 +1439,33 @@ export function inArr1NinArr2(arr1: any[], arr2: any): any[] {
 
 /**
  * Compare two arrays returning an object with counts of shared, only in arr1, only in arr2, etc
+ * 
+ * @aider
+ * @param {[]} arr1 - First array to compare
+ * @param {[]} arr2 - Second array to compare
+ * @returns {Object} Detailed comparison object with arrays and counts
+ * @description
+ * Performs a comprehensive comparison between two arrays, returning an object with:
+ * - The original arrays (arr1, arr2)
+ * - The length of each array (arr1Cnt, arr2Cnt)
+ * - Elements shared between both arrays (shared)
+ * - Count of shared elements (sharedCnt)
+ * - Elements only in arr1 (onlyArr1)
+ * - Count of elements only in arr1 (onlyArr1Cnt)
+ * - Elements only in arr2 (onlyArr2)
+ * - Count of elements only in arr2 (onlyArr2Cnt)
+ * 
+ * This function uses intersect() and inArr1NinArr2() internally.
+ * @example
+ * // Returns detailed comparison object
+ * compareArrays([1, 2, 3], [2, 3, 4])
+ * // {
+ * //   arr1: [1, 2, 3], arr2: [2, 3, 4],
+ * //   arr1Cnt: 3, arr2Cnt: 3,
+ * //   shared: [2, 3], sharedCnt: 2,
+ * //   onlyArr1: [1], onlyArr1Cnt: 1,
+ * //   onlyArr2: [4], onlyArr2Cnt: 1
+ * // }
  */
 export function compareArrays(arr1: [], arr2: []) {
   let shared = intersect(arr1, arr2);
@@ -1439,6 +1481,27 @@ export function compareArrays(arr1: [], arr2: []) {
 /**
  * Unique intersection of two arrays
  * TODO: implement intersectAny & intersectAll for any number of arrays
+ * 
+ * @aider
+ * @param {any[]} [a] - First array
+ * @param {any[]} [b] - Second array
+ * @returns {any[]} Array containing elements that exist in both input arrays, with duplicates removed
+ * @description
+ * Finds the intersection of two arrays (elements that exist in both arrays),
+ * while ensuring the result contains only unique values.
+ * 
+ * The function:
+ * 1. Converts the second array to a Set for efficient lookups
+ * 2. Converts the first array to a Set to remove duplicates
+ * 3. Filters the first array to only include elements that exist in the second array
+ * 
+ * This implementation is efficient for large arrays as it uses Set operations.
+ * @example
+ * // Returns [2, 3]
+ * intersect([1, 2, 2, 3], [2, 3, 4])
+ * 
+ * // Returns [2]
+ * intersect([1, 2, 3], [2, 2, 4])
  */
 export function intersect(a?: any[], b?: any[]): any[] {
   var setB = new Set(b);
@@ -1447,6 +1510,21 @@ export function intersect(a?: any[], b?: any[]): any[] {
 
 /**
  * Returns array with all strings in array converted to lower case
+ * 
+ * @aider
+ * @param {any[]} arr - Array containing elements to process
+ * @returns {any[]} New array with all string elements converted to lowercase
+ * @description
+ * Creates a new array where all string elements from the input array are converted to lowercase.
+ * Non-string elements are left unchanged.
+ * 
+ * This function is useful for case-insensitive comparisons or normalization of string arrays.
+ * @example
+ * // Returns ["hello", "world", 123]
+ * arrayToLower(["Hello", "WORLD", 123])
+ * 
+ * // Returns ["a", "b", "c", null, undefined]
+ * arrayToLower(["A", "B", "C", null, undefined])
  */
 export function arrayToLower(arr: any[]) {
   return arr.map((e) => (typeof e === 'string') ? e.toLowerCase() : e);
@@ -1454,6 +1532,28 @@ export function arrayToLower(arr: any[]) {
 
 /**
  * Compares arrays by VALUES - independant of order
+ * 
+ * @aider
+ * @param {any[]} a - First array to compare
+ * @param {any[]} b - Second array to compare
+ * @returns {boolean} True if arrays contain the same values regardless of order, false otherwise
+ * @description
+ * Determines if two arrays contain the same values, regardless of their order.
+ * 
+ * The function works by:
+ * 1. Sorting both arrays
+ * 2. Converting them to JSON strings
+ * 3. Comparing the resulting strings
+ * 
+ * Note: This approach works well for arrays of primitive values, but may not work
+ * correctly for arrays containing objects or nested arrays, as JSON.stringify
+ * doesn't guarantee consistent ordering of object properties.
+ * @example
+ * // Returns true
+ * arraysEqual([1, 2, 3], [3, 2, 1])
+ * 
+ * // Returns false
+ * arraysEqual([1, 2, 3], [1, 2, 4])
  */
 export function arraysEqual(a, b) {
   return JSON.stringify(a.sort()) === JSON.stringify(b.sort());
@@ -1461,6 +1561,25 @@ export function arraysEqual(a, b) {
 
 /**
  * Take any number of array args & returns array of all duplicates
+ * 
+ * @aider
+ * @param {...any[]} args - Any number of arrays to check for duplicates
+ * @returns {any[]} Array containing all duplicate elements found across all input arrays
+ * @description
+ * Identifies duplicate elements across any number of arrays.
+ * 
+ * The function:
+ * 1. Merges all input arrays into a single array
+ * 2. Filters the merged array to only include elements that appear more than once
+ * 
+ * Note: This returns all instances of duplicates after the first occurrence,
+ * so an element that appears three times will appear twice in the result.
+ * @example
+ * // Returns [2, 3, 3]
+ * dupEntries([1, 2, 3], [2, 3, 3, 4])
+ * 
+ * // Returns [1, 2]
+ * dupEntries([1, 1, 2], [2, 3])
  */
 export function dupEntries(...args) {
   let merged = [].concat(...args);
@@ -1471,6 +1590,27 @@ export function dupEntries(...args) {
 /**
  * Inserts an element between each element of an array - like join() but for arrays
  * 
+ * @aider
+ * @param {any[]} arr - Array of elements
+ * @param {any} sep - Separator element to insert between array elements
+ * @returns {any[]} New array with separator inserted between original elements
+ * @description
+ * Creates a new array with the separator element inserted between each element of the original array.
+ * This is similar to the string join() method, but works with arrays of any type.
+ * 
+ * The function uses the interleave implementation which:
+ * 1. Maps each element to a pair [element, separator]
+ * 2. Flattens the resulting array
+ * 3. Removes the trailing separator
+ * 
+ * Note: The function contains an alternative implementation (magicArrayJoin) that is commented
+ * but preserved for reference.
+ * @example
+ * // Returns [1, "x", 2, "x", 3]
+ * arrayJoin([1, 2, 3], "x")
+ * 
+ * // Returns ["a", 0, "b", 0, "c"]
+ * arrayJoin(["a", "b", "c"], 0)
  */
 export function arrayJoin(arr: any[], sep: any):any[] {
   // These both seem to work, but switch if problem discovered
@@ -1493,6 +1633,28 @@ return interleave(arr, sep);
 
 /**
  * Is 'a' a subset of 'b' ?
+ * 
+ * @aider
+ * @param {any[]} a - Array to check if it's a subset
+ * @param {any[]} b - Array to check against
+ * @returns {boolean} True if every unique element in 'a' is also in 'b', false otherwise
+ * @description
+ * Determines if array 'a' is a subset of array 'b', after removing duplicates from both.
+ * 
+ * The function:
+ * 1. Converts both arrays to Sets to remove duplicates
+ * 2. Checks if every element in the first Set exists in the second Set
+ * 
+ * This is useful for checking if one collection is completely contained within another.
+ * @example
+ * // Returns true
+ * isSubset([1, 2], [1, 2, 3, 4])
+ * 
+ * // Returns true (duplicates are ignored)
+ * isSubset([1, 1, 2], [1, 2, 3])
+ * 
+ * // Returns false
+ * isSubset([1, 2, 5], [1, 2, 3, 4])
  */
 export function isSubset(a, b) {
   a = [... new Set(a)];
@@ -1504,6 +1666,27 @@ export function isSubset(a, b) {
 /**
  * Takes an array and an element, returns a new array with 
  * the element inserted between each element of the original array.
+ * 
+ * @aider
+ * @param {Array<any>} arr - Original array
+ * @param {any} item - Item to insert between array elements
+ * @returns {Array<any>} New array with item inserted between original elements
+ * @description
+ * Creates a new array with the specified item inserted between each element of the original array.
+ * This is similar to arrayJoin() but uses a different implementation with a for loop.
+ * 
+ * The function:
+ * 1. Creates a new empty result array
+ * 2. Iterates through the original array
+ * 3. Adds each original element to the result
+ * 4. Adds the separator item after each element except the last one
+ * 
+ * @example
+ * // Returns [1, "x", 2, "x", 3]
+ * insertBetween([1, 2, 3], "x")
+ * 
+ * // Returns ["a", 0, "b", 0, "c"]
+ * insertBetween(["a", "b", "c"], 0)
  */
 export function insertBetween(arr: Array<any>, item: any) {
   let result = [];
@@ -1519,6 +1702,25 @@ export function insertBetween(arr: Array<any>, item: any) {
 
 
 //TODO - REDO! This sucks...
+/**
+ * @aider
+ * @param {boolean} [report=false] - If true, logs a warning when not in CLI environment
+ * @returns {boolean} True if running in a CLI environment, false otherwise
+ * @description
+ * Determines if the code is running in a CLI environment by checking the RUNTIME environment variable.
+ * 
+ * If report is true and the environment is not CLI, a warning is logged to the console.
+ * 
+ * Note: As indicated by the TODO comment, this function has known limitations and should be improved.
+ * @example
+ * // Basic usage
+ * if (isCli()) {
+ *   // Run CLI-specific code
+ * }
+ * 
+ * // With warning
+ * isCli(true); // Will log warning if not in CLI environment
+ */
 export function isCli(report = false) {
   let runtime = process.env.RUNTIME;
   //let runtime = getRuntime();
@@ -1531,6 +1733,28 @@ export function isCli(report = false) {
 
 /**
  * Converts an https URL to an HTTP URL.
+ * 
+ * @aider
+ * @param {string} url - HTTPS URL to convert
+ * @returns {string} Converted HTTP URL, or original URL if it wasn't HTTPS
+ * @description
+ * Converts an HTTPS URL to HTTP by replacing the protocol.
+ * 
+ * The function:
+ * 1. Splits the URL at the colon
+ * 2. Replaces "https" with "http" if found
+ * 3. Rejoins the parts to form the new URL
+ * 
+ * Note: This function only changes the protocol and doesn't validate the URL structure.
+ * @example
+ * // Returns "http://example.com"
+ * rewriteHttpsToHttp("https://example.com")
+ * 
+ * // Returns "http://example.com:8080/path"
+ * rewriteHttpsToHttp("https://example.com:8080/path")
+ * 
+ * // Returns "http://example.com" (unchanged)
+ * rewriteHttpsToHttp("http://example.com")
  */
 export function rewriteHttpsToHttp(url) {
   let parts = url.split(":");
@@ -1547,6 +1771,33 @@ export function rewriteHttpsToHttp(url) {
  * if array, return array of failed urls
  * TODO!! Doesn't accout for network errors, exceptions, etc!!
  * SEE below checkUrl3
+ * 
+ * @aider
+ * @param {string|string[]} url - URL or array of URLs to check
+ * @returns {Promise<boolean|string[]>} 
+ *   - For single URL: true if status is 200, false otherwise
+ *   - For array of URLs: true if all URLs return 200, otherwise array of failed URLs
+ * @description
+ * Checks if one or more URLs return a 200 status code.
+ * 
+ * When given a single URL:
+ * - Returns true if the URL returns status 200
+ * - Returns false otherwise
+ * 
+ * When given an array of URLs:
+ * - Returns true if all URLs return status 200
+ * - Returns array of failed URLs otherwise
+ * 
+ * Note: As indicated by the TODO comment, this function doesn't properly handle network errors
+ * or exceptions. For more robust URL checking, see checkUrl3().
+ * @example
+ * // Single URL
+ * const result = await checkUrl("https://example.com");
+ * // true if status is 200, false otherwise
+ * 
+ * // Multiple URLs
+ * const results = await checkUrl(["https://example.com", "https://invalid.example"]);
+ * // true if all URLs return 200, otherwise array of failed URLs
  */
 export async function checkUrl(url) {
   if (Array.isArray(url)) {
@@ -1574,6 +1825,23 @@ export async function checkUrl(url) {
 
 /**
  * Returns a URL object from a URL string, else error code
+ * 
+ * @aider
+ * @param {string} url - URL string to convert to URL object
+ * @returns {URL|string} URL object if valid, error code or error object otherwise
+ * @description
+ * Attempts to create a URL object from a URL string.
+ * 
+ * If successful, returns the URL object.
+ * If unsuccessful, returns the error code (if available) or the error object itself.
+ * 
+ * This function provides a safe way to create URL objects without having to handle exceptions.
+ * @example
+ * // Returns URL object
+ * mkUrl("https://example.com")
+ * 
+ * // Returns error code or error object
+ * mkUrl("invalid://url")
  */
 function mkUrl(url) {
   try {
@@ -1589,6 +1857,30 @@ function mkUrl(url) {
 }
 
 //Same as above, but 
+/**
+ * @aider
+ * @param {string} url - URL string to convert to URL object
+ * @param {boolean} [full=false] - If true, returns the full error object on failure
+ * @returns {URL|string|Error} URL object if valid, error code/object otherwise based on full parameter
+ * @description
+ * Similar to mkUrl(), but with an option to return the full error object.
+ * 
+ * If successful, returns the URL object.
+ * If unsuccessful:
+ * - When full=true: returns the complete error object
+ * - When full=false: returns the error code (if available) or the error object
+ * 
+ * This function provides more flexibility in error handling compared to mkUrl().
+ * @example
+ * // Returns URL object
+ * mkUrlObj("https://example.com")
+ * 
+ * // Returns error code
+ * mkUrlObj("invalid://url")
+ * 
+ * // Returns full error object
+ * mkUrlObj("invalid://url", true)
+ */
 function mkUrlObj(url, full = false) {
   try {
     let urlObj = new URL(url);
@@ -1719,6 +2011,20 @@ export async function checkUrlAxios(tstUrl, full = false) {
 
 /**
  * Makes first character of string uppercase
+ * 
+ * @aider
+ * @param {string} str - Input string
+ * @returns {string} String with first character converted to uppercase
+ * @description
+ * Capitalizes the first character of a string while preserving the case of all other characters.
+ * 
+ * This is useful for formatting names, titles, or sentences.
+ * @example
+ * // Returns "Hello world"
+ * firstToUpper("hello world")
+ * 
+ * // Returns "JavaScript"
+ * firstToUpper("javaScript")
  */
 export function firstToUpper(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -1733,7 +2039,37 @@ export function firstToUpper(str: string): string {
  * If "false" - 404 or something - but GOT A STATUS!
  * IF other - who knows? bad domain, invalid URL, network error,...
  * 
+ * @aider
+ * @param {string} url - URL to check
+ * @returns {Promise<boolean|number|object>} 
+ *   - true if status is 200
+ *   - false if status is an error code (>300)
+ *   - status code if it's not 200 but also not an error
+ *   - error object if an exception occurs
+ * @description
+ * Provides a more robust URL checking mechanism than checkUrl() by handling exceptions
+ * and returning a tri-state result.
  * 
+ * The function:
+ * 1. Attempts to get the status code of the URL
+ * 2. Returns true for status 200
+ * 3. Returns false for error status codes (>300)
+ * 4. Returns the actual status code for other status codes
+ * 5. Returns an error object if an exception occurs
+ * 
+ * This function is more reliable than checkUrl() as it properly handles exceptions.
+ * @example
+ * // Returns true for valid URLs
+ * await checkUrl3("https://example.com")
+ * 
+ * // Returns false for URLs that return error codes
+ * await checkUrl3("https://example.com/notfound")
+ * 
+ * // Returns status code for redirects, etc.
+ * await checkUrl3("https://example.com/redirect")
+ * 
+ * // Returns error object for invalid URLs or network errors
+ * await checkUrl3("invalid://url")
  */
 export async function checkUrl3(url) {
   try {
@@ -1752,6 +2088,27 @@ export async function checkUrl3(url) {
 
 /**
  * returns arg, unless it is an empty object or array
+ * 
+ * @aider
+ * @param {any} arg - Value to check
+ * @returns {any|undefined} Original value if not empty, undefined otherwise
+ * @description
+ * Returns the input value only if it's not considered "empty" according to isEmpty().
+ * If the input is empty, the function returns undefined.
+ * 
+ * This is useful for filtering out empty values in a concise way.
+ * @example
+ * // Returns {a: 1}
+ * trueVal({a: 1})
+ * 
+ * // Returns [1, 2, 3]
+ * trueVal([1, 2, 3])
+ * 
+ * // Returns undefined
+ * trueVal({})
+ * trueVal([])
+ * trueVal(null)
+ * trueVal(undefined)
  */
 export function trueVal(arg) {
   if (!isEmpty(arg)) {
@@ -1767,6 +2124,38 @@ export function trueVal(arg) {
 /** Try to make simple copies of complex objects (like with cyclic references)
  * to be storable in MongoDB
  * Primitives will just be returned unchanged.
+ * 
+ * @aider
+ * @param {any} arg - Value to clone
+ * @returns {any} Deep clone of the input value
+ * @description
+ * Creates a deep clone of complex objects, handling cyclic references.
+ * 
+ * The function:
+ * 1. Returns primitives and null/undefined values unchanged
+ * 2. Converts DOM Elements to their HTML representation (in browser environments)
+ * 3. Uses JSON5 stringify/parse with cycle handling for complex objects
+ * 
+ * This is particularly useful for:
+ * - Creating deep copies of objects
+ * - Preparing objects with circular references for storage (e.g., in MongoDB)
+ * - Safely cloning objects for immutable operations
+ * 
+ * @example
+ * // Simple values are returned unchanged
+ * jsonClone(123) // Returns 123
+ * jsonClone("hello") // Returns "hello"
+ * 
+ * // Objects are deeply cloned
+ * const obj = { a: 1, b: { c: 2 } };
+ * const clone = jsonClone(obj);
+ * // clone is a deep copy of obj
+ * 
+ * // Handles circular references
+ * const circular = { a: 1 };
+ * circular.self = circular;
+ * const safeClone = jsonClone(circular);
+ * // safeClone contains the same structure with circular reference intact
  */
 export function jsonClone(arg) {
   if (!arg || typeof arg !== "object" || isPrimitive(arg)) {
@@ -1783,6 +2172,30 @@ export function jsonClone(arg) {
 
 /**
  * Return the constructor chain of an object
+ * 
+ * @aider
+ * @param {any} obj - Object to analyze
+ * @returns {Array<{constructor: any, toConstructor: string}>} Array of constructor objects and their types
+ * @description
+ * Analyzes an object and returns its constructor inheritance chain.
+ * 
+ * The function:
+ * 1. Starts with the object's constructor
+ * 2. Iteratively gets each constructor's constructor
+ * 3. Collects each constructor and its type in an array
+ * 4. Stops after 10 iterations or when reaching Function constructor
+ * 
+ * This is useful for understanding the inheritance hierarchy of an object.
+ * 
+ * Note: The function catches and logs any exceptions that occur during traversal.
+ * @example
+ * // For a Date object:
+ * getConstructorChain(new Date())
+ * // Returns something like:
+ * // [
+ * //   {constructor: ƒ Date(), toConstructor: "function: Date"},
+ * //   {constructor: ƒ Object(), toConstructor: "function: Object"}
+ * // ]
  */
 export function getConstructorChain(obj) {
   let i = 0;
@@ -1806,7 +2219,36 @@ export function getConstructorChain(obj) {
  * Checks if arg is an instance of a class. 
  * TODO: - have to do lots of testing of different args to 
  * verify test conditions...
- * @return - false, or {constructor, className}
+ * 
+ * @aider
+ * @param {any} arg - Value to check
+ * @returns {GenObj|false} Object with constructor and className if arg is a class instance, false otherwise
+ * @description
+ * Determines if a value is an instance of a class (not a primitive or empty object).
+ * 
+ * If the value is a class instance, returns an object containing:
+ * - constructor: The constructor function
+ * - className: The name of the class
+ * 
+ * Returns false for:
+ * - Primitive values
+ * - Non-object values
+ * - Empty objects
+ * - Objects without a constructor
+ * 
+ * Note: As indicated by the TODO comment, this function may need additional testing
+ * with various input types to verify its behavior.
+ * @example
+ * // Returns {constructor: ƒ Date(), className: "Date"}
+ * isInstance(new Date())
+ * 
+ * // Returns {constructor: ƒ Array(), className: "Array"}
+ * isInstance([1, 2, 3])
+ * 
+ * // Returns false
+ * isInstance(123)
+ * isInstance("string")
+ * isInstance({})
  */
 export function isInstance(arg):GenObj|false {
   if (isPrimitive(arg) || !isObject(arg) || isEmpty(arg)) {
@@ -2524,6 +2966,30 @@ export function isJsonStr(arg: any): arg is string {
 
 /**
  * Returns true if arg is string & can be JSON5 parseable
+ * 
+ * @aider
+ * @param {any} arg - Value to check
+ * @returns {boolean} True if arg is a string that can be parsed as JSON5, false otherwise
+ * @description
+ * Type guard function that determines if a value is a string that can be successfully parsed as JSON5.
+ * 
+ * The function:
+ * 1. Checks if the input is a string
+ * 2. Attempts to parse it with JSON5.retrocycle()
+ * 3. Returns true if parsing succeeds, false otherwise
+ * 
+ * JSON5 is an extension of JSON that allows features like comments, trailing commas,
+ * and unquoted keys. This function helps identify valid JSON5 strings.
+ * @example
+ * // Returns true
+ * isJson5Str('{"name":"John","age":30}')
+ * isJson5Str('{name:"John",age:30}') // Valid JSON5, not valid JSON
+ * isJson5Str('[1,2,3,]') // Trailing comma is valid in JSON5
+ * 
+ * // Returns false
+ * isJson5Str('Not JSON5')
+ * isJson5Str(123)
+ * isJson5Str(null)
  */
 export function isJson5Str(arg: any): arg is string {
   if (typeof arg !== 'string') {
@@ -2539,6 +3005,23 @@ export function isJson5Str(arg: any): arg is string {
 }
 
 
+/**
+ * @aider
+ * @param {string} str - JSON string to parse
+ * @returns {any} Parsed JavaScript object with circular references restored
+ * @description
+ * Parses a JSON string and restores any circular references using JSON.retrocycle.
+ * 
+ * This function is a wrapper around JSON.retrocycle that provides a more
+ * intuitive name for the operation of parsing JSON with circular reference handling.
+ * 
+ * Note: This assumes that JSON.retrocycle has been properly extended onto the
+ * native JSON object.
+ * @example
+ * // Parse a JSON string with circular references
+ * const obj = JSONParse('{"a":{"$ref":"$"}}');
+ * // obj is now {a: obj} with the circular reference restored
+ */
 export function JSONParse(str: string) {
   return JSON.retrocycle(str);
 }
@@ -2546,6 +3029,29 @@ export function JSONParse(str: string) {
 
 /**
  * Experiment with Use retrocycle to parse
+ * 
+ * @aider
+ * @param {string} str - JSON5 string to parse
+ * @returns {any} Parsed JavaScript object with circular references restored
+ * @description
+ * Parses a JSON5 string and restores any circular references using JSON5.retrocycle.
+ * 
+ * JSON5 is an extension of JSON that allows:
+ * - Comments
+ * - Trailing commas
+ * - Unquoted property names
+ * - Single-quoted strings
+ * - Multi-line strings
+ * - And more
+ * 
+ * This function uses the retrocycle extension to handle circular references.
+ * 
+ * Note: The commented code shows alternative implementations and error handling
+ * approaches that were considered.
+ * @example
+ * // Parse a JSON5 string with circular references
+ * const obj = JSON5Parse('{a: {$ref: "$"}}');
+ * // obj is now {a: obj} with the circular reference restored
  */
 export function JSON5Parse(str: string) {
   //try {
@@ -2611,6 +3117,32 @@ export function keysFromJson(arg: any): any {
 
 /** Safe stringify - 
  * Experiment with just decycle for all stringify
+ * 
+ * @aider
+ * @param {any} arg - Value to stringify
+ * @param {number} [space=2] - Number of spaces to use for indentation
+ * @returns {string} JSON5 string representation of the value with circular references handled
+ * @description
+ * Converts a JavaScript value to a JSON5 string, handling circular references.
+ * 
+ * This function uses JSON5.decycle to handle circular references in the object
+ * before stringification. The resulting string can be parsed back using JSON5Parse.
+ * 
+ * The space parameter controls the indentation of the output string for readability.
+ * 
+ * Note: The commented code shows alternative implementations that were considered.
+ * @example
+ * // Basic usage
+ * const obj = { a: 1, b: "text" };
+ * JSON5Stringify(obj); // Returns '{\n  a: 1,\n  b: "text"\n}'
+ * 
+ * // With circular reference
+ * const circular = { a: 1 };
+ * circular.self = circular;
+ * JSON5Stringify(circular); // Returns string with $ref for the circular reference
+ * 
+ * // With custom spacing
+ * JSON5Stringify(obj, 0); // Returns '{a:1,b:"text"}'
  */
 export function JSON5Stringify(arg, space=2) {
   //try {
@@ -2624,6 +3156,34 @@ export function JSON5Stringify(arg, space=2) {
   //}
 }
 
+/**
+ * @aider
+ * @param {any} arg - Value to stringify
+ * @param {number} [space=2] - Number of spaces to use for indentation
+ * @returns {string} JSON string representation of the value with circular references handled
+ * @description
+ * Converts a JavaScript value to a JSON string, handling circular references.
+ * 
+ * This function uses JSON.decycle to handle circular references in the object
+ * before stringification. The resulting string can be parsed back using JSONParse.
+ * 
+ * The space parameter controls the indentation of the output string for readability.
+ * 
+ * Note: The commented code shows alternative implementations and special case
+ * handling that were considered.
+ * @example
+ * // Basic usage
+ * const obj = { a: 1, b: "text" };
+ * JSONStringify(obj); // Returns '{\n  "a": 1,\n  "b": "text"\n}'
+ * 
+ * // With circular reference
+ * const circular = { a: 1 };
+ * circular.self = circular;
+ * JSONStringify(circular); // Returns string with $ref for the circular reference
+ * 
+ * // With custom spacing
+ * JSONStringify(obj, 0); // Returns '{"a":1,"b":"text"}'
+ */
 export function JSONStringify(arg, space=2) {
   /*
   if (arg === undefined) {
@@ -2647,11 +3207,37 @@ export function JSONStringify(arg, space=2) {
 
 /**
  * Returns a new object as deepMerge of arg objs, BUT with arrays concatenated
- * @param objs - unlimited number of input objects
- * @return object - a new object with the input objects merged,
- *   and arrays concatenated
+ * 
+ * @aider
+ * @param {...any} objs - Objects to merge
+ * @returns {GenObj} New object with all input objects merged and arrays concatenated
+ * @description
+ * Performs a deep merge of multiple objects, with special handling for arrays.
+ * 
+ * Unlike standard object merging (like Object.assign or _.merge) which would
+ * overwrite arrays, this function concatenates arrays when they are encountered
+ * at the same path in different objects.
+ * 
+ * The function:
+ * 1. Uses lodash's mergeWith to perform the deep merge
+ * 2. Provides a customizer function that concatenates arrays
+ * 3. Starts with an empty object {} to avoid modifying any input objects
+ * 
+ * This is useful when you want to combine configuration objects that contain arrays
+ * of items that should be combined rather than replaced.
+ * @example
+ * // Returns { a: 1, b: 2, c: [1, 2, 3, 4] }
+ * mergeAndConcat(
+ *   { a: 1, c: [1, 2] },
+ *   { b: 2, c: [3, 4] }
+ * )
+ * 
+ * // Returns { a: { b: [1, 2, 3], c: 4 } }
+ * mergeAndConcat(
+ *   { a: { b: [1, 2] } },
+ *   { a: { b: [3], c: 4 } }
+ * )
  */
-
 export function mergeAndConcat(...objs):GenObj {
   let customizer = function (objValue, srcValue) {
     if (_.isArray(objValue)) {
@@ -2663,6 +3249,31 @@ export function mergeAndConcat(...objs):GenObj {
 
 /**
  * Take input arrays, merge, & return single array w. unique values
+ * 
+ * @aider
+ * @param {...any[]} arrs - Arrays to merge and deduplicate
+ * @returns {any[]} Array containing all unique values from the input arrays
+ * @description
+ * Combines multiple arrays and removes duplicate values.
+ * 
+ * The function:
+ * 1. Concatenates all input arrays into a single array
+ * 2. Converts the array to a Set to remove duplicates
+ * 3. Converts the Set back to an array
+ * 
+ * This is useful for merging multiple collections while ensuring uniqueness.
+ * 
+ * Note: The commented code shows an alternative implementation that was considered.
+ * @example
+ * // Returns [1, 2, 3, 4, 5]
+ * uniqueVals([1, 2, 3], [3, 4, 5], [1, 5])
+ * 
+ * // Returns ["a", "b", "c"]
+ * uniqueVals(["a", "b"], ["b", "c"])
+ * 
+ * // Works with mixed types
+ * // Returns [1, "a", true, null]
+ * uniqueVals([1, "a"], ["a", true, null])
  */
 export function uniqueVals(...arrs): any[] {
   /*
@@ -2676,6 +3287,21 @@ export function uniqueVals(...arrs): any[] {
 }
 /** 
  * Return random element of array
+ * 
+ * @aider
+ * @param {any[]} arr - Array to select from
+ * @returns {any} Randomly selected element from the array
+ * @description
+ * Selects and returns a random element from the provided array.
+ * 
+ * The function uses Math.random() to generate a random index within
+ * the bounds of the array length.
+ * @example
+ * // Returns a random element
+ * getRand([1, 2, 3, 4, 5])
+ * 
+ * // Returns a random string
+ * getRand(["apple", "banana", "cherry"])
  */
 export function getRand(arr: any[]) {
   return arr[Math.floor((Math.random() * arr.length))];
@@ -2686,6 +3312,35 @@ export function getRand(arr: any[]) {
  * Gets cnt random unique elements of an array
  * Not the most efficient but it works
  * if cnt = 0, returns a single element, else an array of els
+ * 
+ * @aider
+ * @param {any[]} arr - Array to select from
+ * @param {number} [cnt=null] - Number of elements to select
+ * @returns {any|any[]} Single random element if cnt is null/0, otherwise array of random elements
+ * @throws {PkError} If arr is not an array or is empty
+ * @description
+ * Selects random unique elements from an array.
+ * 
+ * The function:
+ * 1. If cnt is null/0, returns a single random element
+ * 2. If cnt > 0, returns an array of cnt unique random elements
+ * 3. Limits cnt to the array length to avoid infinite loops
+ * 
+ * The implementation uses array indices to select random elements,
+ * ensuring uniqueness by tracking selected indices.
+ * 
+ * Note: As the comment indicates, this is not the most efficient implementation
+ * but it works reliably.
+ * @example
+ * // Returns a single random element
+ * getRandElsArr([1, 2, 3, 4, 5])
+ * getRandElsArr([1, 2, 3, 4, 5], 0)
+ * 
+ * // Returns array of 3 unique random elements
+ * getRandElsArr([1, 2, 3, 4, 5], 3)
+ * 
+ * // Returns array of all elements in random order (when cnt >= arr.length)
+ * getRandElsArr([1, 2, 3], 5) // Returns 3 elements
  */
 export function getRandElsArr(arr: any[], cnt = null) {
   if (!Array.isArray(arr) || !arr.length) {
@@ -2817,6 +3472,27 @@ export function parseHeaderString(str) {
  * Remove all quotes, spaces, etc from a string
  * stupid name - but just removes all quotes, spaces, etc
  * from a string.
+ * 
+ * @aider
+ * @param {any} [str] - String to process
+ * @returns {string|null} String with quotes and spaces removed, or null if input is not a string
+ * @description
+ * Removes all single quotes, double quotes, and spaces from a string.
+ * 
+ * Returns null if the input is not a string or is empty/null/undefined.
+ * 
+ * Note: As indicated by the comment, the function name is not ideal but describes
+ * its purpose of "stripping stray" characters.
+ * @example
+ * // Returns "HelloWorld"
+ * stripStray("'Hello' \"World\"")
+ * 
+ * // Returns "NoSpacesOrQuotes"
+ * stripStray("No Spaces Or 'Quotes'")
+ * 
+ * // Returns null
+ * stripStray(null)
+ * stripStray(123)
  */
 export function stripStray(str?: any) {
   if (!str || typeof str !== 'string') {
@@ -2828,11 +3504,60 @@ export function stripStray(str?: any) {
 
 /**
  * Escapes special regex characters from string for literal use in a regular expression
+ * 
+ * @aider
+ * @param {string} astr - String to escape
+ * @returns {string} String with all special regex characters escaped
+ * @description
+ * Escapes special characters in a string so it can be used as a literal string
+ * within a regular expression.
+ * 
+ * The function escapes: . * + ? ^ $ { } ( ) | [ ] \
+ * 
+ * This is useful when building regular expressions dynamically and you need
+ * to include user input or other strings that might contain special regex characters.
+ * @example
+ * // Returns "\\d\\+\\.\\*"
+ * escapeRegExp("\\d+.*")
+ * 
+ * // Returns "\\(Hello\\)"
+ * escapeRegExp("(Hello)")
+ * 
+ * // Returns "example\\.com"
+ * escapeRegExp("example.com")
  */
 export function escapeRegExp(astr:string):string {
   return astr.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
 
+/**
+ * @aider
+ * @param {string} openTag - Opening tag to match
+ * @param {string} [closeTag] - Closing tag to match (defaults to openTag if not provided)
+ * @param {boolean} [multiline] - Whether to enable multiline matching
+ * @returns {RegExp} Regular expression that matches content between tags
+ * @description
+ * Creates a regular expression that matches content between specified opening and closing tags.
+ * 
+ * The function:
+ * 1. Escapes special regex characters in the tags
+ * 2. Creates a non-greedy pattern to match content between tags
+ * 3. Optionally enables multiline matching with the 's' flag
+ * 
+ * This is a helper function used by taggedMatches() and can be used directly
+ * when more control over regex matching is needed.
+ * 
+ * Note: The function includes a commented alternative pattern for handling nested tags.
+ * @example
+ * // Returns /\{\{(.*?)\}\}/g
+ * taggedMatchRegex("{{", "}}")
+ * 
+ * // Returns /#(.*?)#/g
+ * taggedMatchRegex("#")
+ * 
+ * // Returns /<tag>(.*?)<\/tag>/gs
+ * taggedMatchRegex("<tag>", "</tag>", true)
+ */
 export function taggedMatchRegex( openTag: string, closeTag?:string, multiline?:any) {
   closeTag = closeTag || openTag;
   let escOpenTag = escapeRegExp(openTag);
@@ -2851,10 +3576,36 @@ export function taggedMatchRegex( openTag: string, closeTag?:string, multiline?:
  * Returns array of strings between openTag and closeTag - non-greedy
  * Escapes open & close tags
  * TODO: Add multiline match option
- * @param str - string to search
- * @param openTag:string - openTag 
- * @param closeTag?:string - optional closeTag - if absent, just use openTag
- * @param multiline?:any - optional - if true, multiline match
+ * 
+ * @aider
+ * @param {string} str - String to search
+ * @param {string} openTag - Opening tag to match
+ * @param {string} [closeTag] - Closing tag to match (defaults to openTag if not provided)
+ * @param {boolean} [multiline] - Whether to enable multiline matching
+ * @returns {string[]} Array of strings found between tags, with whitespace trimmed
+ * @description
+ * Extracts all substrings that appear between specified opening and closing tags.
+ * 
+ * The function:
+ * 1. Creates a regex using taggedMatchRegex()
+ * 2. Finds all matches in the input string
+ * 3. Extracts the content between tags (capture group 1)
+ * 4. Trims whitespace from each match
+ * 
+ * This is useful for parsing template strings, extracting variables, or
+ * processing any text with tag-delimited sections.
+ * 
+ * Note: The TODO comment indicates that multiline matching is planned but may
+ * not be fully implemented yet.
+ * @example
+ * // Returns ["content1", "content2"]
+ * taggedMatches("{{content1}} other text {{content2}}", "{{", "}}")
+ * 
+ * // Returns ["variable"]
+ * taggedMatches("This is a ${variable} in a string", "${", "}")
+ * 
+ * // Returns ["tag1", "tag2"]
+ * taggedMatches("#tag1 #tag2", "#")
  */
 export function taggedMatches(str: string, openTag: string, closeTag?:string, multiline?:any) //: string[]
 {
@@ -2870,6 +3621,26 @@ export function taggedMatches(str: string, openTag: string, closeTag?:string, mu
 
 /**
  * Converts a string to camelCase
+ * 
+ * @aider
+ * @param {string} str - String to convert
+ * @returns {string} String converted to camelCase
+ * @throws {Error} If input is not a string
+ * @description
+ * Converts a string to camelCase format by:
+ * 1. Trimming whitespace
+ * 2. Replacing underscores and hyphens followed by a character with the uppercase version of that character
+ * 
+ * This function handles both kebab-case and snake_case inputs.
+ * @example
+ * // Returns "helloWorld"
+ * toCamel("hello_world")
+ * 
+ * // Returns "helloWorld"
+ * toCamel("hello-world")
+ * 
+ * // Returns "helloWorld"
+ * toCamel(" hello_world ")
  */
 export function toCamel(str) {
   if (typeof str !== 'string') {
@@ -2882,6 +3653,27 @@ export function toCamel(str) {
 
 /**
  * Converts a string to snake_case
+ * 
+ * @aider
+ * @param {string} str - String to convert
+ * @returns {string} String converted to snake_case
+ * @throws {Error} If input is not a string
+ * @description
+ * Converts a string to snake_case format by:
+ * 1. Trimming whitespace
+ * 2. Replacing uppercase letters with a hyphen followed by the lowercase version
+ * 3. Replacing all hyphens with underscores
+ * 
+ * This function handles camelCase inputs by inserting underscores before capital letters.
+ * @example
+ * // Returns "hello_world"
+ * toSnake("helloWorld")
+ * 
+ * // Returns "hello_world"
+ * toSnake("HelloWorld")
+ * 
+ * // Returns "hello_world"
+ * toSnake(" helloWorld ")
  */
 export function toSnake(str) {
   if (typeof str !== 'string') {
@@ -2897,6 +3689,27 @@ export function toSnake(str) {
 
 /**
  * Converts a string to kebab-case
+ * 
+ * @aider
+ * @param {string} str - String to convert
+ * @returns {string} String converted to kebab-case
+ * @throws {Error} If input is not a string
+ * @description
+ * Converts a string to kebab-case format by:
+ * 1. Trimming whitespace
+ * 2. Replacing uppercase letters with a hyphen followed by the lowercase version
+ * 3. Replacing all underscores with hyphens
+ * 
+ * This function handles both camelCase and snake_case inputs.
+ * @example
+ * // Returns "hello-world"
+ * toKebab("helloWorld")
+ * 
+ * // Returns "hello-world"
+ * toKebab("hello_world")
+ * 
+ * // Returns "hello-world"
+ * toKebab(" HelloWorld ")
  */
 export function toKebab(str) {
   if (typeof str !== 'string') {
@@ -2911,16 +3724,45 @@ export function toKebab(str) {
 /**
  * Takes a JS object & returns new object w. keys either cammelCased (default) or
  * Returns new JS object w. all keys converted to kebab-case, or camelCase
+ * 
+ * @aider
+ * @param {any} obj - Object whose keys should be converted
+ * @returns {GenObj} New object with all keys converted to kebab-case
+ * @description
+ * Creates a new object with the same structure as the input object,
+ * but with all keys converted to kebab-case format.
+ * 
+ * This function recursively processes nested objects and arrays.
+ * It uses the toKebab() function for the actual string conversion.
+ * @example
+ * // Returns { "hello-world": { "nested-key": "value" } }
+ * kebabKeys({ helloWorld: { nestedKey: "value" } })
+ * 
+ * // Returns { "first-name": "John", "last-name": "Doe" }
+ * kebabKeys({ firstName: "John", lastName: "Doe" })
  */
-
 export function kebabKeys(obj): GenObj {
   return recursiveKeyConversion(obj, toKebab);
 }
 
 /**
  * Takes a flat object & returns new object w. keys camelCased
- * @param obj:GenObj
- * @return new GenObj w. keys appropriately cased.
+ * 
+ * @aider
+ * @param {GenObj} obj - Object whose keys should be converted
+ * @returns {GenObj} New object with all keys converted to camelCase
+ * @description
+ * Creates a new object with the same structure as the input object,
+ * but with all keys converted to camelCase format.
+ * 
+ * This function recursively processes nested objects and arrays.
+ * It uses the toCamel() function for the actual string conversion.
+ * @example
+ * // Returns { helloWorld: { nestedKey: "value" } }
+ * camelKeys({ "hello-world": { "nested_key": "value" } })
+ * 
+ * // Returns { firstName: "John", lastName: "Doe" }
+ * camelKeys({ "first_name": "John", "last-name": "Doe" })
  */
 export function camelKeys(obj): GenObj {
   return recursiveKeyConversion(obj, toCamel);
@@ -2928,6 +3770,29 @@ export function camelKeys(obj): GenObj {
 
 /**
  * Takes a JS object & returns new object w. keys converted, as defined by converstionFunction
+ * 
+ * @aider
+ * @param {any} obj - Object whose keys should be converted
+ * @param {Function} conversionFunction - Function that converts a string to the desired format
+ * @returns {GenObj} New object with all keys converted according to the conversion function
+ * @description
+ * Helper function that recursively converts all keys in an object using the provided conversion function.
+ * 
+ * The function:
+ * 1. Returns non-object values unchanged
+ * 2. Recursively processes arrays by mapping each element
+ * 3. Creates a new object with converted keys
+ * 4. Recursively converts values that are objects
+ * 
+ * This is used internally by camelKeys() and kebabKeys() but can be used directly
+ * with custom conversion functions.
+ * @example
+ * // With a custom conversion function
+ * recursiveKeyConversion(
+ *   { "some_key": 1, "nested": { "another_key": 2 } },
+ *   key => key.toUpperCase()
+ * )
+ * // Returns { "SOME_KEY": 1, "NESTED": { "ANOTHER_KEY": 2 } }
  */
 function recursiveKeyConversion(obj, conversionFunction): GenObj {
   if (typeof obj !== 'object') {
@@ -3005,9 +3870,32 @@ export function snakeCase(str?: any) {
 /**
  * Returns the geographic distance between two points of lon/lat in meters
  * IMPORTANT! Standard is [longitude, latitude]!!!
- * @param point1 GenObj|Array - [lat,lon] or (preferably) {lat, lon}
- * @param point2 GenObj|Array - [lat,lon] or {lat, lon}
- * @return number - distance in meters
+ * 
+ * @aider
+ * @param {GenObj|Array<number>} point1 - First point as [longitude, latitude] array or {lat, lon} object
+ * @param {GenObj|Array<number>} point2 - Second point as [longitude, latitude] array or {lat, lon} object
+ * @returns {number|null} Distance between points in meters
+ * @throws {PkError} If points are in invalid format
+ * @description
+ * Calculates the great-circle distance between two geographic points using the Haversine formula.
+ * 
+ * The function accepts points in two formats:
+ * 1. Array format: [longitude, latitude] (note the order!)
+ * 2. Object format: {lat: latitude, lon: longitude} (preferred)
+ * 
+ * The Haversine formula determines the shortest distance between two points on a sphere,
+ * accounting for the Earth's curvature.
+ * 
+ * Note: The function emphasizes that when using array format, the standard is [longitude, latitude],
+ * which is different from some APIs that use [latitude, longitude].
+ * @example
+ * // Using object format (preferred)
+ * haversine({lat: 52.5200, lon: 13.4050}, {lat: 48.8566, lon: 2.3522})
+ * // Returns distance in meters between Berlin and Paris
+ * 
+ * // Using array format [longitude, latitude]
+ * haversine([13.4050, 52.5200], [2.3522, 48.8566])
+ * // Returns the same distance
  */
 export function haversine(point1: GenObj | Array<number>, point2: GenObj | Array<number>): number | null {
   let lat1, lat2, lon1, lon2: number;
@@ -3121,8 +4009,33 @@ export function dotPathVal(obj, ...keyPaths) {
 
 /**
  * Return array of all possible combination of input arrays
- * @param arrays[] - input arrays
- * @return array of all combinations
+ * 
+ * @aider
+ * @param {...any[]} arrays - Input arrays to combine
+ * @returns {Array<any[]>} Array of all possible combinations
+ * @description
+ * Calculates the Cartesian product of any number of input arrays.
+ * 
+ * The Cartesian product represents all possible combinations where each combination
+ * contains exactly one element from each input array.
+ * 
+ * The function:
+ * 1. Starts with an array containing an empty array [[]]
+ * 2. For each input array, creates new combinations by appending each element
+ *    to each existing combination
+ * 3. Handles empty input arrays by not modifying the accumulated results
+ * 
+ * This implementation uses reduce() and flatMap() for a concise functional approach.
+ * @example
+ * // Returns [[1, 'a'], [1, 'b'], [2, 'a'], [2, 'b']]
+ * cartesianProduct([1, 2], ['a', 'b'])
+ * 
+ * // Returns [[1, 'a', true], [1, 'a', false], [1, 'b', true], [1, 'b', false],
+ * //           [2, 'a', true], [2, 'a', false], [2, 'b', true], [2, 'b', false]]
+ * cartesianProduct([1, 2], ['a', 'b'], [true, false])
+ * 
+ * // Returns [[1], [2]] (when one array is empty)
+ * cartesianProduct([1, 2], [])
  */
 export function cartesianProduct(...arrays) {
   // Initialize with an empty array within an array
