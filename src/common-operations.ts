@@ -2949,6 +2949,29 @@ export function valWithType(val: any): any {
 
 /**
  * Returns true if arg is string & can be JSON parsed
+ * 
+ * @aider
+ * @param {any} arg - Value to check
+ * @returns {boolean} True if arg is a string that can be parsed as JSON, false otherwise
+ * @description
+ * Type guard function that determines if a value is a string that can be successfully parsed as JSON.
+ * 
+ * The function:
+ * 1. Checks if the input is a string
+ * 2. Attempts to parse it with JSON.parse()
+ * 3. Returns true if parsing succeeds, false otherwise
+ * 
+ * This is useful for safely identifying JSON strings before attempting to parse them.
+ * @example
+ * // Returns true
+ * isJsonStr('{"name":"John","age":30}')
+ * isJsonStr('[1,2,3]')
+ * 
+ * // Returns false
+ * isJsonStr('Not JSON')
+ * isJsonStr(123)
+ * isJsonStr(null)
+ * isJsonStr({name: "John"}) // Object, not a JSON string
  */
 //export function isJsonStr(arg: any): boolean {
 export function isJsonStr(arg: any): arg is string {
