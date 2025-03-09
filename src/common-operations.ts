@@ -1146,14 +1146,59 @@ export function strIncludesWhich(str: string, substrs: any) {
 
 /**
  * Checks if a given argument is a Promise.
- * @param arg - The argument to check.
- * @return - boolean true if arg is a Promise, else false
+ * 
+ * @aider
+ * @param {any} [arg] - The argument to check
+ * @returns {boolean} True if arg is a Promise, false otherwise
+ * @description
+ * Determines if a value is a Promise by checking if it:
+ * 1. Is truthy (not null, undefined, false, 0, etc.)
+ * 2. Is an object
+ * 3. Has a "then" method
+ * 
+ * This is a standard way to detect Promise-like objects (thenables).
+ * @example
+ * // Returns true
+ * isPromise(Promise.resolve())
+ * isPromise(new Promise(() => {}))
+ * isPromise({then: function() {}})
+ * 
+ * // Returns false
+ * isPromise(null)
+ * isPromise({})
+ * isPromise("promise")
  */
 export function isPromise(arg?) {
   return !!arg && typeof arg === "object" && typeof arg.then === "function";
 }
 
-/** From Mozilla - a stricter int parser */
+/** From Mozilla - a stricter int parser 
+ * 
+ * @aider
+ * @param {any} value - The value to parse as an integer
+ * @returns {number|boolean} The parsed integer if valid, false otherwise
+ * @description
+ * A stricter version of parseInt that only accepts proper integer strings.
+ * Based on Mozilla's recommended integer parsing approach.
+ * 
+ * Unlike parseInt, this function:
+ * - Rejects strings with trailing non-numeric characters
+ * - Returns false instead of NaN for invalid inputs
+ * - Accepts "Infinity" as a valid input
+ * 
+ * @example
+ * // Returns 42
+ * filterInt("42")
+ * 
+ * // Returns -42
+ * filterInt("-42")
+ * 
+ * // Returns false (would be 42 with parseInt)
+ * filterInt("42px")
+ * 
+ * // Returns false
+ * filterInt("abc")
+ */
 export function filterInt(value) {
   if (/^[-+]?(\d+|Infinity)$/.test(value)) {
     return Number(value);
@@ -1166,6 +1211,26 @@ export function filterInt(value) {
 /**
  * Takes a browser event & tries to get some info
  * Move this to browser library when the time comes
+ * 
+ * @aider
+ * @param {Event} ev - The browser event to extract information from
+ * @returns {object} An object containing key properties from the event
+ * @description
+ * Extracts common properties from a browser Event object and returns them in a plain object.
+ * Uses jsonClone to ensure the returned values are serializable.
+ * 
+ * This function is useful for:
+ * - Logging events
+ * - Debugging event handlers
+ * - Storing event information for later analysis
+ * 
+ * Note: This function is intended to be moved to a browser-specific library in the future.
+ * @example
+ * // In a browser event handler:
+ * element.addEventListener('click', (event) => {
+ *   const info = eventInfo(event);
+ *   console.log(info); // Logs event details
+ * });
  */
 export function eventInfo(ev) {
   let evProps = ['bubbles', 'cancelable', 'cancelBubble', 'composed', 'currentTarget',
@@ -1182,26 +1247,40 @@ export function eventInfo(ev) {
 /** 
  * If arg can be in any way be interpreted as a date,
  * returns the JS Date object, optionally date-fns formatted string
- * @param arg - argument to convert to JS Date - null for now
- * @param fmt - string - a date-fns format or key to one of standard formats
- * NOTE: Unlike regulare JS :
  * 
- * let dtE = new Date(); //Now
- * let dtN = new Date(null); //Start of epoch
- * Valid arg values:
- *    null - returns new Date() - now
- *    date-fns add option object: {years, months, days, hours, minutes, seconds} - returns offset from now 
- *    new Date("2016-01-01")
- *   "2016-01-01"
- *    1650566202871
- *   "1650566202871"
- *   "2022-04-21T18:36:42.871Z"
- * Returns a valid JS Date object or false
- * -- Why not just 'new Date(arg)'??
- * Because: new Date(1650566202871) works
- * BUT new Date("1650566202871") DOESN'T - and sometimes
- * the DB returns a timestamp as a string...
- * @return JS Date or formatted string or false
+ * @aider
+ * @param {any} arg - Argument to convert to JS Date
+ * @returns {Date|false} A valid JS Date object or false if conversion fails
+ * @description
+ * Flexibly converts various input formats to a JavaScript Date object.
+ * 
+ * Unlike standard JS Date constructor behavior:
+ * - null/empty values return current date (new Date())
+ * - Numeric strings are properly converted to timestamps
+ * - date-fns duration objects are treated as offsets from now
+ * 
+ * Valid input formats include:
+ * - null/undefined/empty: returns current date
+ * - date-fns duration object: {days: 5, hours: 3} returns date offset from now
+ * - Date object: returns the same Date
+ * - ISO string: "2022-04-21T18:36:42.871Z"
+ * - Simple date string: "2016-01-01"
+ * - Timestamp (number or numeric string): 1650566202871 or "1650566202871"
+ * 
+ * The function validates the resulting Date object using date-fns isValid().
+ * @example
+ * // Returns current date
+ * pkToDate(null)
+ * 
+ * // Returns date 5 days from now
+ * pkToDate({days: 5})
+ * 
+ * // Returns specific date
+ * pkToDate("2022-04-21")
+ * 
+ * // Returns date from timestamp
+ * pkToDate(1650566202871)
+ * pkToDate("1650566202871")
  */
 export function pkToDate(arg) {
   if (isNumeric(arg)) {
@@ -1222,9 +1301,30 @@ export function pkToDate(arg) {
 
 /**
  * Converts a date to a Unix timestamp (seconds since the epoch) - NOT MILLISECONDS!
- * @param {Dateable} dt - dateable arg for pkToDate - defaults to now
- * @return number - unix timestamp in seconds 
  * 
+ * @aider
+ * @param {any} dt - Dateable argument for pkToDate - defaults to now
+ * @returns {number} Unix timestamp in seconds (not milliseconds)
+ * @description
+ * Converts any value that pkToDate can handle into a Unix timestamp (seconds since epoch).
+ * 
+ * This function:
+ * 1. Uses pkToDate to convert the input to a JavaScript Date object
+ * 2. Gets the millisecond timestamp using getTime()
+ * 3. Converts milliseconds to seconds by dividing by 1000 and flooring
+ * 
+ * If the input cannot be converted to a valid Date, the function throws a PkError.
+ * @example
+ * // Returns current timestamp in seconds
+ * dateToTimestamp()
+ * 
+ * // Returns timestamp for specific date
+ * dateToTimestamp("2022-04-21")
+ * 
+ * // Returns timestamp for date 5 days from now
+ * dateToTimestamp({days: 5})
+ * 
+ * @throws {PkError} If the input cannot be converted to a valid Date
  */
 export function dateToTimestamp(dt) {
   dt = pkToDate(dt);
@@ -1238,6 +1338,25 @@ export function dateToTimestamp(dt) {
 
 /**
  * Object for date-fns formats, with simple keys
+ * 
+ * @aider
+ * @type {Object<string, string>}
+ * @description
+ * A collection of commonly used date format patterns for use with date-fns format function.
+ * Each key represents a semantic format name, and the value is the corresponding date-fns format string.
+ * 
+ * Available formats:
+ * - html: HTML5 date input format (yyyy-MM-dd)
+ * - sqldt: SQL datetime format (yyyy-MM-dd HH:mm:ss)
+ * - short: Short date format (dd-MMM-yy)
+ * - dt: Date and time format (dd-MMM-yy KK:mm)
+ * - dts: Date and time with seconds (dd-MMM-yy KK:mm:ss)
+ * - ts: Time only format (KK:mm:ss)
+ * 
+ * @example
+ * // Using with date-fns format function
+ * import { format } from 'date-fns';
+ * format(new Date(), dtFnsFormats.short); // Returns "21-Apr-22"
  */
 export const dtFnsFormats = {
   html: "yyyy-MM-dd",
@@ -1250,9 +1369,30 @@ export const dtFnsFormats = {
 
 /**
  * Quick Format a date with single format code & date
- * @param fmt string - a key to pre-defined dtFnsFormats or dtfns format str
- * @param dt - datable or null for "now" 
- * @return string|false - Formatted date string, or false if dt is invalid
+ * 
+ * @aider
+ * @param {string} [fmt="short"] - A key to pre-defined dtFnsFormats or a date-fns format string
+ * @param {any} [dt] - Dateable value or null for "now"
+ * @returns {string|false} Formatted date string, or false if dt is invalid
+ * @description
+ * Provides a convenient way to format dates using either predefined format keys or custom format strings.
+ * 
+ * The function:
+ * 1. Checks if the format is a key in dtFnsFormats and uses the corresponding format if found
+ * 2. Converts the input to a Date using pkToDate
+ * 3. Formats the date using date-fns format function
+ * 
+ * If the date cannot be converted to a valid Date, the function returns false.
+ * @example
+ * // Using predefined format
+ * dtFmt("short")                // Returns current date as "21-Apr-22"
+ * dtFmt("html", "2022-04-21")   // Returns "2022-04-21"
+ * 
+ * // Using custom format
+ * dtFmt("MMMM do, yyyy", "2022-04-21")  // Returns "April 21st, 2022"
+ * 
+ * // Invalid date
+ * dtFmt("short", "invalid-date")  // Returns false
  */
 export function dtFmt(fmt: string = "short", dt?: any) {
   if (fmt in dtFnsFormats) {
