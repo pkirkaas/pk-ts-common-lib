@@ -58,6 +58,18 @@ export type Scalar = string | number; //Type for scalar values
 export type Scalars = TypeArr<Scalar>; // Type for scalar values or arrays of scalars - to mkArray
 /**
  * Makes an array from arg, or returns empty array if arg is undefined/null
+ * 
+ * @aider
+ * @template T - The type of elements in the array
+ * @param {T | T[]} arg - A single item or array of items to ensure is an array
+ * @returns {T[]} A new array containing the input item(s), or an empty array if input is null/undefined
+ * @example
+ * // Returns [1, 2, 3]
+ * mkArray([1, 2, 3])
+ * // Returns [1]
+ * mkArray(1)
+ * // Returns []
+ * mkArray(null)
  */
 export function mkArray<T>(arg: T | T[]): T[] {
     return isVoid(arg) ? [] : (Array.isArray(arg) ? arg : [arg]);
@@ -121,12 +133,22 @@ export type SimpleObject = {
  * If is numeric:
  *   returns boolean true if asNum is false
  *   else returns the numeric value (which could be 0)
- * @param arg - argument to check
- * @param asNum boolean - if true, returns the numeric value
- * @return number or boolean true/false
  * 
+ * @aider
+ * @param {any} arg - The value to check if it can be converted to a number
+ * @param {boolean} [asNum=false] - If true, returns the numeric value instead of boolean true
+ * @returns {number|boolean} 
+ *   - If arg is not numeric: false
+ *   - If arg is numeric and asNum is false: true
+ *   - If arg is numeric and asNum is true: the numeric value
+ * @example
+ * // Returns true
+ * isNumeric("123")
+ * // Returns 123
+ * isNumeric("123", true)
+ * // Returns false
+ * isNumeric("abc")
  */
-
 export function isNumeric(arg: any, asNum = false): number | boolean {
   let num = Number(arg);
   if (num !== parseFloat(arg)) {
@@ -140,6 +162,15 @@ export function isNumeric(arg: any, asNum = false): number | boolean {
 
 /**
  * Returns the numeric value, or boolean false
+ * 
+ * @aider
+ * @param {any} arg - The value to convert to a number
+ * @returns {number|boolean} The numeric value if conversion is possible, otherwise false
+ * @example
+ * // Returns 123
+ * asNumeric("123")
+ * // Returns false
+ * asNumeric("abc")
  */
 export function asNumeric(arg): number | boolean {
   return isNumeric(arg, true);
@@ -153,8 +184,33 @@ export function asNumeric(arg): number | boolean {
 /**
  * Checks if the argument is "Empty" - null, undefined, empty string, empty array, empty object
  * This is a tough call & really hard to get right...
- * @param arg - argument to test
- * @return boolean - true if empty, false if not empty
+ * 
+ * @aider
+ * @param {any} arg - The value to check for emptiness
+ * @returns {boolean} True if the argument is considered empty, false otherwise
+ * @description
+ * Considers the following as empty:
+ * - null or undefined
+ * - Empty arrays (length === 0)
+ * - Empty objects (no own properties)
+ * - Falsy values (0, "", false)
+ * 
+ * Functions are never considered empty.
+ * Objects are considered empty if they have no keys and no non-built-in properties.
+ * @example
+ * // All return true
+ * isEmpty(null)
+ * isEmpty(undefined)
+ * isEmpty([])
+ * isEmpty({})
+ * isEmpty("")
+ * 
+ * // All return false
+ * isEmpty(0)
+ * isEmpty(false)
+ * isEmpty({a: 1})
+ * isEmpty([1])
+ * isEmpty(() => {})
  */
 export function isEmpty(arg): boolean {
   if (!arg || (Array.isArray(arg) && !arg.length)) {
@@ -175,6 +231,24 @@ export function isEmpty(arg): boolean {
   return false;
 }
 
+/**
+ * @aider
+ * @param {unknown} key - The value to check if it's a valid property key
+ * @returns {boolean} True if the value is a valid property key (string, symbol, or number)
+ * @description
+ * Type guard function that checks if a value is a valid JavaScript property key.
+ * Valid property keys are strings, symbols, or numbers.
+ * @example
+ * // Returns true
+ * isPropertyKey("name")
+ * isPropertyKey(Symbol("id"))
+ * isPropertyKey(42)
+ * 
+ * // Returns false
+ * isPropertyKey(null)
+ * isPropertyKey(undefined)
+ * isPropertyKey({})
+ */
 export function isPropertyKey(key: unknown): key is PropertyKey {
   return typeof key === 'string' || typeof key === 'symbol' || typeof key === 'number';
 }
@@ -187,10 +261,44 @@ export function isObjKey(arg: any): arg is ObjKey {
 /**
  * Trickier than isEmpty - tests only for null or undefined - 0, '', {}, [] should return true
  * IMPORTANT if testing if a param is not passed (null/undefined) or passed as 0
+ * 
+ * @aider
+ * @param {unknown} arg - The value to check
+ * @returns {boolean} True if the value is null or undefined, false otherwise
+ * @description
+ * Type guard function that checks if a value is strictly null or undefined.
+ * Unlike isEmpty, this function returns false for empty strings, empty arrays, 
+ * empty objects, 0, and false.
+ * @example
+ * // Returns true
+ * isVoid(null)
+ * isVoid(undefined)
+ * 
+ * // Returns false
+ * isVoid(0)
+ * isVoid("")
+ * isVoid([])
+ * isVoid({})
+ * isVoid(false)
  */
 export function isVoid(arg:unknown): arg is Void {
   return arg === undefined || arg === null;
 }
+/**
+ * @aider
+ * @param {unknown} value - The value to check
+ * @returns {boolean} True if the value is a string, false otherwise
+ * @description
+ * Type guard function that checks if a value is a string.
+ * @example
+ * // Returns true
+ * isString("hello")
+ * 
+ * // Returns false
+ * isString(123)
+ * isString(null)
+ * isString({})
+ */
 export function isString(value: unknown): value is string {
   return typeof value === "string";
 }
@@ -199,6 +307,24 @@ export function isString(value: unknown): value is string {
  * Checks if the argument has values by reference (array, object, etc)
  * Arrays & Objects passed by referrence,
  * risk of unintended changes
+ * 
+ * @aider
+ * @param {any} arg - The value to check
+ * @returns {boolean} True if the value is passed by reference (object, array, etc.), false otherwise
+ * @description
+ * Determines if a value is passed by reference rather than by value.
+ * This is useful to identify values that could be unintentionally modified.
+ * Uses the inverse of isPrimitive() to determine if a value is passed by reference.
+ * @example
+ * // Returns true
+ * isByRef({})
+ * isByRef([])
+ * isByRef(new Date())
+ * 
+ * // Returns false
+ * isByRef(123)
+ * isByRef("hello")
+ * isByRef(null)
  */
 export function isByRef(arg: any): boolean {
   return !isPrimitive(arg);
@@ -206,6 +332,27 @@ export function isByRef(arg: any): boolean {
 
 /**
  * Checks if the argument is a "simple" JS type - boolean, number, string, bigint
+ * 
+ * @aider
+ * @param {unknown} arg - The value to check
+ * @returns {boolean} True if the value is a simple type (boolean, number, string, or bigint)
+ * @description
+ * Determines if a value is one of JavaScript's simple primitive types.
+ * Simple types are: boolean, number, string, and bigint.
+ * This excludes objects, arrays, functions, null, undefined, and symbols.
+ * @example
+ * // Returns true
+ * isSimpleType(true)
+ * isSimpleType(123)
+ * isSimpleType("hello")
+ * isSimpleType(BigInt(123))
+ * 
+ * // Returns false
+ * isSimpleType({})
+ * isSimpleType([])
+ * isSimpleType(null)
+ * isSimpleType(undefined)
+ * isSimpleType(Symbol())
  */
 export function isSimpleType(arg:unknown): boolean {
   let simpletypes = ["boolean", "number", "bigint", "string"];
@@ -213,12 +360,56 @@ export function isSimpleType(arg:unknown): boolean {
   return simpletypes.includes(toarg);
 }
 
+/**
+ * @aider
+ * @param {unknown} arg - The value to check
+ * @returns {boolean} True if the value is a function, false otherwise
+ * @description
+ * Type guard function that checks if a value is a function.
+ * This includes regular functions, arrow functions, class methods, and class constructors.
+ * @example
+ * // Returns true
+ * isFunction(function() {})
+ * isFunction(() => {})
+ * isFunction(Array.isArray)
+ * isFunction(Date)
+ * 
+ * // Returns false
+ * isFunction({})
+ * isFunction([])
+ * isFunction("function")
+ */
 export function isFunction(arg: unknown): arg is Function {
   return typeof arg === "function";
 }
 
 /**
  * Checks if the argument is a "primitive" JS type - boolean, number, string, bigint, null, undefined, ...
+ * 
+ * @aider
+ * @param {unknown} arg - The value to check
+ * @returns {boolean} True if the value is a primitive type, false otherwise
+ * @description
+ * Type guard function that determines if a value is a JavaScript primitive.
+ * Primitive values include: string, number, bigint, boolean, undefined, symbol, and null.
+ * Non-primitive values (objects) include: Object, Array, Map, Set, Function, Date, RegExp, etc.
+ * 
+ * This function uses the behavior that Object(x) returns a new object wrapper for primitive values,
+ * but returns the object itself for non-primitive values. Therefore, x !== Object(x) is true only
+ * for primitive values.
+ * @example
+ * // Returns true
+ * isPrimitive("hello")
+ * isPrimitive(123)
+ * isPrimitive(true)
+ * isPrimitive(null)
+ * isPrimitive(undefined)
+ * 
+ * // Returns false
+ * isPrimitive({})
+ * isPrimitive([])
+ * isPrimitive(new Date())
+ * isPrimitive(() => {})
  */
 export function isPrimitive(arg: unknown): arg is Primitive {
   return arg !== Object(arg);
@@ -228,6 +419,37 @@ export function isPrimitive(arg: unknown): arg is Primitive {
  * & values, not based on other types or prototypes
  * 
  * TODO: What about arrays?
+ * 
+ * @aider
+ * @param {unknown} anobj - The value to check
+ * @returns {boolean} True if the value is a simple object, false otherwise
+ * @description
+ * Type guard function that determines if a value is a "simple" JavaScript object.
+ * A simple object is one created with object literal syntax {} or new Object(),
+ * with Object.prototype as its prototype.
+ * 
+ * This excludes:
+ * - Arrays (different prototype)
+ * - Null values
+ * - Primitive values
+ * - Class instances (different prototype)
+ * - Built-in objects like Date, Map, Set, etc.
+ * 
+ * The function works by comparing the object's prototype with the prototype of an empty object literal.
+ * @example
+ * // Returns true
+ * isSimpleObject({})
+ * isSimpleObject({a: 1, b: 2})
+ * isSimpleObject(Object.create(Object.prototype))
+ * 
+ * // Returns false
+ * isSimpleObject([])
+ * isSimpleObject(null)
+ * isSimpleObject(new Date())
+ * isSimpleObject(new Map())
+ * isSimpleObject(Object.create(null))
+ * isSimpleObject(123)
+ * isSimpleObject("string")
  */
 export function isSimpleObject(anobj:unknown): anobj is SimpleObject {
   if (!anobj || typeof anobj !== "object") {
@@ -236,6 +458,28 @@ export function isSimpleObject(anobj:unknown): anobj is SimpleObject {
   return Object.getPrototypeOf(anobj) === Object.getPrototypeOf({});
 }
 
+/**
+ * @aider
+ * @param {unknown} anobj - The value to check
+ * @returns {boolean} True if the value is a generic object, false otherwise
+ * @description
+ * Type guard function that determines if a value is a generic object (GenObj).
+ * This is an alias for isSimpleObject() with identical behavior.
+ * 
+ * A generic object is one created with object literal syntax {} or new Object(),
+ * with Object.prototype as its prototype.
+ * 
+ * @see isSimpleObject
+ * @example
+ * // Returns true
+ * isGenObj({})
+ * isGenObj({a: 1, b: 2})
+ * 
+ * // Returns false
+ * isGenObj([])
+ * isGenObj(null)
+ * isGenObj(new Date())
+ */
 export function isGenObj(anobj:unknown): anobj is GenObj {
   if (!anobj || typeof anobj !== "object") {
     return false;
@@ -245,6 +489,39 @@ export function isGenObj(anobj:unknown): anobj is GenObj {
 
 /**
  * Checks if the argument is an object - 
+ * 
+ * @aider
+ * @param {any} arg - The value to check
+ * @param {boolean} [alsoEmpty=false] - If true, empty objects will also return true
+ * @param {boolean} [alsoFunction=true] - If true, functions will also return true
+ * @returns {boolean} True if the value is an object (based on parameters), false otherwise
+ * @description
+ * Determines if a value is an object, with configurable behavior for edge cases.
+ * 
+ * This function is more flexible than isSimpleObject() as it can optionally:
+ * - Include or exclude empty objects (controlled by alsoEmpty parameter)
+ * - Include or exclude functions (controlled by alsoFunction parameter)
+ * 
+ * It uses lodash's isObjectLike for the base check, which returns true for
+ * objects that are not null and have typeof 'object'.
+ * @example
+ * // Basic usage
+ * isObject({})         // true if alsoEmpty=true, false otherwise
+ * isObject({a: 1})     // true
+ * isObject([1, 2, 3])  // true (arrays are objects)
+ * 
+ * // With alsoEmpty=true
+ * isObject({}, true)   // true
+ * 
+ * // With alsoFunction=false
+ * isObject(function(){}, true, false)  // false
+ * isObject(function(){})               // true (default alsoFunction=true)
+ * 
+ * // Always false
+ * isObject(null)       // false
+ * isObject(undefined)  // false
+ * isObject(123)        // false
+ * isObject("string")   // false
  */
 export function isObject(arg, alsoEmpty = false, alsoFunction = true):boolean {
   if (!arg || isPrimitive(arg) || (isEmpty(arg) && !alsoEmpty)) {
@@ -258,10 +535,25 @@ export function isObject(arg, alsoEmpty = false, alsoFunction = true):boolean {
 
 /**
  * Checks if the keys of all objects in the argument are unique
- * @param ...args:object - objects to test
- * @return boolean - true if all objects have unique property names
+ * 
+ * @aider
+ * @param {...object[]} args - Objects to test for unique keys
+ * @returns {boolean} True if all objects have unique property names (no overlapping keys), false otherwise
+ * @description
+ * Determines if multiple objects have completely unique sets of keys with no overlaps.
+ * This is useful when merging objects to ensure no properties will be overwritten.
+ * 
+ * The function checks each object's keys against all previously seen keys.
+ * If any intersection is found, it returns false immediately.
+ * @example
+ * // Returns true
+ * uniqueKeys({a: 1, b: 2}, {c: 3, d: 4})
+ * uniqueKeys({x: 1}, {y: 2}, {z: 3})
+ * 
+ * // Returns false
+ * uniqueKeys({a: 1, b: 2}, {b: 3, c: 4})  // 'b' appears in both objects
+ * uniqueKeys({x: 1}, {y: 2}, {x: 3})      // 'x' appears in multiple objects
  */
-
 export function uniqueKeys(...args: object[]): boolean {
   let allProps = [];
   for (let arg of args) {
@@ -298,6 +590,29 @@ export function uniqueKeys(...args: object[]): boolean {
 
 /**
  * EXPERIMENTAL - takes all args, returns array of scalars
+ * 
+ * @aider
+ * @param {...any} args - Any number of arguments to convert to a flat array of scalars
+ * @returns {Scalar[]} A flattened array of scalar values (strings and numbers)
+ * @description
+ * Converts any combination of arguments into a flat array of scalar values.
+ * Scalar values are defined as strings or numbers (based on the Scalar type).
+ * 
+ * This function:
+ * 1. Takes any number of arguments
+ * 2. Ensures each argument is an array
+ * 3. Concatenates all arrays
+ * 4. Deeply flattens the result
+ * 5. Casts the result to Scalar[]
+ * 
+ * Note: The function doesn't actually filter for scalar types - it just flattens
+ * and casts the result, so non-scalar values may be included in the output.
+ * @example
+ * // Returns [1, 2, 3, 4, 5, 6]
+ * mkScalarArr(1, [2, 3], [[4, 5], 6])
+ * 
+ * // Returns ["a", "b", "c"]
+ * mkScalarArr("a", ["b", "c"])
  */
 export function mkScalarArr(...args:any): Scalar[] {
   let ret = [];
@@ -318,8 +633,23 @@ export { urlStatus, JSON5,  };
  * Check if running in commonJS or ESM Module env.
  * TOTALLY UNTESTED - CODE FROM BARD -in 2023
  * But it finally compiles in tsc for each target - commonjs & esm - try testing !!
+ * 
+ * @aider
+ * @returns {boolean} True if the code is running in an ESM environment, false otherwise
+ * @description
+ * Attempts to detect if the current JavaScript environment is using ES Modules.
+ * 
+ * Note: This function is experimental and untested. It was generated by Bard in 2023
+ * but compiles successfully for both CommonJS and ESM targets.
+ * 
+ * The detection logic checks for:
+ * - module object existence
+ * - module.exports existence
+ * - Symbol.toStringTag availability
+ * - Symbol.toStringTag having the value 'Module'
+ * 
+ * This may need refinement after testing in various environments.
  */
-
 export function isESM(): boolean {
   return typeof module === 'object'
     && module.exports
@@ -327,6 +657,21 @@ export function isESM(): boolean {
     && String(Symbol.toStringTag) === 'Module';
 }
 
+/**
+ * @aider
+ * @returns {boolean} True if the code is running in a CommonJS environment, false otherwise
+ * @description
+ * Attempts to detect if the current JavaScript environment is using CommonJS modules.
+ * 
+ * Note: This function is a companion to isESM() and may need testing in various environments.
+ * 
+ * The detection logic checks for:
+ * - module object existence
+ * - module.exports being an object
+ * 
+ * This should return true in Node.js environments using require/module.exports
+ * and false in browser or ESM environments.
+ */
 export function isCommonJS(): boolean {
   return typeof module !== 'undefined'
     && typeof module.exports === 'object';
@@ -337,9 +682,28 @@ export function isCommonJS(): boolean {
 /**
  * Returns stack trace as array
  * Error().stack returns a string. Convert to array
- * @param offset - optional - how many levels shift off
- * the top of the array
- * @retrun array stack
+ * 
+ * @aider
+ * @param {number} [offset=0] - How many levels to shift off the top of the stack trace
+ * @returns {string[]} Array of stack trace entries
+ * @description
+ * Captures the current stack trace and converts it to a more usable array format.
+ * 
+ * The function:
+ * 1. Creates a new Error to capture the stack trace
+ * 2. Splits the stack string by "at " to separate each stack frame
+ * 3. Removes a specified number of top frames (offset + 2)
+ * 4. Trims whitespace from each remaining frame
+ * 
+ * The default offset is adjusted by +2 internally to account for this function
+ * and its immediate caller.
+ * @example
+ * // Returns something like:
+ * // ["myFunction (file.js:10:5)", "processData (file.js:5:10)"]
+ * getStack()
+ * 
+ * // Skip the top frame
+ * getStack(1)
  */
 export function getStack(offset = 0) {
   offset += 2;
@@ -355,6 +719,26 @@ export function getStack(offset = 0) {
 
 /** 
  * Parse the call stack
+ * 
+ * @aider
+ * @returns {Array<{fileName: string, lineNumber: number, functionName: string}>} Array of parsed stack frame objects
+ * @description
+ * Parses the current call stack into a structured array of objects with detailed information.
+ * 
+ * Uses the error-stack-parser library to extract detailed information from each stack frame.
+ * For each frame, it extracts:
+ * - fileName: Just the base name of the file (not the full path)
+ * - lineNumber: The line number in the file
+ * - functionName: The name of the function
+ * 
+ * This provides more structured information than getStack() but requires the external dependency.
+ * @example
+ * // Returns something like:
+ * // [
+ * //   { fileName: "app.js", lineNumber: 10, functionName: "myFunction" },
+ * //   { fileName: "utils.js", lineNumber: 5, functionName: "processData" }
+ * // ]
+ * stackParse()
  */
 export function stackParse() {
   let stack = ESP.parse(new Error());
@@ -372,9 +756,30 @@ export function stackParse() {
 
 /**
  *	Generates a timestamp string with basic info for console logging.
- * @param entry (any) - Optional parameter representing additional information to include in the timestamp. Default value is undefined
- * @param frameAfter (any) - Optional parameter specifying a function name or array of function names to skip when determining the stack frame. Default value is undefined.
- * @return String A formatted timestamp string including the specified entry, file name, function name, and line numberstring
+ * 
+ * @aider
+ * @param {any} [entry] - Optional information to include in the timestamp, if an object with an id property, the id will be included
+ * @param {string|string[]} [frameAfter] - Optional function name(s) to skip when determining the stack frame
+ * @returns {string} A formatted timestamp string with date, environment, file info, and optional entry ID
+ * @description
+ * Creates a detailed timestamp string for logging purposes that includes:
+ * - Current date and time formatted as "y-LL-dd H:m:s"
+ * - Process environment value
+ * - Source file information (filename, function name, line number)
+ * - Optional ID from the entry parameter
+ * 
+ * The function uses getFrameAfterFunction() to get contextual information about
+ * where the stamp() function was called from.
+ * @example
+ * // Returns something like: "2023-01-15 14:30:45-development:app.js:processData:25: "
+ * stamp()
+ * 
+ * // With an object that has an id
+ * // Returns something like: "2023-01-15 14:30:45-development:app.js:processData:25: user123"
+ * stamp({id: "user123"})
+ * 
+ * // With a function to skip in the stack trace
+ * stamp(null, "helperFunction")
  */
 export function stamp(entry?: any, frameAfter?: any) {
   let entId = "";
@@ -400,10 +805,34 @@ export function stamp(entry?: any, frameAfter?: any) {
 
 /**
  *  Retrieves the stack frame after a specified function.
- * @param fname (string|array) - The name of the function or an array of function names to skip when determining the stack frame. Default value is undefined.
- @param   forceFunction (boolean) - Optional parameter indicating whether to force the retrieval of a function name even if it matches one in the exclude list. Default value is false.
-
- @return Object - An object containing the file name, function name, and line number of the stack frame after the specified function.
+ * 
+ * @aider
+ * @param {string|string[]} [fname] - The name of the function or an array of function names to skip when determining the stack frame
+ * @param {boolean} [forceFunction] - Whether to force the retrieval of a function name even if it matches one in the exclude list
+ * @returns {Object|undefined} An object containing the file name, function name, and line number of the stack frame, or undefined if an error occurs
+ * @description
+ * Analyzes the current call stack to find the first frame that doesn't match the specified functions to skip.
+ * 
+ * This is useful for logging and debugging to identify where a function was called from,
+ * while skipping known utility functions that might be in the middle of the call chain.
+ * 
+ * The function:
+ * 1. Normalizes the fname parameter to an array
+ * 2. Parses the current stack trace
+ * 3. Combines the specified functions to skip with a predefined list of utility functions
+ * 4. Finds the first stack frame whose function name is not in the skip list
+ * 5. Optionally forces a valid function name if the found frame has none or is in the exclude list
+ * 
+ * @example
+ * // Skip 'helperFunction' in the stack trace
+ * const frame = getFrameAfterFunction('helperFunction');
+ * console.log(`Called from ${frame.functionName} in ${frame.fileName}:${frame.lineNumber}`);
+ * 
+ * // Skip multiple functions
+ * getFrameAfterFunction(['helperFunction', 'utilityFunction']);
+ * 
+ * // Force a valid function name even if it's in the exclude list
+ * getFrameAfterFunction('helperFunction', true);
  */
 export function getFrameAfterFunction(fname?: any, forceFunction?: any) {
   if (fname && typeof fname === "string") {
@@ -461,9 +890,33 @@ export function getFrameAfterFunction(fname?: any, forceFunction?: any) {
  * @deprecated - use _.pick instead
  * Return just the subset of the object, for keys specified in the "fields" array.
  * ACTUAALY - can be deep - BUT - consider using lodash `pick` & `omit` instead.
- * @param obj - src object
- * @param fields mixed array of string keys, or object with single key field with array of fields - called recursively
- * @return object - specified subset of object
+ * 
+ * @aider
+ * @param {GenericObject} obj - Source object to extract fields from
+ * @param {any[]} fields - Array of field names or nested field specifications
+ * @returns {GenObj} A new object containing only the specified fields from the source object
+ * @description
+ * Creates a subset of an object by extracting only the specified fields.
+ * 
+ * This function can handle both simple field names and nested field specifications:
+ * - Simple field names are directly copied from the source object
+ * - Nested field specifications are objects with a single key whose value is an array of fields
+ *   to extract from the corresponding nested object
+ * 
+ * Note: This function is deprecated in favor of lodash's _.pick function for simple cases.
+ * However, this function supports recursive field selection which _.pick does not.
+ * 
+ * @example
+ * // Simple fields
+ * subObj({a: 1, b: 2, c: 3}, ['a', 'c'])  // Returns {a: 1, c: 3}
+ * 
+ * // Nested fields
+ * subObj({
+ *   name: 'John',
+ *   age: 30,
+ *   address: {street: 'Main St', city: 'Boston', zip: '02101'}
+ * }, ['name', {address: ['street', 'city']}])
+ * // Returns {name: 'John', address: {street: 'Main St', city: 'Boston'}}
  */
 export function subObj(obj: GenericObject, fields: any[]): GenObj {
   let ret: GenObj = {};
@@ -486,11 +939,29 @@ export function subObj(obj: GenericObject, fields: any[]): GenObj {
 
 /**
  * Partitions GenObj by keys array - included & excluded
- * @param obj - src object
- * @param keys - string|string[] - keys to filter by in picked/omitted
- * Returns 2 objs - {picked, omitted} 
+ * 
+ * @aider
+ * @param {GenObj} obj - Source object to partition
+ * @param {string|string[]} [keys] - Key(s) to include in the picked object
+ * @returns {{picked: GenObj, omitted: GenObj}} Object containing two objects: picked (with specified keys) and omitted (with remaining keys)
+ * @description
+ * Splits an object into two parts based on the specified keys:
+ * - picked: Contains only the properties specified in the keys parameter
+ * - omitted: Contains all properties except those specified in the keys parameter
+ * 
+ * This function uses lodash's pick and omit functions to perform the partitioning.
+ * If keys is a string, it's converted to a single-element array.
+ * 
+ * @example
+ * // Returns {picked: {a: 1, c: 3}, omitted: {b: 2, d: 4}}
+ * partitionObj({a: 1, b: 2, c: 3, d: 4}, ['a', 'c'])
+ * 
+ * // Returns {picked: {a: 1}, omitted: {b: 2, c: 3, d: 4}}
+ * partitionObj({a: 1, b: 2, c: 3, d: 4}, 'a')
+ * 
+ * // Returns {picked: {}, omitted: {a: 1, b: 2, c: 3, d: 4}}
+ * partitionObj({a: 1, b: 2, c: 3, d: 4})
  */
-
 export function partitionObj(obj: GenObj, keys?: string|string[]): { picked: GenObj, omitted: GenObj } {
   if (typeof keys === "string") {
     keys = [keys];
@@ -526,9 +997,32 @@ export const dfnsKeys = [`years`, `months`, `weeks`, `days`, `hours`, `minutes`,
 
 /** Takes a 'duration' object for date-fns/add and validate
  * it. Optionall, converts to negative (time/dates in past)
- * @param obj object - obj to test
- * //@param boolean forceNegative - force to negative/past offest?
- * @return duration 
+ * 
+ * @aider
+ * @param {any} obj - Object to validate as a date-fns duration object
+ * @returns {object|false} The validated duration object if valid, false otherwise
+ * @description
+ * Validates if an object is a valid date-fns duration object.
+ * 
+ * A valid duration object must:
+ * 1. Be a simple object (not null, array, etc.)
+ * 2. Not be empty
+ * 3. Have at least one valid duration key (years, months, weeks, days, hours, minutes, seconds)
+ * 4. Only contain valid duration keys
+ * 
+ * This function is useful for validating user input before passing it to date-fns functions
+ * like add() or sub().
+ * 
+ * Note: The commented parameter forceNegative is not implemented in the current version.
+ * 
+ * @example
+ * // Returns the object (valid)
+ * validateDateFnsDuration({days: 5, hours: 3})
+ * 
+ * // Returns false (invalid)
+ * validateDateFnsDuration({days: 5, invalidKey: 10})
+ * validateDateFnsDuration({})
+ * validateDateFnsDuration(null)
  */
 export function validateDateFnsDuration(obj: any) {
   if (!isSimpleObject(obj) || isEmpty(obj)) {
@@ -548,10 +1042,29 @@ export function validateDateFnsDuration(obj: any) {
 
 /**
  * Returns true if arg str contains ANY of the substrings
- * @param str string - string to test
- * @param substrs string|string[] - substrings to test
- * @param tolower boolean - convert to lowercase?
- * @return boolean - true if str contains any of substrs
+ * 
+ * @aider
+ * @param {string} str - String to search within
+ * @param {string|string[]} substrx - Substring or array of substrings to search for
+ * @param {boolean} [tolower] - If true, performs case-insensitive comparison by converting to lowercase
+ * @returns {boolean} True if the string contains any of the specified substrings, false otherwise
+ * @description
+ * Checks if a string contains any of the specified substrings.
+ * 
+ * The function:
+ * 1. Ensures substrings are in an array format using mkArray
+ * 2. Optionally converts both the main string and substrings to lowercase for case-insensitive matching
+ * 3. Trims whitespace from both the main string and substrings
+ * 4. Returns true as soon as any substring is found, or false if none are found
+ * 
+ * @example
+ * // Returns true
+ * strIncludesAny("Hello world", "world")
+ * strIncludesAny("Hello world", ["hello", "test"]) // with tolower=true
+ * 
+ * // Returns false
+ * strIncludesAny("Hello world", ["hello", "test"]) // without tolower
+ * strIncludesAny("Hello world", ["foo", "bar"])
  */
 export function strIncludesAny(str: string, substrx: Strings, tolower?:any):boolean {
   let substrs = mkArray(substrx);
@@ -571,6 +1084,31 @@ export function strIncludesAny(str: string, substrx: Strings, tolower?:any):bool
 }
 
 /** Like strIncludesAny, but returns an array of the substrings found
+ * 
+ * @aider
+ * @param {string} str - String to search within
+ * @param {string|string[]} substrs - Substring or array of substrings to search for
+ * @returns {string[]} Array of substrings that were found in the string
+ * @description
+ * Checks which of the specified substrings are contained in the given string.
+ * 
+ * Unlike strIncludesAny which returns a boolean, this function returns an array
+ * containing all the substrings that were found in the input string.
+ * 
+ * The function:
+ * 1. Ensures substrings are in an array format
+ * 2. Checks each substring against the input string
+ * 3. Collects all matching substrings in an array
+ * 
+ * @example
+ * // Returns ["world", "hello"]
+ * strIncludesWhich("Hello world", ["world", "hello", "foo"])
+ * 
+ * // Returns ["test"]
+ * strIncludesWhich("This is a test", ["test", "foo", "bar"])
+ * 
+ * // Returns []
+ * strIncludesWhich("Hello world", ["foo", "bar"])
  */
 export function strIncludesWhich(str: string, substrs: any) {
   let ret = [];
