@@ -1,0 +1,32 @@
+{
+  "__doc": "Aider Configuration File - Main settings for the AI assistant",
+  "model": "gpt-4",
+  "temperature": 0.7,
+  "__section_comment_1": "The following settings control code generation behavior",
+  "context_window": 32000,
+  "read":"./src/common_operations.ts",
+  "coding_guidelines": {
+    "description": "Standards to follow when writing or modifying code",
+    "rules": [
+      "Use ESM export syntax",
+      "Follow TypeScript best practices",
+      "Use 2-space indentation",
+      "Prefer functional programming patterns",
+      "Functions and methods should accept flexible parameters - a function accepting `string[]` parameter should also accept a `string` parameter and covert it to a `string[]`",
+      "All code should be as generalizable as possible for future reuse"
+    ]
+  },
+  "_documentation": [
+    "Git conventions section defines how commits should be structured",
+    "These are important for maintaining a clean repository history"
+  ],
+  "git_conventions": [
+    "Write descriptive commit messages with prefixes (feat:, fix:, etc.)",
+    "Make small, focused commits"
+  ],
+  "metadata": {
+    "version": "1.0",
+    "last_updated": "2025-03-09",
+    "notes": "This configuration emphasizes code quality and consistent style for PK TypeScript libraries"
+  }
+}
