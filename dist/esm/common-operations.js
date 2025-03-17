@@ -21,19 +21,33 @@ import axios from "axios";
 import { isValid, add, } from "date-fns";
 import { format, } from "date-fns/format";
 /**
- * Makes an array from arg, or returns empty array if arg is undefined/null
- *
  * @aider
+ * Ensures a value is an array, converting single items to arrays or handling null/undefined
+ *
  * @template T - The type of elements in the array
  * @param {T | T[]} arg - A single item or array of items to ensure is an array
  * @returns {T[]} A new array containing the input item(s), or an empty array if input is null/undefined
+ *
+ * @description
+ * This utility function guarantees that the return value is always an array by:
+ * - Returning the original array if the input is already an array
+ * - Converting a single item into a single-element array
+ * - Returning an empty array if the input is null or undefined
+ *
+ * This is particularly useful for parameter handling when a function accepts
+ * either a single value or an array of values.
+ *
  * @example
- * // Returns [1, 2, 3]
- * mkArray([1, 2, 3])
- * // Returns [1]
- * mkArray(1)
- * // Returns []
- * mkArray(null)
+ * // Array input remains unchanged
+ * mkArray([1, 2, 3])  // Returns [1, 2, 3]
+ *
+ * // Single item is converted to array
+ * mkArray(1)  // Returns [1]
+ * mkArray("text")  // Returns ["text"]
+ *
+ * // Null/undefined values become empty array
+ * mkArray(null)  // Returns []
+ * mkArray(undefined)  // Returns []
  */
 export function mkArray(arg) {
     return isVoid(arg) ? [] : (Array.isArray(arg) ? arg : [arg]);
@@ -139,21 +153,33 @@ export function isEmpty(arg) {
 }
 /**
  * @aider
- * @param {unknown} key - The value to check if it's a valid property key
+ * Type guard that checks if a value is a valid JavaScript property key
+ *
+ * @param {unknown} key - The value to check
  * @returns {boolean} True if the value is a valid property key (string, symbol, or number)
+ *
  * @description
  * Type guard function that checks if a value is a valid JavaScript property key.
- * Valid property keys are strings, symbols, or numbers.
+ * In JavaScript, valid property keys are:
+ * - Strings
+ * - Symbols
+ * - Numbers (which are converted to strings when used as property keys)
+ *
+ * This function is useful when working with dynamic property access or when
+ * validating user input that will be used as an object key.
+ *
  * @example
- * // Returns true
+ * // All return true
  * isPropertyKey("name")
  * isPropertyKey(Symbol("id"))
  * isPropertyKey(42)
  *
- * // Returns false
+ * // All return false
  * isPropertyKey(null)
  * isPropertyKey(undefined)
  * isPropertyKey({})
+ * isPropertyKey([])
+ * isPropertyKey(true)
  */
 export function isPropertyKey(key) {
     return typeof key === 'string' || typeof key === 'symbol' || typeof key === 'number';
@@ -164,27 +190,46 @@ export function isObjKey(arg: any): arg is ObjKey {
 }
   */
 /**
- * Trickier than isEmpty - tests only for null or undefined - 0, '', {}, [] should return true
- * IMPORTANT if testing if a param is not passed (null/undefined) or passed as 0
- *
  * @aider
+ * Type guard that checks if a value is null or undefined
+ *
  * @param {unknown} arg - The value to check
- * @returns {boolean} True if the value is null or undefined, false otherwise
+ * @returns {arg is Void} True if the value is null or undefined, false otherwise
+ *
  * @description
- * Type guard function that checks if a value is strictly null or undefined.
- * Unlike isEmpty, this function returns false for empty strings, empty arrays,
- * empty objects, 0, and false.
+ * Type guard function that strictly checks if a value is null or undefined.
+ *
+ * Unlike isEmpty() which considers empty strings, arrays, and objects as "empty",
+ * this function only returns true for null and undefined values.
+ *
+ * This is particularly important when:
+ * - Testing if a parameter was not passed (null/undefined) versus passed as falsy value (0, "", false)
+ * - Implementing optional parameters with default values
+ * - Checking for the existence of a property regardless of its value
+ *
+ * Note: The return type uses TypeScript's type predicate syntax (arg is Void)
+ * which helps TypeScript understand the type narrowing.
+ *
  * @example
  * // Returns true
  * isVoid(null)
  * isVoid(undefined)
  *
- * // Returns false
+ * // Returns false (all these have values, even if "empty")
  * isVoid(0)
  * isVoid("")
  * isVoid([])
  * isVoid({})
  * isVoid(false)
+ *
+ * // TypeScript usage example
+ * function processValue(value?: string) {
+ *   if (isVoid(value)) {
+ *     // Handle missing value case
+ *   } else {
+ *     // TypeScript knows value is string here
+ *   }
+ * }
  */
 export function isVoid(arg) {
     return arg === undefined || arg === null;
@@ -387,13 +432,14 @@ export function isGenObj(anobj) {
     return Object.getPrototypeOf(anobj) === Object.getPrototypeOf({});
 }
 /**
- * Checks if the argument is an object -
- *
  * @aider
+ * Checks if a value is an object with configurable handling of edge cases
+ *
  * @param {any} arg - The value to check
- * @param {boolean} [alsoEmpty=false] - If true, empty objects will also return true
- * @param {boolean} [alsoFunction=true] - If true, functions will also return true
- * @returns {boolean} True if the value is an object (based on parameters), false otherwise
+ * @param {boolean} [alsoEmpty=false] - When true, empty objects will also return true
+ * @param {boolean} [alsoFunction=true] - When true, functions are considered objects
+ * @returns {boolean} True if the value is an object (based on parameters)
+ *
  * @description
  * Determines if a value is an object, with configurable behavior for edge cases.
  *
@@ -403,9 +449,10 @@ export function isGenObj(anobj) {
  *
  * It uses lodash's isObjectLike for the base check, which returns true for
  * objects that are not null and have typeof 'object'.
+ *
  * @example
  * // Basic usage
- * isObject({})         // true if alsoEmpty=true, false otherwise
+ * isObject({})         // false (empty object, alsoEmpty=false)
  * isObject({a: 1})     // true
  * isObject([1, 2, 3])  // true (arrays are objects)
  *
@@ -432,23 +479,25 @@ export function isObject(arg, alsoEmpty = false, alsoFunction = true) {
     return _.isObjectLike(arg);
 }
 /**
- * Checks if the keys of all objects in the argument are unique
- *
  * @aider
+ * Checks if multiple objects have completely unique key sets with no overlaps
+ *
  * @param {...object[]} args - Objects to test for unique keys
- * @returns {boolean} True if all objects have unique property names (no overlapping keys), false otherwise
+ * @returns {boolean} True if all objects have unique property names (no overlapping keys)
+ *
  * @description
  * Determines if multiple objects have completely unique sets of keys with no overlaps.
  * This is useful when merging objects to ensure no properties will be overwritten.
  *
  * The function checks each object's keys against all previously seen keys.
  * If any intersection is found, it returns false immediately.
+ *
  * @example
- * // Returns true
+ * // Returns true - no overlapping keys
  * uniqueKeys({a: 1, b: 2}, {c: 3, d: 4})
  * uniqueKeys({x: 1}, {y: 2}, {z: 3})
  *
- * // Returns false
+ * // Returns false - overlapping keys
  * uniqueKeys({a: 1, b: 2}, {b: 3, c: 4})  // 'b' appears in both objects
  * uniqueKeys({x: 1}, {y: 2}, {x: 3})      // 'x' appears in multiple objects
  */
@@ -643,23 +692,27 @@ export function stackParse() {
     return ret;
 }
 /**
- *	Generates a timestamp string with basic info for console logging.
- *
  * @aider
- * @param {any} [entry] - Optional information to include in the timestamp, if an object with an id property, the id will be included
+ * Generates a contextual timestamp string with debugging information for logging
+ *
+ * @param {any} [entry] - Optional information to include in the timestamp
  * @param {string|string[]} [frameAfter] - Optional function name(s) to skip when determining the stack frame
  * @returns {string} A formatted timestamp string with date, environment, file info, and optional entry ID
+ *
  * @description
  * Creates a detailed timestamp string for logging purposes that includes:
  * - Current date and time formatted as "y-LL-dd H:m:s"
  * - Process environment value
  * - Source file information (filename, function name, line number)
- * - Optional ID from the entry parameter
+ * - Optional ID from the entry parameter (if entry is an object with an id property)
  *
  * The function uses getFrameAfterFunction() to get contextual information about
- * where the stamp() function was called from.
+ * where the stamp() function was called from, allowing you to see exactly where
+ * in your code the log originated.
+ *
  * @example
- * // Returns something like: "2023-01-15 14:30:45-development:app.js:processData:25: "
+ * // Basic usage - returns something like:
+ * // "2023-01-15 14:30:45-development:app.js:processData:25: "
  * stamp()
  *
  * // With an object that has an id
@@ -667,6 +720,7 @@ export function stackParse() {
  * stamp({id: "user123"})
  *
  * // With a function to skip in the stack trace
+ * // Useful when stamp() is called through helper functions
  * stamp(null, "helperFunction")
  */
 export function stamp(entry, frameAfter) {
@@ -689,24 +743,28 @@ export function stamp(entry, frameAfter) {
     return `${ds}-${pe}${src}: ${entId} `;
 }
 /**
- *  Retrieves the stack frame after a specified function.
- *
  * @aider
- * @param {string|string[]} [fname] - The name of the function or an array of function names to skip when determining the stack frame
- * @param {boolean} [forceFunction] - Whether to force the retrieval of a function name even if it matches one in the exclude list
- * @returns {Object|undefined} An object containing the file name, function name, and line number of the stack frame, or undefined if an error occurs
+ * Analyzes the call stack to find the first frame after specified function(s)
+ *
+ * @param {string|string[]} [fname] - Function name(s) to skip when determining the stack frame
+ * @param {boolean} [forceFunction] - Whether to force retrieval of a function name even if it matches one in the exclude list
+ * @returns {Object|undefined} An object containing:
+ *   - fileName: Name of the source file
+ *   - functionName: Name of the calling function
+ *   - lineNumber: Line number in the source file
+ *   - or undefined if an error occurs
+ *
  * @description
  * Analyzes the current call stack to find the first frame that doesn't match the specified functions to skip.
- *
  * This is useful for logging and debugging to identify where a function was called from,
  * while skipping known utility functions that might be in the middle of the call chain.
  *
- * The function:
- * 1. Normalizes the fname parameter to an array
- * 2. Parses the current stack trace
- * 3. Combines the specified functions to skip with a predefined list of utility functions
- * 4. Finds the first stack frame whose function name is not in the skip list
- * 5. Optionally forces a valid function name if the found frame has none or is in the exclude list
+ * The function works by:
+ * 1. Normalizing the fname parameter to an array
+ * 2. Parsing the current stack trace
+ * 3. Combining the specified functions to skip with a predefined list of utility functions
+ * 4. Finding the first stack frame whose function name is not in the skip list
+ * 5. Optionally forcing a valid function name if the found frame has none or is in the exclude list
  *
  * @example
  * // Skip 'helperFunction' in the stack trace
@@ -818,14 +876,17 @@ export function subObj(obj, fields) {
     return ret;
 }
 /**
- * Partitions GenObj by keys array - included & excluded
- *
  * @aider
+ * Splits an object into two parts based on specified keys
+ *
  * @param {GenObj} obj - Source object to partition
  * @param {string|string[]} [keys] - Key(s) to include in the picked object
- * @returns {{picked: GenObj, omitted: GenObj}} Object containing two objects: picked (with specified keys) and omitted (with remaining keys)
+ * @returns {{picked: GenObj, omitted: GenObj}} Object containing:
+ *   - picked: Object with only the specified keys
+ *   - omitted: Object with all remaining keys
+ *
  * @description
- * Splits an object into two parts based on the specified keys:
+ * Divides an object into two separate objects based on the specified keys:
  * - picked: Contains only the properties specified in the keys parameter
  * - omitted: Contains all properties except those specified in the keys parameter
  *
@@ -833,14 +894,17 @@ export function subObj(obj, fields) {
  * If keys is a string, it's converted to a single-element array.
  *
  * @example
- * // Returns {picked: {a: 1, c: 3}, omitted: {b: 2, d: 4}}
+ * // Split object by multiple keys
  * partitionObj({a: 1, b: 2, c: 3, d: 4}, ['a', 'c'])
+ * // Returns {picked: {a: 1, c: 3}, omitted: {b: 2, d: 4}}
  *
- * // Returns {picked: {a: 1}, omitted: {b: 2, c: 3, d: 4}}
+ * // Split object by a single key
  * partitionObj({a: 1, b: 2, c: 3, d: 4}, 'a')
+ * // Returns {picked: {a: 1}, omitted: {b: 2, c: 3, d: 4}}
  *
- * // Returns {picked: {}, omitted: {a: 1, b: 2, c: 3, d: 4}}
+ * // With no keys specified
  * partitionObj({a: 1, b: 2, c: 3, d: 4})
+ * // Returns {picked: {}, omitted: {a: 1, b: 2, c: 3, d: 4}}
  */
 export function partitionObj(obj, keys) {
     if (typeof keys === "string") {
@@ -851,34 +915,38 @@ export function partitionObj(obj, keys) {
     return { picked, omitted };
 }
 /**
- * Returns a new merged object, optionally filtered by keylist
- * Useful for merging default options with user-supplied options
- * If first arg is array, then it is assumed to be the keys to pick
- *
  * @aider
+ * Merges multiple objects with optional key filtering
+ *
  * @param {...any} args - First argument can be an array of keys to pick, remaining arguments are objects to merge
  * @returns {object} A new merged object, optionally filtered to only include specified keys
+ *
  * @description
  * Creates a new object by deeply merging multiple source objects, with an optional filtering step.
  *
- * This function is particularly useful for handling options objects where you want to:
- * 1. Merge default options with user-supplied options
- * 2. Optionally filter the result to only include a specific set of keys
+ * This function has two modes of operation:
+ * 1. If the first argument is an array, it's treated as a list of keys to pick from the final merged object
+ * 2. If all arguments are objects, they are simply merged together
  *
- * If the first argument is an array, it's treated as a list of keys to pick from the final merged object.
- * Otherwise, all arguments are treated as objects to be merged.
+ * This is particularly useful for:
+ * - Merging default options with user-supplied options
+ * - Creating configuration objects with selective property inclusion
+ * - Combining multiple partial objects into a complete object
  *
  * The function uses lodash's merge for deep merging and pick for filtering.
  *
  * @example
  * // Simple merge of objects
- * extractOpts({a: 1}, {b: 2}, {c: 3})  // Returns {a: 1, b: 2, c: 3}
+ * extractOpts({a: 1}, {b: 2}, {c: 3})
+ * // Returns {a: 1, b: 2, c: 3}
  *
  * // Merge with overriding properties
- * extractOpts({a: 1, b: 2}, {b: 3, c: 4})  // Returns {a: 1, b: 3, c: 4}
+ * extractOpts({a: 1, b: 2}, {b: 3, c: 4})
+ * // Returns {a: 1, b: 3, c: 4}
  *
  * // Merge and filter by keys
- * extractOpts(['a', 'c'], {a: 1, b: 2}, {c: 3, d: 4})  // Returns {a: 1, c: 3}
+ * extractOpts(['a', 'c'], {a: 1, b: 2}, {c: 3, d: 4})
+ * // Returns {a: 1, c: 3}
  */
 export function extractOpts(...args) {
     let keys = null;
@@ -2630,7 +2698,37 @@ export function isRealObject(anobj) {
 }
 */
 /**
- * Returns the type of the argument. If it's an object, it returns the name of the constructor.
+ * @aider
+ * Determines the detailed type of any JavaScript value
+ *
+ * @param {any} anObj - The value to analyze
+ * @param {any} [opts] - Options for controlling output format
+ * @returns {String} A string describing the type of the value
+ *
+ * @description
+ * Returns a detailed type description of any JavaScript value.
+ *
+ * For objects, it returns the constructor name rather than just "object".
+ * For functions, it returns "function: [name]" with the function name.
+ * For simple objects (created with {} literal), it returns "simple Object".
+ *
+ * The opts parameter can be:
+ * - A number (level): Controls how much detail to include
+ * - An object with properties:
+ *   - level: Controls detail level
+ *   - justType: If true, removes prefix strings like "function: " and "simple "
+ *
+ * @example
+ * typeOf(123)           // "number"
+ * typeOf("hello")       // "string"
+ * typeOf(new Date())    // "Date"
+ * typeOf([])            // "Array"
+ * typeOf({})            // "simple Object"
+ * typeOf(function foo(){}) // "function: foo"
+ *
+ * // With options
+ * typeOf({}, {level: 1})  // "simple Object\nKeys: []"
+ * typeOf(new Date(), {justType: true})  // "Date" (without prefixes)
  */
 export function typeOf(anObj, opts) {
     let level = null;
@@ -2687,10 +2785,30 @@ export function typeOf(anObj, opts) {
     }
 }
 /**
- * Lazy way to get type (and vals) of multiple variables at once with typeOf
- * @param obj: GenObj  - collection of properties to type
- * @param wVal:boolean - also return value?
- * @return object - keyed by the original keys, to type (and val)
+ * @aider
+ * Gets types of multiple values in a single operation
+ *
+ * @param {GenObj} obj - Object containing values to analyze
+ * @param {boolean} [wVal=false] - Whether to include the original values in the result
+ * @returns {object|false} Object with same keys as input, but values replaced with their types (and optionally original values)
+ *
+ * @description
+ * A convenient way to get the types of multiple variables at once.
+ *
+ * For each property in the input object, the function:
+ * - If wVal is false: Replaces the value with its type (using typeOf)
+ * - If wVal is true: Replaces the value with an object containing both type and original value
+ *
+ * Returns false if the input is not a simple object or is empty.
+ *
+ * @example
+ * // Basic usage
+ * typeOfEach({name: "John", age: 30, items: [1, 2, 3]})
+ * // Returns {name: "string", age: "number", items: "Array"}
+ *
+ * // With values included
+ * typeOfEach({name: "John", age: 30}, true)
+ * // Returns {name: {type: "string", val: "John"}, age: {type: "number", val: 30}}
  */
 export function typeOfEach(obj, wVal = false) {
     if (!isSimpleObject(obj) || isEmpty(obj)) {
@@ -2711,7 +2829,32 @@ export function typeOfEach(obj, wVal = false) {
     return res;
 }
 /**
- * Takes any args & tries to analyze them
+ * @aider
+ * Creates a detailed debug report of any number of arguments
+ *
+ * @param {...any} args - Any values to analyze and report on
+ * @returns {string} A formatted string containing detailed information about each argument
+ *
+ * @description
+ * Generates a comprehensive debug report for any number of arguments.
+ *
+ * For each argument:
+ * - Primitive values are included directly
+ * - Objects are analyzed to show their type and structure
+ * - For simple objects, includes the type of each property
+ *
+ * The function returns a single string with all information formatted for readability,
+ * making it ideal for logging or debugging complex data structures.
+ *
+ * @example
+ * // Basic usage with mixed types
+ * dbgReport("User data:", {name: "John", age: 30}, [1, 2, 3], new Date())
+ * // Returns a formatted string with details about each argument
+ *
+ * // Analyzing a complex object
+ * const user = {name: "John", profile: {id: 123, roles: ["admin", "user"]}};
+ * dbgReport("User:", user)
+ * // Returns detailed breakdown of the user object structure
  */
 export function dbgReport(...args) {
     let retArr = [];
@@ -2739,11 +2882,12 @@ export function valWithType(val) {
     return { type: typeOf(val), val };
 }
 /**
- * Returns true if arg is string & can be JSON parsed
- *
  * @aider
+ * Type guard that checks if a value is a valid JSON string
+ *
  * @param {any} arg - Value to check
- * @returns {boolean} True if arg is a string that can be parsed as JSON, false otherwise
+ * @returns {arg is string} True if arg is a string that can be parsed as JSON, false otherwise
+ *
  * @description
  * Type guard function that determines if a value is a string that can be successfully parsed as JSON.
  *
@@ -2752,7 +2896,14 @@ export function valWithType(val) {
  * 2. Attempts to parse it with JSON.parse()
  * 3. Returns true if parsing succeeds, false otherwise
  *
- * This is useful for safely identifying JSON strings before attempting to parse them.
+ * This is useful for:
+ * - Safely identifying JSON strings before attempting to parse them
+ * - Validating user input or API responses
+ * - Type narrowing in TypeScript
+ *
+ * Note: The return type uses TypeScript's type predicate syntax (arg is string)
+ * which helps TypeScript understand the type narrowing.
+ *
  * @example
  * // Returns true
  * isJsonStr('{"name":"John","age":30}')
@@ -2763,8 +2914,16 @@ export function valWithType(val) {
  * isJsonStr(123)
  * isJsonStr(null)
  * isJsonStr({name: "John"}) // Object, not a JSON string
+ *
+ * // TypeScript type narrowing
+ * function processInput(input: any) {
+ *   if (isJsonStr(input)) {
+ *     // TypeScript knows input is a string here
+ *     const data = JSON.parse(input);
+ *     // ...
+ *   }
+ * }
  */
-//export function isJsonStr(arg: any): boolean {
 export function isJsonStr(arg) {
     if (typeof arg !== 'string') {
         return false;
@@ -2778,31 +2937,45 @@ export function isJsonStr(arg) {
     }
 }
 /**
- * Returns true if arg is string & can be JSON5 parseable
- *
  * @aider
+ * Type guard that checks if a value is a valid JSON5 string
+ *
  * @param {any} arg - Value to check
- * @returns {boolean} True if arg is a string that can be parsed as JSON5, false otherwise
+ * @returns {arg is string} True if arg is a string that can be parsed as JSON5, false otherwise
+ *
  * @description
  * Type guard function that determines if a value is a string that can be successfully parsed as JSON5.
+ *
+ * JSON5 is an extension of JSON that allows:
+ * - Comments
+ * - Trailing commas
+ * - Unquoted property names
+ * - Single-quoted strings
+ * - Multi-line strings
  *
  * The function:
  * 1. Checks if the input is a string
  * 2. Attempts to parse it with JSON5.retrocycle()
  * 3. Returns true if parsing succeeds, false otherwise
  *
- * JSON5 is an extension of JSON that allows features like comments, trailing commas,
- * and unquoted keys. This function helps identify valid JSON5 strings.
+ * This is useful for validating configuration files or other data that uses the more
+ * flexible JSON5 format.
+ *
+ * Note: The return type uses TypeScript's type predicate syntax (arg is string)
+ * which helps TypeScript understand the type narrowing.
+ *
  * @example
- * // Returns true
+ * // All return true
  * isJson5Str('{"name":"John","age":30}')
  * isJson5Str('{name:"John",age:30}') // Valid JSON5, not valid JSON
  * isJson5Str('[1,2,3,]') // Trailing comma is valid in JSON5
+ * isJson5Str('// Comment\n{name:"John"}') // Comments are valid in JSON5
  *
- * // Returns false
+ * // All return false
  * isJson5Str('Not JSON5')
  * isJson5Str(123)
  * isJson5Str(null)
+ * isJson5Str({name: "John"}) // Object, not a JSON5 string
  */
 export function isJson5Str(arg) {
     if (typeof arg !== 'string') {
@@ -2838,11 +3011,12 @@ export function JSONParse(str) {
     return JSON.retrocycle(str);
 }
 /**
- * Experiment with Use retrocycle to parse
- *
  * @aider
+ * Parses a JSON5 string with support for circular references
+ *
  * @param {string} str - JSON5 string to parse
  * @returns {any} Parsed JavaScript object with circular references restored
+ *
  * @description
  * Parses a JSON5 string and restores any circular references using JSON5.retrocycle.
  *
@@ -2854,12 +3028,23 @@ export function JSONParse(str) {
  * - Multi-line strings
  * - And more
  *
- * This function uses the retrocycle extension to handle circular references.
+ * This function is particularly useful when:
+ * - Parsing configuration files with comments
+ * - Working with data that contains circular references
+ * - Handling more relaxed JSON syntax from various sources
  *
- * Note: The commented code shows alternative implementations and error handling
- * approaches that were considered.
+ * The function uses the retrocycle extension to properly reconstruct circular
+ * references that were serialized with the decycle function.
+ *
  * @example
- * // Parse a JSON5 string with circular references
+ * // Basic JSON5 parsing
+ * const config = JSON5Parse(`{
+ *   // Server configuration
+ *   host: 'localhost',
+ *   port: 8080,
+ * }`);
+ *
+ * // Parsing with circular references
  * const obj = JSON5Parse('{a: {$ref: "$"}}');
  * // obj is now {a: obj} with the circular reference restored
  */
@@ -2920,34 +3105,44 @@ export function keysToJson(arg) {
 export function keysFromJson(arg) {
     return keysToFromJson(arg, false);
 }
-/** Safe stringify -
- * Experiment with just decycle for all stringify
- *
+/**
  * @aider
+ * Converts a JavaScript value to a JSON5 string with circular reference handling
+ *
  * @param {any} arg - Value to stringify
  * @param {number} [space=2] - Number of spaces to use for indentation
  * @returns {string} JSON5 string representation of the value with circular references handled
+ *
  * @description
- * Converts a JavaScript value to a JSON5 string, handling circular references.
+ * Converts a JavaScript value to a JSON5 string, properly handling circular references.
  *
  * This function uses JSON5.decycle to handle circular references in the object
  * before stringification. The resulting string can be parsed back using JSON5Parse.
  *
+ * JSON5 format advantages over standard JSON:
+ * - Supports comments
+ * - Allows trailing commas
+ * - Accepts unquoted property names
+ * - Permits single-quoted strings
+ * - Handles multi-line strings
+ *
  * The space parameter controls the indentation of the output string for readability.
  *
- * Note: The commented code shows alternative implementations that were considered.
  * @example
  * // Basic usage
  * const obj = { a: 1, b: "text" };
- * JSON5Stringify(obj); // Returns '{\n  a: 1,\n  b: "text"\n}'
+ * JSON5Stringify(obj);
+ * // Returns '{\n  a: 1,\n  b: "text"\n}'
  *
  * // With circular reference
  * const circular = { a: 1 };
  * circular.self = circular;
- * JSON5Stringify(circular); // Returns string with $ref for the circular reference
+ * JSON5Stringify(circular);
+ * // Returns string with $ref for the circular reference
  *
- * // With custom spacing
- * JSON5Stringify(obj, 0); // Returns '{a:1,b:"text"}'
+ * // With custom spacing (compact output)
+ * JSON5Stringify(obj, 0);
+ * // Returns '{a:1,b:"text"}'
  */
 export function JSON5Stringify(arg, space = 2) {
     //try {
