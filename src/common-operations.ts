@@ -3159,7 +3159,6 @@ export function valWithType(val: any): any {
  * }
  */
 export function isJsonStr(arg: any): arg is string {
-export function isJsonStr(arg: any): arg is string {
   if (typeof arg !== 'string') {
     return false;
   }
