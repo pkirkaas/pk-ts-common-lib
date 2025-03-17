@@ -2739,8 +2739,33 @@ export function filterProps(props: any[]) {
     depth: 1,
   };
 /**
- * Experimenting with function overloading
- * changed defaults - opt from "tvp" to "tv", depth from 6 to 1
+ * @aider
+ * Analyzes an object's properties with configurable output format and depth
+ * 
+ * @overload
+ * @param {any} obj - Object to analyze
+ * @param {string} [optArg] - Option string controlling output format
+ * @param {number} [depth] - How deep to recurse into nested objects
+ * @returns {GenObj | [] | string | boolean} Object properties in requested format
+ * 
+ * @overload
+ * @param {any} obj - Object to analyze
+ * @param {GenObj} [optArg] - Options object controlling output format
+ * @param {number} [depth] - How deep to recurse into nested objects
+ * @returns {GenObj | [] | string | boolean} Object properties in requested format
+ * 
+ * @description
+ * Analyzes an object's properties with configurable output format and recursion depth.
+ * 
+ * The function accepts options either as a string or an object:
+ * - If 'v' is included: Returns the raw property values
+ * - If 't' is included: Returns the type of each property
+ * - If 'p' is included: Returns parsed/readable values for complex properties
+ * - If 'f' is included: Returns full property details without filtering
+ * 
+ * If none of t,v,p are specified, returns just an array of property names.
+ * 
+ * The depth parameter controls how deep to recurse into nested objects.
  */
 export function allProps(obj: any, optArg?: string, depth?:number): GenObj | [] | string | boolean;
 export function allProps(obj: any, optArg?: GenObj, depth?:number): GenObj | [] | string | boolean;
@@ -3091,11 +3116,12 @@ export function valWithType(val: any): any {
 }
 
 /**
- * Returns true if arg is string & can be JSON parsed
- * 
  * @aider
+ * Type guard that checks if a value is a valid JSON string
+ * 
  * @param {any} arg - Value to check
- * @returns {boolean} True if arg is a string that can be parsed as JSON, false otherwise
+ * @returns {arg is string} True if arg is a string that can be parsed as JSON, false otherwise
+ * 
  * @description
  * Type guard function that determines if a value is a string that can be successfully parsed as JSON.
  * 
@@ -3104,7 +3130,14 @@ export function valWithType(val: any): any {
  * 2. Attempts to parse it with JSON.parse()
  * 3. Returns true if parsing succeeds, false otherwise
  * 
- * This is useful for safely identifying JSON strings before attempting to parse them.
+ * This is useful for:
+ * - Safely identifying JSON strings before attempting to parse them
+ * - Validating user input or API responses
+ * - Type narrowing in TypeScript
+ * 
+ * Note: The return type uses TypeScript's type predicate syntax (arg is string)
+ * which helps TypeScript understand the type narrowing.
+ * 
  * @example
  * // Returns true
  * isJsonStr('{"name":"John","age":30}')
@@ -3115,8 +3148,17 @@ export function valWithType(val: any): any {
  * isJsonStr(123)
  * isJsonStr(null)
  * isJsonStr({name: "John"}) // Object, not a JSON string
+ * 
+ * // TypeScript type narrowing
+ * function processInput(input: any) {
+ *   if (isJsonStr(input)) {
+ *     // TypeScript knows input is a string here
+ *     const data = JSON.parse(input);
+ *     // ...
+ *   }
+ * }
  */
-//export function isJsonStr(arg: any): boolean {
+export function isJsonStr(arg: any): arg is string {
 export function isJsonStr(arg: any): arg is string {
   if (typeof arg !== 'string') {
     return false;
@@ -3208,11 +3250,12 @@ export function JSONParse(str: string) {
 
 
 /**
- * Experiment with Use retrocycle to parse
- * 
  * @aider
+ * Parses a JSON5 string with support for circular references
+ * 
  * @param {string} str - JSON5 string to parse
  * @returns {any} Parsed JavaScript object with circular references restored
+ * 
  * @description
  * Parses a JSON5 string and restores any circular references using JSON5.retrocycle.
  * 
@@ -3224,12 +3267,23 @@ export function JSONParse(str: string) {
  * - Multi-line strings
  * - And more
  * 
- * This function uses the retrocycle extension to handle circular references.
+ * This function is particularly useful when:
+ * - Parsing configuration files with comments
+ * - Working with data that contains circular references
+ * - Handling more relaxed JSON syntax from various sources
  * 
- * Note: The commented code shows alternative implementations and error handling
- * approaches that were considered.
+ * The function uses the retrocycle extension to properly reconstruct circular
+ * references that were serialized with the decycle function.
+ * 
  * @example
- * // Parse a JSON5 string with circular references
+ * // Basic JSON5 parsing
+ * const config = JSON5Parse(`{
+ *   // Server configuration
+ *   host: 'localhost',
+ *   port: 8080,
+ * }`);
+ * 
+ * // Parsing with circular references
  * const obj = JSON5Parse('{a: {$ref: "$"}}');
  * // obj is now {a: obj} with the circular reference restored
  */
@@ -3295,34 +3349,44 @@ export function keysFromJson(arg: any): any {
   return keysToFromJson(arg, false);
 }
 
-/** Safe stringify - 
- * Experiment with just decycle for all stringify
- * 
+/**
  * @aider
+ * Converts a JavaScript value to a JSON5 string with circular reference handling
+ * 
  * @param {any} arg - Value to stringify
  * @param {number} [space=2] - Number of spaces to use for indentation
  * @returns {string} JSON5 string representation of the value with circular references handled
+ * 
  * @description
- * Converts a JavaScript value to a JSON5 string, handling circular references.
+ * Converts a JavaScript value to a JSON5 string, properly handling circular references.
  * 
  * This function uses JSON5.decycle to handle circular references in the object
  * before stringification. The resulting string can be parsed back using JSON5Parse.
  * 
+ * JSON5 format advantages over standard JSON:
+ * - Supports comments
+ * - Allows trailing commas
+ * - Accepts unquoted property names
+ * - Permits single-quoted strings
+ * - Handles multi-line strings
+ * 
  * The space parameter controls the indentation of the output string for readability.
  * 
- * Note: The commented code shows alternative implementations that were considered.
  * @example
  * // Basic usage
  * const obj = { a: 1, b: "text" };
- * JSON5Stringify(obj); // Returns '{\n  a: 1,\n  b: "text"\n}'
+ * JSON5Stringify(obj); 
+ * // Returns '{\n  a: 1,\n  b: "text"\n}'
  * 
  * // With circular reference
  * const circular = { a: 1 };
  * circular.self = circular;
- * JSON5Stringify(circular); // Returns string with $ref for the circular reference
+ * JSON5Stringify(circular); 
+ * // Returns string with $ref for the circular reference
  * 
- * // With custom spacing
- * JSON5Stringify(obj, 0); // Returns '{a:1,b:"text"}'
+ * // With custom spacing (compact output)
+ * JSON5Stringify(obj, 0); 
+ * // Returns '{a:1,b:"text"}'
  */
 export function JSON5Stringify(arg, space=2) {
   //try {
