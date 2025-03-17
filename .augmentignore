@@ -1,0 +1,10 @@
+# Hardlinked shared .aiderignore, .augmentignore
+/node_modules/     # Ignore node_modules directory in root
+*.log              # Ignore all log files
+build/             # Ignore build directory anywhere
+/dist/**           # Ignore everything in dist directory
+/deprecated/
+/tmp/
+/out/
+/logs/
+/git-hooks/

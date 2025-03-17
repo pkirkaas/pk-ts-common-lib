@@ -1,0 +1,18 @@
+- Assume latest version of all languages, libraries and tools
+- The project is implemented in JavaScript v ES022+, TypeScript v ^5.8, NodeJS ^22
+- For front-end/web clients, use Next.js ^15, React ^19, prefer SSR & RSC when possible
+- Use ESM import/export for imported modules
+- Functions and methods should accept flexible parameters - a function accepting `string[]` parameter should also accept a `string` parameter and covert it to a `string[]`
+- All code should be as generalizable as possible for future reuse
+- Code should be as configurable as possible - accepting multiple parameters for customization, but as many parameters as possible should have reasonable defaults.
+- All generated code should be very thoroughly commented. All components/functions should start with complete TSDoc format comments including: 
+
+- overloaded functions - many functions have multiple, overloaded signatures. The generated TSDoc should detail each overloaded signature.
+
+- function parameters: Each parameter comment should contain the parameter name, type(s), optional & default, and description of its purpose.
+
+- function return types, conditions, and description: A function can return different values/types depending on conditions. Define each possible return type, and what it is used for.
+
+- Detailed discussion/description of the purpose and usage of the function 
+
+- Include explanatory comments within the body of all code explaining the steps taken and why.
