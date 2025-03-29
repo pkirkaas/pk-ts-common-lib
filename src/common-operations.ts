@@ -1333,7 +1333,8 @@ export function eventInfo(ev) {
  * - Date object: returns the same Date
  * - ISO string: "2022-04-21T18:36:42.871Z"
  * - Simple date string: "2016-01-01"
- * - Timestamp (number or numeric string): 1650566202871 or "1650566202871"
+ * - Timestamp - seconds/ms - (number or numeric string): 1650566202871 or "1650566202871"
+ *     (ts in seconds usu. 10 digits, in ms, 13 digits
  * 
  * The function validates the resulting Date object using date-fns isValid().
  * @example
@@ -1351,8 +1352,15 @@ export function eventInfo(ev) {
  * pkToDate("1650566202871")
  */
 export function pkToDate(arg) {
-  if (isNumeric(arg)) {
-    arg = new Date(Number(arg));
+  if (isNumeric(arg)) { // A timestamp - but ms or seconds?
+    let ts = Number(arg);
+    if (isNaN(ts) || !ts) { // Invalid timestamp
+      throw new PkError(`Invalid ts arg to pkToDate:`,{arg, ts});
+    }
+    if (Math.abs(ts) < 1e10) { //Probably TS in seconds
+      ts = ts * 1000;
+    }
+    arg = new Date(ts);
   } else if (isEmpty(arg)) {
     arg = new Date();
   } else if (validateDateFnsDuration(arg)) {
@@ -1433,6 +1441,8 @@ export const dtFnsFormats = {
   dt: 'dd-MMM-yy KK:mm',
   dts: 'dd-MMM-yy KK:mm:ss',
   ts: 'KK:mm:ss',
+  s: 't', //Unix timestamp in seconds
+  ms: 'T', // Timestamp in milliseconds
 };
 
 /**

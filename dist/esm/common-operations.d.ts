@@ -954,7 +954,8 @@ export declare function eventInfo(ev: any): {};
  * - Date object: returns the same Date
  * - ISO string: "2022-04-21T18:36:42.871Z"
  * - Simple date string: "2016-01-01"
- * - Timestamp (number or numeric string): 1650566202871 or "1650566202871"
+ * - Timestamp - seconds/ms - (number or numeric string): 1650566202871 or "1650566202871"
+ *     (ts in seconds usu. 10 digits, in ms, 13 digits
  *
  * The function validates the resulting Date object using date-fns isValid().
  * @example
@@ -1029,6 +1030,8 @@ export declare const dtFnsFormats: {
     dt: string;
     dts: string;
     ts: string;
+    s: string;
+    ms: string;
 };
 /**
  * Quick Format a date with single format code & date

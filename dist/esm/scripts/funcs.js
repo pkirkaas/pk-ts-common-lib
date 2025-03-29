@@ -1,7 +1,7 @@
 /**
  * We don't have Pk-Ts-Node, so no external node packages - just native node
  */
-import { haversine, dtFmt, } from '../index.js';
+import { haversine, pkToDate, dtFmt, } from '../index.js';
 let args = [...process.argv];
 args.shift();
 args.shift();
@@ -12,6 +12,16 @@ let fncs = {
         let fmtd = dtFmt(fmt, null);
         console.log(`The [${fmt}] formatted date: [${fmtd}]`);
         return fmtd;
+    },
+    tstTs(fmt = "html") {
+        console.log("Testing differentiating between ms timestamps & Unix");
+        let tsm = dtFmt('ms');
+        let tss = dtFmt('s');
+        let tssDate = pkToDate(tss);
+        let tssDateShort = dtFmt('short', tss);
+        let tsmDate = pkToDate(tsm);
+        let tsmDateShort = dtFmt('short', tsm);
+        console.log({ tsm, tss, tssDate, tssDateShort, tsmDate, tsmDateShort, });
     },
     sayHello() {
         return "sayHello says Hello!";
