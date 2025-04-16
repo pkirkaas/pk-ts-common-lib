@@ -41,7 +41,7 @@
     "url-status-code": "*",
     "zod": "*",
     "zod-metadata": "*",
-    "zod-to-json-schema": "*"
+    "zod-to-json-schema": "3.24.5"
   },
   "devDependencies": {
     "@types/lodash": "*",
