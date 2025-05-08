@@ -39,7 +39,7 @@
     "slugify": "*",
     "url-join": "latest",
     "url-status-code": "*",
-    "zod": "*",
+    "zod": "3.24.3",
     "zod-metadata": "*",
     "zod-to-json-schema": "*"
   },
