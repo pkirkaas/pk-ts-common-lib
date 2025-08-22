@@ -1354,7 +1354,8 @@ export function eventInfo(ev) {
 export function pkToDate(arg) {
   if (isNumeric(arg)) { // A timestamp - but ms or seconds?
     let ts = Number(arg);
-    if (isNaN(ts) || !ts) { // Invalid timestamp
+    //if (isNaN(ts) || !ts) { // Invalid timestamp - BUT ALLOW 0
+    if (isNaN(ts) ) { // Invalid timestamp
       throw new PkError(`Invalid ts arg to pkToDate:`,{arg, ts});
     }
     if (Math.abs(ts) < 1e10) { //Probably TS in seconds
