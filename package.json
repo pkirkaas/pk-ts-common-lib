@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "ajv": "*",
-    "axios": "*",
+    "axios": "1.12.0",
     "console-title": "*",
     "date-fns": "latest",
     "error-stack-parser": "*",
