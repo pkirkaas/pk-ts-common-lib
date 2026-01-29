@@ -35,7 +35,7 @@
     "date-fns": "latest",
     "error-stack-parser": "*",
     "json5": "*",
-    "lodash": "latest",
+    "lodash": "4.17.23",
     "slugify": "*",
     "url-join": "latest",
     "url-status-code": "*",
